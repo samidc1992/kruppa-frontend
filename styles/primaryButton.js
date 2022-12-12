@@ -17,7 +17,8 @@ export const PrimaryButtonstyles = StyleSheet.create({
         fontWeight: '500',
         letterSpacing: 0.75,
         fontSize: 14,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        lineHeight: 17
     },
 })
 
