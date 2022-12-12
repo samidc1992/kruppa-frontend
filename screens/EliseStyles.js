@@ -1,5 +1,8 @@
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import { PrimaryButtonstyles } from '../styles/primaryButton';
+import { primaryButtonStyles } from '../styles/primaryButton';
+import { secondaryButtonStyles } from '../styles/secondaryButton';
+import { primaryButtonSmallStyles } from '../styles/primaryButtonSmall';
+import { secondaryButtonSmallStyles } from '../styles/secondaryButtonSmall';
 
 export default function EliseStylesScreen({ navigation }) {
 
@@ -7,8 +10,17 @@ export default function EliseStylesScreen({ navigation }) {
         <View style={styles.container}>
             <Text>Elise Styles</Text>
 
-            <TouchableOpacity style={PrimaryButtonstyles.primaryButton} activeOpacity={0.8}>
-                <Text style={PrimaryButtonstyles.textPrimaryButton}>Primary Button</Text>
+            <TouchableOpacity style={primaryButtonStyles.button} activeOpacity={0.8}>
+                <Text style={primaryButtonStyles.buttonText}>Primary Button</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={secondaryButtonStyles.button} activeOpacity={0.8}>
+                <Text style={secondaryButtonStyles.buttonText}>Secondary Button</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={primaryButtonSmallStyles.button} activeOpacity={0.8}>
+                <Text style={primaryButtonSmallStyles.buttonText}>Primary</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={secondaryButtonSmallStyles.button} activeOpacity={0.8}>
+                <Text style={secondaryButtonSmallStyles.buttonText}>Secondary</Text>
             </TouchableOpacity>
 
         </View>

@@ -2,20 +2,19 @@ import { StyleSheet } from 'react-native';
 
 // TO USE THIS STYLE :
 
-// import { primaryButtonStyles } from '../styles/primaryButton';
+// import { primaryButtonSmallStyles } from '../styles/primaryButtonSmall';
 
-// <TouchableOpacity style={primaryButtonStyles.button} activeOpacity={0.8}>
-// <Text style={primaryButtonStyles.buttonText}>Primary Button</Text>
+// <TouchableOpacity style={primaryButtonSmallStyles.button} activeOpacity={0.8}>
+// <Text style={primaryButtonSmallStyles.buttonText}>Primary</Text>
 // </TouchableOpacity>
 
-
-export const primaryButtonStyles = StyleSheet.create({
+export const primaryButtonSmallStyles = StyleSheet.create({
 
     button: {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
-        width: '80%',
+        width: '40%',
         height: '10%',
         backgroundColor: '#ec6e5b',
         borderRadius: 10,
