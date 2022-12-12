@@ -1,9 +1,9 @@
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 
-export default function HomeScreen({ navigation }) {
+export default function MessagesScreen({ navigation }) {
     return(
         <View style={styles.container}>
-            <Text>Home</Text>
+            <Text>Messages</Text>
         </View>
     )
 }
@@ -13,5 +13,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: 'pink',
     }
 })
