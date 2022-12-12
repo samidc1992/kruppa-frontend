@@ -10,6 +10,7 @@ import SignUpScreen from './screens/SignUpScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import MessagesScreen from './screens/MessagesScreen';
 import EliseStylesScreen from './screens/EliseStyles';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 const Stack = createNativeStackNavigator();
@@ -17,7 +18,25 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return(
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        let iconName = "";
+
+        if(route.name === "Home") {
+          iconName = "home";
+        } else if(route.name === "Search") {
+          iconName = "search";
+        } else if(route.name === "Messages") {
+          iconName = "bell";
+        } else if(route.name === "Profile") {
+          iconName = "user";
+        }
+        return <FontAwesome name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: "#FF6317",
+      tabBarInactiveTintColor: "gray",
+      headerShown: false,
+    })}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="Messages" component={MessagesScreen} />
