@@ -43,7 +43,7 @@ export const dropdownStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#3A474E',
-        height: 50,
+        height: 45,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
         borderBottomLeftRadius: 0,
@@ -60,7 +60,7 @@ export const dropdownStyles = StyleSheet.create({
         color: '#7E8284',
     },
     container: {
-        width: '80%',
+        width: '85%',
         margin: 5
     },
 

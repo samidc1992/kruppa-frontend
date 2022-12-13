@@ -1,12 +1,10 @@
-import { TouchableOpacity, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import MapView from 'react-native-maps';
+import { Keyboard, TouchableWithoutFeedback, Platform, TouchableOpacity, StyleSheet, Text, View, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { dropdownStyles } from '../styles/dropdown';
 import { useState } from 'react';
 import SearchInput from '../components/SearchInput'
 import PrimaryButton from '../components/PrimaryButton'
-
-
-
 
 export default function SearchScreen({ navigation }) {
     //search input setup
@@ -30,17 +28,25 @@ export default function SearchScreen({ navigation }) {
         console.log('launch search')
     }
 
-
     return (
-        // <SafeAreaView >
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}>
 
-            <View style={styles.mapContainer}>
-                <Text>Map here</Text>
-            </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <MapView
+                    initialRegion={{
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                    style={styles.mapContainer}
+                >
+                </MapView>
+            </TouchableWithoutFeedback>
 
             <View style={styles.contentContainer}>
-                <Text style={{ color: 'white' }}>Tabs here</Text>
                 <DropDownPicker
                     style={dropdownStyles.header}
                     textStyle={dropdownStyles.text}
@@ -63,8 +69,7 @@ export default function SearchScreen({ navigation }) {
                     onPress={() => launchSearch()}
                 />
             </View>
-        </View>
-        // {/* </SafeAreaView> */ }
+        </KeyboardAvoidingView>
     )
 }
 
@@ -73,20 +78,19 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'yellow'
+        backgroundColor: '#272D31',
     },
     contentContainer: {
-        height: '50%',
+        height: '40%',
         width: '100%',
-        backgroundColor: '#272D31',
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth: 2,
+        margin: 0,
+        padding: 0,
     },
     mapContainer: {
-        height: '50%'
-
+        height: '60%',
+        width: '100%',
     }
-
 
 })
