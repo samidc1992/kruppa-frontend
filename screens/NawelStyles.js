@@ -1,73 +1,68 @@
 import { TouchableOpacity, StyleSheet, Text, View, TextInput, SafeAreaView } from 'react-native';
-//import { formControlsStyles } from '../styles/formControls';
+
 import React from 'react';
 import { useState } from 'react';
+import StandardFormInput from '../components/StandardFormInput';
 
 
 export default function NawelStylesScreen({ navigation }) {
-     const [textInputValue, setTextInputValue] = useState('');
-     const [searchIsFocused, setSearchIsFocused] = useState(false);
+
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const handleUsernameInputChange = value => setUsername(value);
+    const handleEmailInputChange = value => setEmail(value);
+    const handlePasswordInputChange = value => setPassword(value);
+
   
    
 return (      
- <SafeAreaView style={styles.container}>
-    <Text style={styles.outlinedText}>username</Text>
+    
+   <View style={styles.container}>
+        <TextInput style={styles.fieldName}>username</TextInput>
+        <StandardFormInput
+        placeholder="username"        
+        value={username}
+        handleChange={handleUsernameInputChange}
+    />
+    <Text style={styles.fieldName}>email</Text>
+    <StandardFormInput
+        placeholder="email"        
+        keyboardType="email-address"
+        value={email}
+        handleChange={handleEmailInputChange}
+    />
 
-<TextInput style={searchIsFocused ? styles.inputFocus : styles.input}
-    onChangeText={text => setTextInputValue(text)}
-     value={textInputValue}
-     placeholder="username"
-    placeholderTextColor="#7E8284"
-    mode = 'flat'
-     onBlur={() => setSearchIsFocused(false)}
-    onFocus={() => setSearchIsFocused(true)}
-   />
- </SafeAreaView>
-)}
+<Text style={styles.fieldName}>password</Text>
+    <StandardFormInput
+        
+        placeholder="password"   
+        secureTextEntry ='true'     
+        value={password}
+        handleChange={handlePasswordInputChange}
+    />
+    </View>
+
+)
+
+}
 
 const styles = StyleSheet.create({
      container: {
-        flex: 1,
+        flex: 1,      
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#272D31'
     },  
-
-    outlinedText: {
-        fontSize : 18,
-        color : '#fff',
-        marginRight: 5,        
-    },
-
-    input: {
-       /*  alignItems: 'center',
-        justifyContent: 'center', */
-        backgroundColor: '#3A474E',
-        width: '75%',
-        height: 40,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        margin: 5,
-        borderBottomColor: '#7E8284',
-        borderBottomWidth: 1,
-        paddingLeft: 10,
-        fontSize: 20,
-        color: '#fff',
-    },
-    inputFocus: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#3A474E',
-        width: '75%',
-        height: 40,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        margin: 5,
-        borderBottomColor: '#ec6e5b',
-        borderBottomWidth: 2,
-        paddingLeft: 10,
-        fontSize: 20,
-        color: '#fff',
-
+    fieldName: {
+        alignItems: 'flex-start',
+        color :"white",
+        marginTop:'5%',
+        marginBottom: '-3%',
+        marginLeft: '-53%',
+        fontSize: 14,
+        
     }
+
+   
 })
