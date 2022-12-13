@@ -1,13 +1,7 @@
-<<<<<<< HEAD
-import { StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
-import { useState } from 'react';
-import PrimaryButton from '../components/PrimaryButton';
-=======
 import { StyleSheet, Text, View, SafeAreaView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
->>>>>>> signUpScreen
 
 
 
@@ -16,15 +10,12 @@ export default function SignUpScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-<<<<<<< HEAD
     const [usernameIsFocused, setUsernameIsFocused] = useState(false);
     const [emailIsFocused, setEmailIsFocused] = useState(false);
     const [passwordIsFocused, setPasswordIsFocused] = useState(false);
-=======
     const handleUsernameInputChange = value => setUsername(value);
     const handleEmailInputChange = value => setEmail(value);
     const handlePasswordInputChange = value => setPassword(value);
->>>>>>> signUpScreen
 
     const handlePressPrimaryButton = () => {
 
@@ -119,7 +110,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: "bold",
         color: '#F0F0F0',
-<<<<<<< HEAD
     },
 
     input: {
@@ -127,18 +117,6 @@ const styles = StyleSheet.create({
         fontSize : 30,
         fontWeight : "bold",
         color : '#979797',
-=======
-        marginBottom: '20%',
-    },
-
-    fieldName: {
-        alignItems: 'flex-start',
-        color :"white",
-        marginTop:'3%',
-        marginBottom: '-3%',
-        marginLeft: '-65%',
-        fontSize: 14,        
->>>>>>> signUpScreen
     },
 
     input: {
