@@ -17,11 +17,15 @@ import React from 'react';
 
 export default function EliseStylesScreen({ navigation }) {
 
+    const [searchInputValue, setSearchInputValue] = useState('')
+    const handleSearchInputChange = value => setSearchInputValue(value)
 
-    const [textInputValue, setTextInputValue] = useState('');
-    const [searchIsFocused, setSearchIsFocused] = useState(false);
-
-
+    const handlePressPrimaryButton = () => {
+        console.log('handlePressPrimaryButton')
+    }
+    const handlePressSecondaryButton = () => {
+        console.log('handlePressSecondaryButton')
+    }
 
     DropDownPicker.setTheme("DARK");
     const [open, setOpen] = useState(false);
@@ -34,22 +38,9 @@ export default function EliseStylesScreen({ navigation }) {
         { label: 'Ananas', value: 'ananas' },
     ]);
 
-    //To get the items selected : value
-
-    const [searchInputValue, setSearchInputValue] = useState('')
-    const handleSearchInputChange = value => setSearchInputValue(value)
-
-    console.log(searchInputValue)
-
-    const handlePressPrimaryButton = () => {
-        console.log('handlePressPrimaryButton')
-    }
-    const handlePressSecondaryButton = () => {
-        console.log('handlePressSecondaryButton')
-    }
-
     return (
         <View style={styles.container}>
+
             <DropDownPicker
                 style={dropdownStyles.header}
                 textStyle={dropdownStyles.text}
