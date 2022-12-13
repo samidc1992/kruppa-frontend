@@ -2,7 +2,7 @@ import React from 'react'
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 
 
-export default function SecondaryButtonSmall(props) {
+function SecondaryButtonSmall(props) {
     return (
         <TouchableOpacity
             style={styles.button}
@@ -35,3 +35,6 @@ const styles = StyleSheet.create({
         lineHeight: 17
     },
 })
+
+
+export default SecondaryButtonSmall

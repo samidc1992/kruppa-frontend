@@ -1,16 +1,11 @@
 import { TouchableOpacity, StyleSheet, Text, View, TextInput } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-// import { primaryButtonStyles } from '../styles/primaryButton';
-// import { secondaryButtonStyles } from '../styles/secondaryButton';
-// import { primaryButtonSmallStyles } from '../styles/primaryButtonSmall';
-// import { secondaryButtonSmallStyles } from '../styles/secondaryButtonSmall';
-import { searchInputStyles } from '../styles/searchInput';
 import { dropdownStyles } from '../styles/dropdown';
-
-import PrimaryButton from '../components/PrimaryButton'
+import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton'
 import PrimaryButtonSmall from '../components/PrimaryButtonSmall'
 import SecondaryButtonSmall from '../components/SecondaryButtonSmall'
+import SearchInput from '../components/SearchInput'
 
 // const myTheme = require('../styles/darkDropdownTheme');
 
@@ -41,6 +36,10 @@ export default function EliseStylesScreen({ navigation }) {
 
     //To get the items selected : value
 
+    const [searchInputValue, setSearchInputValue] = useState('')
+    const handleSearchInputChange = value => setSearchInputValue(value)
+
+    console.log(searchInputValue)
 
     const handlePressPrimaryButton = () => {
         console.log('handlePressPrimaryButton')
@@ -64,13 +63,10 @@ export default function EliseStylesScreen({ navigation }) {
                 setItems={setItems}
             />
 
-            <TextInput style={searchIsFocused ? searchInputStyles.inputFocus : searchInputStyles.input}
-                onChangeText={text => setTextInputValue(text)}
-                value={textInputValue}
+            <SearchInput
                 placeholder="Where ?"
-                placeholderTextColor="#7E8284"
-                onBlur={() => setSearchIsFocused(false)}
-                onFocus={() => setSearchIsFocused(true)}
+                value={searchInputValue}
+                handleChange={handleSearchInputChange}
             />
 
             <PrimaryButton
