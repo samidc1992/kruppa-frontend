@@ -16,7 +16,7 @@ export const primaryButtonStyles = StyleSheet.create({
         justifyContent: 'center',
         padding: 10,
         width: '80%',
-        height: '10%',
+        height: 50,
         backgroundColor: '#ec6e5b',
         borderRadius: 10,
         margin: 5,

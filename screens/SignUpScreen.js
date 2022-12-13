@@ -1,69 +1,68 @@
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
+import { useState } from 'react';
+import { primaryButtonStyles } from '../styles/primaryButton';
+
+
 
 
 
 export default function SignUpScreen({ navigation }) {
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const submitAccount = () => {
-        const newUser = { username: 'username1', email: 'test@mail.fr', password: '123456' }
-        fetch(`http://192.168.10.176:3000/users/signup`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newUser),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
-            });
+    const handleSubmit = () => {
+
     }
-
-    const submitProfile = () => {
-        const newProfile = {
-            gender: 'female',
-            photo: '.jpeg',
-            birthDate: new Date(),
-            description: 'hello',
-            favoriteSports: [{ sport: 'football', level: 'beginner' }],
-            token: 'axJMtPpr3R7XzjpK87rC6hZpp-qNIhLK'
-        }
-        fetch(`http://192.168.10.176:3000/users/signup`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newProfile),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
-            });
-    }
-
 
     return (
-        <View style={styles.container}>
-            <Text>Sign Up Page</Text>
-            <TouchableOpacity
-                onPress={() => submitAccount()}
-            >
-                <Text>Sign Up Account</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => submitProfile()}
-            >
-                <Text>Sign Up Profile</Text>
-            </TouchableOpacity>
-        </View>
+        <SafeAreaView style={styles.container}>
+            {/* <Image  source={require('')} style={styles.image}/> */}
+
+            <Text style={styles.title}>Welcome to Kruppa</Text>
+
+            <View style={styles.inputContainer}>
+                <TextInput placeholder="your username" onChangeText={(value) => setUsername(value)} value={username} style={styles.input} />
+                <TextInput placeholder="your email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} />
+                <TextInput placeholder="your password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} />
+                <TouchableOpacity style={primaryButtonStyles.button} activeOpacity={0.8}>
+                    <Text style={primaryButtonStyles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
+        /*   alignItems: 'center',
+          justifyContent: 'center', */
+        backgroundColor: '#374146',
+    },
+
+    inputContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'yellow',
+        height: '100%',
+        width: '100%',
+    },
+
+    image: {
+
+
+    },
+
+    title: {
+        alignSelf: 'center',
+        marginTop: '50%',
+        fontSize: 30,
+        fontWeight: "bold",
+    },
+
+    input: {
+
+
     }
 })

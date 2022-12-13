@@ -20,10 +20,6 @@ export default function WelcomeScreen({ navigation }) {
             onPress={() => navigation.navigate('TabNavigator')}>
                 <Text>Explore</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-            onPress={() => navigation.navigate('Elise')}>
-                <Text>Elise Styles</Text>
-            </TouchableOpacity>
         </View>
     )
 }
