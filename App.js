@@ -19,18 +19,18 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  return(
+  return (
     <Tab.Navigator screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
         let iconName = "";
 
-        if(route.name === "Home") {
+        if (route.name === "Home") {
           iconName = "home";
-        } else if(route.name === "Search") {
+        } else if (route.name === "Search") {
           iconName = "search";
-        } else if(route.name === "Messages") {
+        } else if (route.name === "Messages") {
           iconName = "bell";
-        } else if(route.name === "Profile") {
+        } else if (route.name === "Profile") {
           iconName = "user";
         }
         return <FontAwesome name={iconName} size={size} color={color} />;
@@ -44,7 +44,7 @@ const TabNavigator = () => {
       <Tab.Screen name="Messages" component={MessagesScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
-  ) 
+  )
 }
 
 export default function App() {
@@ -59,7 +59,8 @@ export default function App() {
         <Stack.Screen name="Nawel" component={NawelStylesScreen} />
         <Stack.Screen name="SignUpProfile" component={SignUpProfileScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        
+        <Stack.Screen name="Search" component={SearchScreen} />
+
 
       </Stack.Navigator>
     </NavigationContainer>
