@@ -1,16 +1,30 @@
+<<<<<<< HEAD
 import { StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
 import { useState } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
+=======
+import { StyleSheet, Text, View, SafeAreaView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
+import { useState } from 'react';
+import PrimaryButton from '../components/PrimaryButton';
+import StandardFormInput from '../components/StandardFormInput';
+>>>>>>> signUpScreen
 
 
 
 export default function SignUpScreen({ navigation }) {
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+<<<<<<< HEAD
     const [usernameIsFocused, setUsernameIsFocused] = useState(false);
     const [emailIsFocused, setEmailIsFocused] = useState(false);
     const [passwordIsFocused, setPasswordIsFocused] = useState(false);
+=======
+    const handleUsernameInputChange = value => setUsername(value);
+    const handleEmailInputChange = value => setEmail(value);
+    const handlePasswordInputChange = value => setPassword(value);
+>>>>>>> signUpScreen
 
     const handlePressPrimaryButton = () => {
 
@@ -27,61 +41,52 @@ export default function SignUpScreen({ navigation }) {
              })
             .then(response => response.json())
             .then (data => {               
-              if (data.result) {               
+              if (data.result) {          
+                setUsername('');
+                setEmail('');
+                setPassword(''); 
                  navigation.navigate('SignUpProfile');              
               }
             });  
     }
 
-    return (
-        <SafeAreaView style={styles.container}>
-             {/* <Image  source={require('')} style={styles.image}/> */}
-
-            <Text style={styles.title}>Welcome to Kruppa</Text>
-  
+    return (     
+            
+       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        
+             {/* <Image  source={require('')} style={styles.image}/> */}  
             <View style={styles.inputContainer}>
             
-                 <TextInput style={usernameIsFocused ? styles.inputFocus : styles.input}
-                    placeholder="your username" 
-                    placeholderTextColor= '#7E8284'
-                    mode = 'flat'
-                    onChangeText={(value) => setUsername(value)} 
-                    value={username}                
-                    onBlur={() => setUsernameIsFocused(false)}
-                    onFocus={() => setUsernameIsFocused(true)}
-                    />
+             <Text style={styles.title}>Welcome to Kruppa</Text>
+                <TextInput style={styles.fieldName}>username</TextInput>
+                <StandardFormInput
+                    placeholder="username"        
+                    value={username}
+                    handleChange={handleUsernameInputChange}
+                />
 
-                <TextInput style={emailIsFocused? styles.inputFocus : styles.input}
-                    placeholder ="your email"
-                    placeholderTextColor="#7E8284"           
-                    mode = 'flat'
+                <Text style={styles.fieldName}>email       </Text>
+                <StandardFormInput
+                    placeholder="email"        
                     keyboardType="email-address"
-                    onChangeText={(value) => setEmail(value)} 
-                    value={email} 
-                    onBlur={() => setEmailIsFocused(false)}
-                        onFocus={() => setEmailIsFocused(true)} 
-                    
-                    />
+                    value={email}
+                    handleChange={handleEmailInputChange}
+                />
 
-                <TextInput style={passwordIsFocused ? styles.inputFocus : styles.input}
-                        placeholder ="your password"
-                        placeholderTextColor="#7E8284"
-                        secureTextEntry              
-                    
-                        mode = 'flat'
-                        onChangeText={(value) => setPassword(value)} 
-                        value={password} 
-                        onBlur={() => setPasswordIsFocused(false)}
-                        onFocus={() => setPasswordIsFocused(true)} 
-                  />
-
+                <Text style={styles.fieldName}>password</Text>
+                <StandardFormInput                        
+                    placeholder="password"   
+                    secureTextEntry ='true'     
+                    value={password}
+                    handleChange={handlePasswordInputChange}
+                />
+               </View>  
+              
                 <PrimaryButton
-                text='Sign Up'
-                onPress={() => handlePressPrimaryButton()}
-            />
-        </View>   
-          
-      </SafeAreaView>
+                    text='Sign Up'
+                    onPress={() => handlePressPrimaryButton()}
+                />
+        </KeyboardAvoidingView>
     )
 }
 
@@ -96,10 +101,12 @@ const styles = StyleSheet.create({
     },
 
     inputContainer: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center', 
         height: '100%',
         width: '100%', 
+        marginBottom :'29%',
     },
 
     image: {
@@ -112,6 +119,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: "bold",
         color: '#F0F0F0',
+<<<<<<< HEAD
     },
 
     input: {
@@ -119,6 +127,18 @@ const styles = StyleSheet.create({
         fontSize : 30,
         fontWeight : "bold",
         color : '#979797',
+=======
+        marginBottom: '20%',
+    },
+
+    fieldName: {
+        alignItems: 'flex-start',
+        color :"white",
+        marginTop:'3%',
+        marginBottom: '-3%',
+        marginLeft: '-65%',
+        fontSize: 14,        
+>>>>>>> signUpScreen
     },
 
     input: {
