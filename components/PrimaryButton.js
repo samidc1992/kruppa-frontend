@@ -22,9 +22,10 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '80%',
         height: '10%',
-        backgroundColor: '#ec6e5b',
+        backgroundColor: '#FF6317',
         borderRadius: 10,
         margin: 5,
+      
     },
     buttonText: {
         color: '#ffffff',
