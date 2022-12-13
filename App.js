@@ -7,9 +7,11 @@ import GroupScreen from './screens/GroupScreen';
 import SearchScreen from './screens/SearchScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import SignUpProfileScreen from './screens/SignUpProfileScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import MessagesScreen from './screens/MessagesScreen';
 import EliseStylesScreen from './screens/EliseStyles';
+import NawelStylesScreen from './screens/NawelStyles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
@@ -54,7 +56,11 @@ export default function App() {
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="Group" component={GroupScreen} />
         <Stack.Screen name="Elise" component={EliseStylesScreen} />
+        <Stack.Screen name="Nawel" component={NawelStylesScreen} />
+        <Stack.Screen name="SignUpProfile" component={SignUpProfileScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        
+
       </Stack.Navigator>
     </NavigationContainer>
   );
