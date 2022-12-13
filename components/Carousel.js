@@ -9,14 +9,17 @@ export const slider_width = Dimensions.get('window').width;
 export const item_width = Math.round(slider_width);
 
 const CarouselCardItem = ({ item, index }) => {
-  console.log(item.imgUrl)
-  const img = item.imgUrl
   return (
     <View style={styles.container} key={index}>
       <ImageBackground
-        source={require("../assets/running-2.jpg")}
+        source={item.image}
         style={styles.image}
-      />
+      >
+        <View style={styles.textContainer}>
+          <Text style={styles.header}>{item.header}</Text>
+          <Text style={styles.body}>{item.body}</Text>
+        </View>
+      </ImageBackground>
     </View>
   )
 }
@@ -31,26 +34,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  header: {
-    color: 'white',
-    height: 55,
+  textContainer: {
+    paddingTop: '155%',
     width: '85%',
-    fontSize: 34,
-    fontWeight: '600',
   },
   body: {
     color: 'white',
-    width: '85%',
     fontSize: 16,
     fontWeight: '400',
+    fontFamily: 'Inter',
   },
-  buttonsContainer: {
-    width: '100%',
-    alignItems: 'center',
-    paddingBottom: 30,
-  },
-  smallBtnsContainer: {
-      flexDirection: 'row',
+  header: {
+    color: 'white',
+    width: '85%',
+    fontSize: 18,
+    fontWeight: '600',
+    fontFamily: 'Inter',
   }
 })
 

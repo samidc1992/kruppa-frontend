@@ -11,13 +11,20 @@ export default function WelcomeScreen({ navigation }) {
 
     const data = [
         {
-          body: "Ut tincidunt tincidunt erat. Sed cursus turpis vitae tortor. Quisque malesuada placerat nisl. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.",
-          imgUrl: "../assets/running-1.jpg",
+            header: "New to Kruppa?",
+            body: "Join now and discover what your neighboors are doing to keep in shape.",
+            image: require("../assets/running-2.jpg"),
         },
         {
-          body: "Aenean ut eros et nisl sagittis vestibulum. Donec posuere vulputate arcu. Proin faucibus arcu quis ante. Curabitur at lacus ac velit ornare lobortis. ",
-          imgUrl: "../assets/running-2.jpg",
+            header: "EXPLORE AROUND YOU",
+            body: "Search workout groups in your city and neighbourhood.",
+            image: require("../assets/cycling-1.jpg"),
         },
+        {
+            header: "CONNECT TO PEOPLE",
+            body: "Reach out to people and workout with them.",
+            image: require("../assets/workout-1.jpg"),
+          },
       ];
 
     return (
@@ -34,13 +41,13 @@ export default function WelcomeScreen({ navigation }) {
                 useScrollView={true}
                 autoplay={true}
                 autoplayInterval={5000}
+                loop={true}
             />
             <Text style={styles.header}>Welcome to Kruppa</Text>
-            <Text style={styles.body}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation...</Text>
             <View style={styles.buttonsContainer}>
                 <View style={styles.smallBtnsContainer}>
                     <PrimaryButtonSmall 
-                    text='Sign Up' 
+                    text='Join Now' 
                     onPress={() => navigation.navigate('SignUp')}/>
                     <PrimaryButtonSmall 
                     text='Sign In' 
@@ -63,22 +70,12 @@ const styles = StyleSheet.create({
     },
     header: {
         color: 'white',
-
         width: '85%',
         fontSize: 34,
         fontWeight: '600',
         fontFamily: 'Inter',
         position: 'absolute',
         paddingTop: '20%'
-    },
-    body: {
-        color: 'white',
-        width: '85%',
-        fontSize: 16,
-        fontWeight: '400',
-        fontFamily: 'Inter',
-        position: 'absolute',
-        paddingTop: '160%'
     },
     buttonsContainer: {
         width: '100%',
@@ -91,15 +88,15 @@ const styles = StyleSheet.create({
     }
 })
 
-            // <TouchableOpacity
-            //     onPress={() => navigation.navigate('Elise')}>
-            //     <Text>Elise Styles</Text>
-            // </TouchableOpacity>
-            // <TouchableOpacity
-            //     onPress={() => navigation.navigate('Nawel')}>
-            //     <Text>Nawel Styles</Text>
-            // </TouchableOpacity>
-            // <TouchableOpacity
-            //     onPress={() => navigation.navigate('Search')}>
-            //     <Text>Search screen</Text>
-            // </TouchableOpacity>
+// <TouchableOpacity
+//     onPress={() => navigation.navigate('Elise')}>
+//     <Text>Elise Styles</Text>
+// </TouchableOpacity>
+// <TouchableOpacity
+//     onPress={() => navigation.navigate('Nawel')}>
+//     <Text>Nawel Styles</Text>
+// </TouchableOpacity>
+// <TouchableOpacity
+//     onPress={() => navigation.navigate('Search')}>
+//     <Text>Search screen</Text>
+// </TouchableOpacity>
