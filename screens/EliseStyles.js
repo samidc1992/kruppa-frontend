@@ -1,11 +1,16 @@
 import { TouchableOpacity, StyleSheet, Text, View, TextInput } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { primaryButtonStyles } from '../styles/primaryButton';
-import { secondaryButtonStyles } from '../styles/secondaryButton';
-import { primaryButtonSmallStyles } from '../styles/primaryButtonSmall';
-import { secondaryButtonSmallStyles } from '../styles/secondaryButtonSmall';
+// import { primaryButtonStyles } from '../styles/primaryButton';
+// import { secondaryButtonStyles } from '../styles/secondaryButton';
+// import { primaryButtonSmallStyles } from '../styles/primaryButtonSmall';
+// import { secondaryButtonSmallStyles } from '../styles/secondaryButtonSmall';
 import { searchInputStyles } from '../styles/searchInput';
 import { dropdownStyles } from '../styles/dropdown';
+
+import PrimaryButton from '../components/PrimaryButton'
+import SecondaryButton from '../components/SecondaryButton'
+import PrimaryButtonSmall from '../components/PrimaryButtonSmall'
+import SecondaryButtonSmall from '../components/SecondaryButtonSmall'
 
 // const myTheme = require('../styles/darkDropdownTheme');
 
@@ -37,6 +42,13 @@ export default function EliseStylesScreen({ navigation }) {
     //To get the items selected : value
 
 
+    const handlePressPrimaryButton = () => {
+        console.log('handlePressPrimaryButton')
+    }
+    const handlePressSecondaryButton = () => {
+        console.log('handlePressSecondaryButton')
+    }
+
     return (
         <View style={styles.container}>
             <DropDownPicker
@@ -61,18 +73,22 @@ export default function EliseStylesScreen({ navigation }) {
                 onFocus={() => setSearchIsFocused(true)}
             />
 
-            <TouchableOpacity style={primaryButtonStyles.button} activeOpacity={0.8}>
-                <Text style={primaryButtonStyles.buttonText}>Primary Button</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={secondaryButtonStyles.button} activeOpacity={0.8}>
-                <Text style={secondaryButtonStyles.buttonText}>Secondary Button</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={primaryButtonSmallStyles.button} activeOpacity={0.8}>
-                <Text style={primaryButtonSmallStyles.buttonText}>Primary</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={secondaryButtonSmallStyles.button} activeOpacity={0.8}>
-                <Text style={secondaryButtonSmallStyles.buttonText}>Secondary</Text>
-            </TouchableOpacity>
+            <PrimaryButton
+                text='Primary Button'
+                onPress={() => handlePressPrimaryButton()}
+            />
+            <SecondaryButton
+                text='Secondary Button'
+                onPress={() => handlePressSecondaryButton()}
+            />
+            <PrimaryButtonSmall
+                text='Primary'
+                onPress={() => handlePressPrimaryButton()}
+            />
+            <SecondaryButtonSmall
+                text='Secondary'
+                onPress={() => handlePressSecondaryButton()}
+            />
 
         </View>
     )
