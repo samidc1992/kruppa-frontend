@@ -1,10 +1,46 @@
-import { TouchableOpacity, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
-import { primaryButtonStyles } from '../styles/primaryButton';
+import PrimaryButton from '../components/PrimaryButton';
+import StandardFormInput from '../components/StandardFormInput';
+
+
+
 export default function SignUpScreen({ navigation }) {
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+<<<<<<< HEAD
+    const [usernameIsFocused, setUsernameIsFocused] = useState(false);
+    const [emailIsFocused, setEmailIsFocused] = useState(false);
+    const [passwordIsFocused, setPasswordIsFocused] = useState(false);
+    const handleUsernameInputChange = value => setUsername(value);
+    const handleEmailInputChange = value => setEmail(value);
+    const handlePasswordInputChange = value => setPassword(value);
+
+    const handlePressPrimaryButton = () => {
+
+        const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
+        
+        fetch(`${BACKEND_ADDRESS }/users/signup`, {
+            method : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              username : username, 
+              email : email , 
+              password : password,
+             }),
+             })
+            .then(response => response.json())
+            .then (data => {               
+              if (data.result) {          
+                setUsername('');
+                setEmail('');
+                setPassword(''); 
+                 navigation.navigate('SignUpProfile');              
+              }
+            });  
+=======
 
     const handleSubmit = () => {
         const [usernameIsFocused, setUsernameIsFocused] = useState(false);
@@ -31,15 +67,48 @@ export default function SignUpScreen({ navigation }) {
                 });
         }
 
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     }
 
-    return (
-        <SafeAreaView style={styles.container}>
-            {/* <Image  source={require('')} style={styles.image}/> */}
-
-            <Text style={styles.title}>Welcome to Kruppa</Text>
-
+    return (     
+            
+       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        
+             {/* <Image  source={require('')} style={styles.image}/> */}  
             <View style={styles.inputContainer}>
+<<<<<<< HEAD
+            
+             <Text style={styles.title}>Welcome to Kruppa</Text>
+                <TextInput style={styles.fieldName}>username</TextInput>
+                <StandardFormInput
+                    placeholder="username"        
+                    value={username}
+                    handleChange={handleUsernameInputChange}
+                />
+
+                <Text style={styles.fieldName}>email       </Text>
+                <StandardFormInput
+                    placeholder="email"        
+                    keyboardType="email-address"
+                    value={email}
+                    handleChange={handleEmailInputChange}
+                />
+
+                <Text style={styles.fieldName}>password</Text>
+                <StandardFormInput                        
+                    placeholder="password"   
+                    secureTextEntry ='true'     
+                    value={password}
+                    handleChange={handlePasswordInputChange}
+                />
+               </View>  
+              
+                <PrimaryButton
+                    text='Sign Up'
+                    onPress={() => handlePressPrimaryButton()}
+                />
+        </KeyboardAvoidingView>
+=======
                 <TextInput placeholder="your username" onChangeText={(value) => setUsername(value)} value={username} style={styles.input} />
                 <TextInput placeholder="your email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} />
                 <TextInput placeholder="your password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} />
@@ -92,6 +161,7 @@ export default function SignUpScreen({ navigation }) {
             </View>
 
         </SafeAreaView>
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     )
 }
 
@@ -99,20 +169,29 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        /*   alignItems: 'center',
-          justifyContent: 'center', */
-        backgroundColor: '#374146',
         alignItems: 'center',
+<<<<<<< HEAD
+        justifyContent: 'center',
+        backgroundColor: '#251E1E',
+          
+=======
         justifyContent: 'space-around',
         backgroundColor: '#272D31',
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     inputContainer: {
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center', 
         height: '100%',
+<<<<<<< HEAD
+        width: '100%', 
+        marginBottom :'29%',
+=======
         width: '100%',
 
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     image: {
@@ -124,9 +203,16 @@ const styles = StyleSheet.create({
         marginTop: '50%',
         fontSize: 30,
         fontWeight: "bold",
+        color: '#F0F0F0',
     },
 
     input: {
+<<<<<<< HEAD
+        marginTop : '70%',
+        fontSize : 30,
+        fontWeight : "bold",
+        color : '#979797',
+=======
 
 
         marginTop: '30%',
@@ -134,6 +220,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: '#979797',
 
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     input: {
@@ -145,7 +232,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
         margin: 5,
-        borderBottomColor: '#7E8284',
+        borderBottomColor: '#545A5E',
         borderBottomWidth: 1,
         paddingLeft: 10,
         fontSize: 20,
@@ -154,7 +241,7 @@ const styles = StyleSheet.create({
     inputFocus: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#3A474E',
+        backgroundColor: '#545A5E',
         width: '80%',
         height: 50,
         borderTopLeftRadius: 5,
