@@ -10,18 +10,13 @@ export default function SignUpScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [emptyField, SetEmptyField] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [fieldError, setFieldError] = useState('');
 
     const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     
     const handleUsernameInputChange = value => yasetUsername(value);
-
-    const handleEmailInputChange = value => setEmail(value);
-      
-     
-
+    const handleEmailInputChange = value => setEmail(value);     
     const handlePasswordInputChange = value => setPassword(value);
     
 
@@ -40,7 +35,7 @@ export default function SignUpScreen({ navigation }) {
              })
             .then(response => response.json())
             .then (data => {               
-              if (data.result) {          
+              if (data.result && ) {          
                 setUsername('');
                 setEmail('');
                 setPassword(''); 
