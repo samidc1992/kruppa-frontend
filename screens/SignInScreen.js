@@ -6,18 +6,25 @@ import { useState } from 'react';
 
 export default function SignInScreen({ navigation }) {
 
-        const [SearchMail, setSearchMail] = useState('')
-        const handleSearchInputChangeMail = value => setSearchMail(value)
+        const [email, setEmail] = useState('');
+        const handleSearchInputChangeMail = value => setEmail(value)
 
-        const [SearchPassword, setSearchPassword] = useState('')
-        const handleSearchInputChangePassword = value => setSearchPassword(value)
 
-        console.log(SearchMail) 
-        console.log(SearchPassword)
+        const [password, setPassword] = useState('');
+
+        const handleSearchInputChangePassword = value => setPassword(value)
+
+
+        console.log(email) 
+        console.log(password)
+
+        const [fieldError, setFieldError] = useState('');
+        
+        const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
      function login() {
 
-         const newUser = {email: SearchMail, password: SearchPassword }
+         const newUser = {email: email, password: password }
          fetch('http://192.168.10.197:3000/users/signin', {
             method: 'POST',
             headers: {
@@ -26,25 +33,39 @@ export default function SignInScreen({ navigation }) {
             body: JSON.stringify(newUser),
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
+            .then((data) => { console.log(data);
+            if (data.result && EMAIL_REGEX.test(email)) {
+                setEmail('');
+                setPassword('');    
+                navigation.navigate('Home');
+
+            } else {
+                setEmail('');
+                setPassword('');
+                setFieldError(true);
+            }
             })
+      
         };
-    return(
+         return(
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
                 
             <SearchInput
-                placeholder="Votre Email"
-                value={SearchMail}
+                placeholder="Email"
+                value={email}
                 handleChange={handleSearchInputChangeMail}/>
           
                 
             <SearchInput
-                    placeholder="Mot de passe"
-                    value={SearchPassword}
-                    handleChange={handleSearchInputChangePassword}/>
+                    placeholder="Password"
+                    value={password}
+                    handleChange={handleSearchInputChangePassword}/>            
+         {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
+
                 </View>
+
+
             <View style={styles.inputContainer}>
 
             <PrimaryButton
@@ -53,7 +74,7 @@ export default function SignInScreen({ navigation }) {
          </View>
         </SafeAreaView>
     )
-};
+    };
 
 const styles = StyleSheet.create({
     container: {
