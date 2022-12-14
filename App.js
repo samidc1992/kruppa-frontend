@@ -30,7 +30,7 @@ const TabNavigator = () => {
         } else if (route.name === "Search") {
           iconName = "search";
         } else if (route.name === "Messages") {
-          iconName = "bell";
+          iconName = "envelope";
         } else if (route.name === "Profile") {
           iconName = "user";
         }
