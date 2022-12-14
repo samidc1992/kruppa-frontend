@@ -18,7 +18,7 @@ export default function WelcomeScreen({ navigation }) {
         {
             header: "EXPLORE AROUND YOU",
             body: "Search workout groups in your city and neighbourhood.",
-            image: require("../assets/workout-1.jpg"),
+            image: require("../assets/cycling-1.jpg"),
         },
         {
             header: "CONNECT TO PEOPLE",
