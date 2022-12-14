@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
 import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
-import PrimaryButton from '../components/PrimaryButton';
-import PrimaryButtonSmall from '../components/PrimaryButtonSmall';
 
 //https://blog.logrocket.com/implement-react-native-snap-carousel/
+//https://amanhimself.dev/blog/custom-preview-image-gallery-in-react-native/
 
 export const slider_width = Dimensions.get('window').width;
 export const item_width = Math.round(slider_width);
