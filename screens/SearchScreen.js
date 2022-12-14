@@ -10,6 +10,8 @@ import * as Location from 'expo-location';
 
 export default function SearchScreen({ navigation }) {
 
+    const BACKEND_ADRESS = 'http://192.168.10.140:3000'
+
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
 
@@ -22,10 +24,14 @@ export default function SearchScreen({ navigation }) {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
 
+    // search results
+    const [searchResults, setSearchResults] = useState([])
+    console.log('searchResults : ' + JSON.stringify(searchResults))
+
     //fetch sports in DB for the dropdown list
     const [sports, setSports] = useState([])
     useEffect(() => {
-        fetch('http://192.168.10.152:3000/sports')
+        fetch(`${BACKEND_ADRESS}/sports`)
             .then(response => response.json())
             .then(data => {
                 //format sports for the dropdown list
@@ -51,33 +57,70 @@ export default function SearchScreen({ navigation }) {
 
 
     function launchSearch() {
-        console.log('launch search')
 
         //if user did not fill any field, error message
         //if user did not fill location, search around me ?
         // if user did not fill sport ? 
 
         // get values from input
-        console.log('sport selected :' + value)
-        console.log('location searched :' + searchInputValue)
+        // console.log('sport selected :' + value)
+        // console.log('location searched :' + searchInputValue)
+
+        const urlParams = { sport: null, latitude: null, longitude: null }
+
+        //how to not search API if searchInput is empty ?
+        urlParams.sport = value
+
 
         //search location from Search input with API api.gouv
-        if (searchInputValue.length === 0) {
-            return
-        }
         fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchInputValue}`)
             .then((response) => response.json())
             .then((data) => {
+                // console.log('data from address API : ' + JSON.stringify(data))
+                if (!data.features[0]) {
+                    console.log('no result')
+                    return
+                }
                 const firstLocationFound = data.features[0];
                 const locationFound = {
-                    name: firstCity.properties.city,
-                    latitude: firstCity.geometry.coordinates[1],
-                    longitude: firstCity.geometry.coordinates[0],
+                    name: firstLocationFound.properties.label,
+                    latitude: firstLocationFound.geometry.coordinates[1],
+                    longitude: firstLocationFound.geometry.coordinates[0],
                 };
-                console.log('location found : ' + locationFound)
+                console.log('location found : ' + JSON.stringify(locationFound))
+                // fetch route search with location found
+
+                urlParams.latitude = locationFound.latitude
+                urlParams.longitude = locationFound.longitude
+                console.log(JSON.stringify(urlParams))
+
+                const url = (
+                    `${BACKEND_ADRESS}/groups/search?` +
+                    new URLSearchParams(urlParams).toString()
+                );
+
+                console.log(url)
+
+                fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data)
+                        setSearchResults(data.groups)
+
+                        //empty search fields
+                    })
+
+
             })
-        // fetch route search
     }
+
+    //get markers from search result and display on Map
+    const markers = searchResults.map((data, i) => {
+        return <Marker key={i} coordinate={{ latitude: data.workout_location.location.coordinates[1], longitude: data.workout_location.location.coordinates[0] }} title={data.name} />;
+    });
+
+
+    // console.log(markers)
 
     return (
         <KeyboardAvoidingView
@@ -94,6 +137,7 @@ export default function SearchScreen({ navigation }) {
                     }}
                     style={styles.mapContainer}
                 >
+                    {markers}
                     {currentPosition && <Marker
                         coordinate={currentPosition}
                         title="My position"
