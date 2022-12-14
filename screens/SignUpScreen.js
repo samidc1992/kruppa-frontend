@@ -43,7 +43,10 @@ export default function SignUpScreen({ navigation }) {
                 setEmail('');
                 setPassword(''); 
                  navigation.navigate('SignUpProfile');              
-              } else {                        
+              } else {          
+                setUsername('');
+                setEmail('');
+                setPassword('');               
                 setFieldError(true);
               } 
             });  
@@ -53,40 +56,38 @@ export default function SignUpScreen({ navigation }) {
             
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             {/* <Image  source={require('')} style={styles.image}/> */}  
-            <Text style={styles.header}>Welcome to Kruppa</Text>
 
             <View style={styles.inputContainer}>
+            <Text style={styles.header}>Welcome to Kruppa</Text>
             
                 <Text style={styles.fieldName}>username</Text>
                 <StandardFormInput
-                    placeholder="username"        
+                    placeholder="your username"        
                     value={username}
                     handleChange={handleUsernameInputChange}
                 />
 
                 <Text style={styles.fieldName}>email       </Text>
                 <StandardFormInput
-                    placeholder="email"        
-                    keyboardType="email-address"
+                    placeholder="your email"        
+                   keyboardType="email-address"
                     value={email}
                     handleChange={handleEmailInputChange}
                 />
 
                 <Text style={styles.fieldName}>password</Text>
                 <StandardFormInput                        
-                    placeholder="password"   
+                    placeholder="your password"   
                     secureTextEntry ='true'     
                     value={password}
                     handleChange={handlePasswordInputChange}
                 />
                  {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
-               </View> 
-            <View  style={styles.buttonsContainer}> 
+               </View>         
                 <PrimaryButton                    
                     text='Sign Up'
                     onPress={() => handlePressPrimaryButton()}
-                />
-            </View>
+                />       
                
         </KeyboardAvoidingView>
     )
