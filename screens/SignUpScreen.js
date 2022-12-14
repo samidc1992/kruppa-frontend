@@ -98,7 +98,7 @@ export default function SignUpScreen({ navigation }) {
                 </TouchableOpacity>
             </View>
 
-        </SafeAreaView>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -107,14 +107,9 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-<<<<<<< HEAD
         justifyContent: 'center',
         backgroundColor: '#251E1E',
           
-=======
-        justifyContent: 'space-around',
-        backgroundColor: '#272D31',
->>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     inputContainer: {
@@ -122,13 +117,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center', 
         height: '100%',
-<<<<<<< HEAD
         width: '100%', 
         marginBottom :'29%',
-=======
-        width: '100%',
-
->>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     image: {
@@ -144,12 +134,6 @@ const styles = StyleSheet.create({
     },
 
     input: {
-<<<<<<< HEAD
-        marginTop : '70%',
-        fontSize : 30,
-        fontWeight : "bold",
-        color : '#979797',
-=======
 
 
         marginTop: '30%',
@@ -157,7 +141,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: '#979797',
 
->>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     input: {
