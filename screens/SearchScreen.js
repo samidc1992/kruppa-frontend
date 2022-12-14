@@ -1,5 +1,5 @@
 import MapView, { Marker } from 'react-native-maps';
-import { Keyboard, TouchableWithoutFeedback, Platform, StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import { Keyboard, Text, TouchableWithoutFeedback, Platform, StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { dropdownStyles } from '../styles/dropdown';
 import { useState, useEffect } from 'react';
@@ -22,11 +22,13 @@ export default function SearchScreen({ navigation }) {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     })
-    console.log(regionView)
 
     //search input setup
     const [searchInputValue, setSearchInputValue] = useState('')
     const handleSearchInputChange = value => setSearchInputValue(value)
+
+    //manage error messages
+    const [errorMessage, setErrorMessage] = useState('')
 
     //dropdown setup
     DropDownPicker.setTheme("DARK");
@@ -35,7 +37,6 @@ export default function SearchScreen({ navigation }) {
 
     // search results
     const [searchResults, setSearchResults] = useState([])
-    // console.log('searchResults : ' + JSON.stringify(searchResults))
 
     //fetch sports in DB for the dropdown list
     const [sports, setSports] = useState([])
@@ -60,8 +61,8 @@ export default function SearchScreen({ navigation }) {
                     (location) => {
                         setCurrentPosition(location.coords);
                         setRegionView({
-                            latitude: currentPosition.latitude,
-                            longitude: currentPosition.longitude,
+                            latitude: location.coords.latitude,
+                            longitude: location.coords.longitude,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         })
@@ -71,81 +72,86 @@ export default function SearchScreen({ navigation }) {
     }, []);
 
 
-    function launchSearch() {
+    const launchSearch = async () => {
+        setErrorMessage('')
 
-        //if user did not fill any field, error message
-        //if user did not fill location, search around me ?
-        // if user did not fill sport ? 
+        //manage inputs : at least sport or location should be filled
+        if (!sportValue && !searchInputValue) {
+            setErrorMessage('Please indicate location or sport.')
+            Keyboard.dismiss()
+            return
+        }
+        if (searchInputValue && searchInputValue.length < 3) {
+            setErrorMessage('Location must contain at least 3 characters.')
+            Keyboard.dismiss()
+            return
+        }
 
-        // get values from input
-        // console.log('sport selected :' + value)
-        // console.log('location searched :' + searchInputValue)
+        // prepare query fetch GET group
+        let urlParams = {
+            sport: '', latitude: '', longitude: ''
+        }
 
-        const urlParams = { sport: null, latitude: null, longitude: null }
-
-        //how to not search API if searchInput is empty ?
+        //get sport from input
         urlParams.sport = sportValue
 
-
         //search location from Search input with API api.gouv
-        fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchInputValue}`)
-            .then((response) => response.json())
-            .then((data) => {
-                // console.log('data from address API : ' + JSON.stringify(data))
-                if (!data.features[0]) {
-                    console.log('no result')
-                    return
-                }
-                const firstLocationFound = data.features[0];
-                const locationFound = {
-                    name: firstLocationFound.properties.label,
-                    latitude: firstLocationFound.geometry.coordinates[1],
-                    longitude: firstLocationFound.geometry.coordinates[0],
-                };
-                console.log('location found : ' + JSON.stringify(locationFound))
-                // fetch route search with location found
+        if (searchInputValue.length) {
+            response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchInputValue}`)
+            data = await response.json()
 
-                urlParams.latitude = locationFound.latitude
-                urlParams.longitude = locationFound.longitude
-                console.log(JSON.stringify(urlParams))
+            // console.log('data.feature[0]: ' + data.features[0])
 
-                const url = (
-                    `${BACKEND_ADRESS}/groups/search?` +
-                    new URLSearchParams(urlParams).toString()
-                );
+            if (data.code === 400) {
+                setErrorMessage('Location not found.')
+                Keyboard.dismiss()
+                return
+            }
+            const locationFound = {
+                name: data.features[0].properties.label,
+                latitude: data.features[0].geometry.coordinates[1],
+                longitude: data.features[0].geometry.coordinates[0],
+            };
 
-                console.log(url)
+            // console.log('location found : ' + JSON.stringify(locationFound))
 
-                fetch(url)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        console.log(data)
-                        setSearchResults(data.groups)
+            // fetch route search with location found
 
-                        //center map on research
-                        setRegionView({
-                            latitude: locationFound.latitude,
-                            longitude: locationFound.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                        })
+            urlParams.latitude = locationFound.latitude
+            urlParams.longitude = locationFound.longitude
+        }
 
-                        //clean screen
-                        Keyboard.dismiss()
-                        setSearchInputValue('')
-                    })
+        const url = (
+            `${BACKEND_ADRESS}/groups/search?sport${urlParams.sport && '=' + urlParams.sport}&latitude${urlParams.latitude && '=' + urlParams.latitude}&longitude${urlParams.longitude && '=' + urlParams.longitude}`
+        );
 
+        console.log(url)
 
-            })
+        const groupsResponse = await fetch(url)
+        const groupsData = await groupsResponse.json()
+        setSearchResults(groupsData.groups)
+
+        // console.log(groupsData)
+
+        //center map on research
+        // setRegionView({
+        //     latitude: locationFound.latitude,
+        //     longitude: locationFound.longitude,
+        //     latitudeDelta: 0.0922,
+        //     longitudeDelta: 0.0421,
+        // })
+
+        //clean screen
+        Keyboard.dismiss()
+        // setSearchInputValue(locationFound.name)
     }
+
+    // console.log('searchResults : ' + searchResults)
 
     //get markers from search result and display on Map
     const markers = searchResults.map((data, i) => {
         return <Marker key={i} coordinate={{ latitude: data.workout_location.location.coordinates[1], longitude: data.workout_location.location.coordinates[0] }} title={data.name} />;
     });
-
-
-    // console.log(markers)
 
     return (
         <KeyboardAvoidingView
@@ -161,7 +167,7 @@ export default function SearchScreen({ navigation }) {
                     {currentPosition && <Marker
                         coordinate={currentPosition}
                         title="My position"
-                        pinColor="red"
+                        pinColor="#FF6317"
                     />}
                 </MapView>
             </TouchableWithoutFeedback>
@@ -184,6 +190,7 @@ export default function SearchScreen({ navigation }) {
                     value={searchInputValue}
                     handleChange={handleSearchInputChange}
                 />
+                {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
                 <PrimaryButton
                     text='Search'
                     onPress={() => launchSearch()}
@@ -211,6 +218,12 @@ const styles = StyleSheet.create({
     mapContainer: {
         height: '60%',
         width: '100%',
+    },
+    error: {
+        color: 'red',
+        textAlign: 'left',
+        width: '85%',
+        fontSize: 16,
     }
 
 })
