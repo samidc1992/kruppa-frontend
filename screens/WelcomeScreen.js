@@ -68,8 +68,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-around',
-        backgroundColor: '#3A474E',
+        backgroundColor: 'black',
     },
     header: {
         color: 'white',
@@ -78,7 +77,8 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontFamily: 'Inter',
         position: 'absolute',
-        top: 60
+        top: 60,
+        textAlign: 'center'
     },
     buttonsContainer: {
         width: '100%',
