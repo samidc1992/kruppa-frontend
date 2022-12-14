@@ -15,6 +15,15 @@ export default function SearchScreen({ navigation }) {
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
 
+    //region view on map
+    const [regionView, setRegionView] = useState({
+        latitude: currentPosition.latitude,
+        longitude: currentPosition.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+    })
+    console.log(regionView)
+
     //search input setup
     const [searchInputValue, setSearchInputValue] = useState('')
     const handleSearchInputChange = value => setSearchInputValue(value)
@@ -22,11 +31,11 @@ export default function SearchScreen({ navigation }) {
     //dropdown setup
     DropDownPicker.setTheme("DARK");
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
+    const [sportValue, setSportValue] = useState(null);
 
     // search results
     const [searchResults, setSearchResults] = useState([])
-    console.log('searchResults : ' + JSON.stringify(searchResults))
+    // console.log('searchResults : ' + JSON.stringify(searchResults))
 
     //fetch sports in DB for the dropdown list
     const [sports, setSports] = useState([])
@@ -50,6 +59,12 @@ export default function SearchScreen({ navigation }) {
                 Location.watchPositionAsync({ distanceInterval: 10 },
                     (location) => {
                         setCurrentPosition(location.coords);
+                        setRegionView({
+                            latitude: currentPosition.latitude,
+                            longitude: currentPosition.longitude,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                        })
                     });
             }
         })();
@@ -69,7 +84,7 @@ export default function SearchScreen({ navigation }) {
         const urlParams = { sport: null, latitude: null, longitude: null }
 
         //how to not search API if searchInput is empty ?
-        urlParams.sport = value
+        urlParams.sport = sportValue
 
 
         //search location from Search input with API api.gouv
@@ -107,7 +122,17 @@ export default function SearchScreen({ navigation }) {
                         console.log(data)
                         setSearchResults(data.groups)
 
-                        //empty search fields
+                        //center map on research
+                        setRegionView({
+                            latitude: locationFound.latitude,
+                            longitude: locationFound.longitude,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                        })
+
+                        //clean screen
+                        Keyboard.dismiss()
+                        setSearchInputValue('')
                     })
 
 
@@ -129,12 +154,7 @@ export default function SearchScreen({ navigation }) {
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <MapView
-                    region={{
-                        latitude: currentPosition.latitude,
-                        longitude: currentPosition.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
+                    region={regionView}
                     style={styles.mapContainer}
                 >
                     {markers}
@@ -153,10 +173,10 @@ export default function SearchScreen({ navigation }) {
                     containerStyle={dropdownStyles.container}
                     multiple={false}
                     open={open}
-                    value={value}
+                    value={sportValue}
                     items={sports}
                     setOpen={setOpen}
-                    setValue={setValue}
+                    setValue={setSportValue}
                     setItems={setSports}
                 />
                 <SearchInput
