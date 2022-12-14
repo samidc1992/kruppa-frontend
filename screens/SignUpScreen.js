@@ -10,6 +10,7 @@ export default function SignUpScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+<<<<<<< HEAD
     const [usernameIsFocused, setUsernameIsFocused] = useState(false);
     const [emailIsFocused, setEmailIsFocused] = useState(false);
     const [passwordIsFocused, setPasswordIsFocused] = useState(false);
@@ -39,6 +40,34 @@ export default function SignUpScreen({ navigation }) {
                  navigation.navigate('SignUpProfile');              
               }
             });  
+=======
+
+    const handleSubmit = () => {
+        const [usernameIsFocused, setUsernameIsFocused] = useState(false);
+        const [emailIsFocused, setEmailIsFocused] = useState(false);
+        const [passwordIsFocused, setPasswordIsFocused] = useState(false);
+
+        //const BACKEND_ADDRESS = '';
+
+        const handleSubmit = () => {
+            fetch('http://192.168.10.134:3000/users/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result) {
+                        navigation.navigate('SignUpProfile');
+                    }
+                });
+        }
+
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     }
 
     return (     
@@ -47,6 +76,7 @@ export default function SignUpScreen({ navigation }) {
         
              {/* <Image  source={require('')} style={styles.image}/> */}  
             <View style={styles.inputContainer}>
+<<<<<<< HEAD
             
              <Text style={styles.title}>Welcome to Kruppa</Text>
                 <TextInput style={styles.fieldName}>username</TextInput>
@@ -78,6 +108,60 @@ export default function SignUpScreen({ navigation }) {
                     onPress={() => handlePressPrimaryButton()}
                 />
         </KeyboardAvoidingView>
+=======
+                <TextInput placeholder="your username" onChangeText={(value) => setUsername(value)} value={username} style={styles.input} />
+                <TextInput placeholder="your email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} />
+                <TextInput placeholder="your password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} />
+                <TouchableOpacity style={primaryButtonStyles.button} activeOpacity={0.8}>
+                    <Text style={primaryButtonStyles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+            </View>
+             //{/* <Image  source={require('')} style={styles.image}/> */}
+
+            <Text style={styles.title}>Welcome to Kruppa</Text>
+
+            <View style={styles.inputContainer}>
+
+                <TextInput style={usernameIsFocused ? styles.inputFocus : styles.input}
+                    placeholder="your username"
+                    placeholderTextColor='#7E8284'
+                    mode='flat'
+                    onChangeText={(value) => setUsername(value)}
+                    value={username}
+                    onBlur={() => setUsernameIsFocused(false)}
+                    onFocus={() => setUsernameIsFocused(true)}
+                />
+
+                <TextInput style={emailIsFocused ? styles.inputFocus : styles.input}
+                    placeholder="your email"
+                    placeholderTextColor="#7E8284"
+                    mode='flat'
+                    keyboardType="email-address"
+                    onChangeText={(value) => setEmail(value)}
+                    value={email}
+                    onBlur={() => setEmailIsFocused(false)}
+                    onFocus={() => setEmailIsFocused(true)}
+
+                />
+
+                <TextInput style={passwordIsFocused ? styles.inputFocus : styles.input}
+                    placeholder="your password"
+                    placeholderTextColor="#7E8284"
+                    secureTextEntry
+
+                    mode='flat'
+                    onChangeText={(value) => setPassword(value)}
+                    value={password}
+                    onBlur={() => setPasswordIsFocused(false)}
+                    onFocus={() => setPasswordIsFocused(true)}
+                />
+                <TouchableOpacity style={primaryButtonStyles.button} activeOpacity={0.8} onPress={() => handleSubmit()}>
+                    <Text style={primaryButtonStyles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+            </View>
+
+        </SafeAreaView>
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     )
 }
 
@@ -86,9 +170,14 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
+<<<<<<< HEAD
         justifyContent: 'center',
         backgroundColor: '#251E1E',
           
+=======
+        justifyContent: 'space-around',
+        backgroundColor: '#272D31',
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     inputContainer: {
@@ -96,8 +185,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center', 
         height: '100%',
+<<<<<<< HEAD
         width: '100%', 
         marginBottom :'29%',
+=======
+        width: '100%',
+
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     image: {
@@ -113,10 +207,20 @@ const styles = StyleSheet.create({
     },
 
     input: {
+<<<<<<< HEAD
         marginTop : '70%',
         fontSize : 30,
         fontWeight : "bold",
         color : '#979797',
+=======
+
+
+        marginTop: '30%',
+        fontSize: 30,
+        fontWeight: "bold",
+        color: '#979797',
+
+>>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     },
 
     input: {
