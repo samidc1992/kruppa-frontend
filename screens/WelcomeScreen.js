@@ -18,7 +18,7 @@ export default function WelcomeScreen({ navigation }) {
         {
             header: "EXPLORE AROUND YOU",
             body: "Search workout groups in your city and neighbourhood.",
-            image: require("../assets/cycling-1.jpg"),
+            image: require("../assets/workout-1.jpg"),
         },
         {
             header: "CONNECT TO PEOPLE",
@@ -75,13 +75,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontFamily: 'Inter',
         position: 'absolute',
-        paddingTop: '20%'
+        top: 60
     },
     buttonsContainer: {
         width: '100%',
         alignItems: 'center',
         position: 'absolute',
-        paddingTop: '175%'
+        bottom: 40
     },
     smallBtnsContainer: {
         flexDirection: 'row',
