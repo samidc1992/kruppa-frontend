@@ -16,15 +16,11 @@ export default function SignUpScreen({ navigation }) {
     const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     
-    const handleUsernameInputChange = value => {
-        setUsername(value);
-    };
-    const handleEmailInputChange = value => {
-        setEmail(value);
-       /*  if (EMAIL_REGEX.test(email)) {
-        
-        }; */
-     };
+    const handleUsernameInputChange = value => yasetUsername(value);
+
+    const handleEmailInputChange = value => setEmail(value);
+      
+     
 
     const handlePasswordInputChange = value => setPassword(value);
     
@@ -33,7 +29,7 @@ export default function SignUpScreen({ navigation }) {
 
         const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
         
-        fetch(`${BACKEND_ADDRESS }/users/signup`, {
+        fetch(`${BACKEND_ADDRESS}/users/signup`, {
             method : 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
