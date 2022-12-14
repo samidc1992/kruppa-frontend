@@ -10,12 +10,24 @@ export default function SignUpScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [usernameIsFocused, setUsernameIsFocused] = useState(false);
-    const [emailIsFocused, setEmailIsFocused] = useState(false);
-    const [passwordIsFocused, setPasswordIsFocused] = useState(false);
-    const handleUsernameInputChange = value => setUsername(value);
-    const handleEmailInputChange = value => setEmail(value);
+    const [emptyField, SetEmptyField] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    
+    const handleUsernameInputChange = value => {
+        setUsername(value);
+    };
+    const handleEmailInputChange = value => {
+        setEmail(value);
+       /*  if (EMAIL_REGEX.test(email)) {
+        
+        }; */
+     };
+
     const handlePasswordInputChange = value => setPassword(value);
+    
 
     const handlePressPrimaryButton = () => {
 
@@ -37,67 +49,49 @@ export default function SignUpScreen({ navigation }) {
                 setEmail('');
                 setPassword(''); 
                  navigation.navigate('SignUpProfile');              
+              } else {
+                SetEmptyField(true);
+                setErrorMessage ('Required fields should be filled out');
               }
             });  
     }
 
     return (     
             
-       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
              {/* <Image  source={require('')} style={styles.image}/> */}  
             <View style={styles.inputContainer}>
-                <TextInput placeholder="your username" onChangeText={(value) => setUsername(value)} value={username} style={styles.input} />
-                <TextInput placeholder="your email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} />
-                <TextInput placeholder="your password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} />
-                <TouchableOpacity style={primaryButtonStyles.button} activeOpacity={0.8}>
-                    <Text style={primaryButtonStyles.buttonText}>Sign Up</Text>
-                </TouchableOpacity>
-            </View>
-             //{/* <Image  source={require('')} style={styles.image}/> */}
-
-            <Text style={styles.title}>Welcome to Kruppa</Text>
-
-            <View style={styles.inputContainer}>
-
-                <TextInput style={usernameIsFocused ? styles.inputFocus : styles.input}
-                    placeholder="your username"
-                    placeholderTextColor='#7E8284'
-                    mode='flat'
-                    onChangeText={(value) => setUsername(value)}
+            
+             <Text style={styles.title}>Welcome to Kruppa</Text>
+                <Text style={styles.fieldName}>username</Text>
+                <StandardFormInput
+                    placeholder="username"        
                     value={username}
-                    onBlur={() => setUsernameIsFocused(false)}
-                    onFocus={() => setUsernameIsFocused(true)}
+                    handleChange={handleUsernameInputChange}
                 />
 
-                <TextInput style={emailIsFocused ? styles.inputFocus : styles.input}
-                    placeholder="your email"
-                    placeholderTextColor="#7E8284"
-                    mode='flat'
+                <Text style={styles.fieldName}>email       </Text>
+                <StandardFormInput
+                    placeholder="email"        
                     keyboardType="email-address"
-                    onChangeText={(value) => setEmail(value)}
                     value={email}
-                    onBlur={() => setEmailIsFocused(false)}
-                    onFocus={() => setEmailIsFocused(true)}
-
+                    handleChange={handleEmailInputChange}
                 />
 
-                <TextInput style={passwordIsFocused ? styles.inputFocus : styles.input}
-                    placeholder="your password"
-                    placeholderTextColor="#7E8284"
-                    secureTextEntry
-
-                    mode='flat'
-                    onChangeText={(value) => setPassword(value)}
+                <Text style={styles.fieldName}>password</Text>
+                <StandardFormInput                        
+                    placeholder="password"   
+                    secureTextEntry ='true'     
                     value={password}
-                    onBlur={() => setPasswordIsFocused(false)}
-                    onFocus={() => setPasswordIsFocused(true)}
+                    handleChange={handlePasswordInputChange}
                 />
-                <TouchableOpacity style={primaryButtonStyles.button} activeOpacity={0.8} onPress={() => handleSubmit()}>
-                    <Text style={primaryButtonStyles.buttonText}>Sign Up</Text>
-                </TouchableOpacity>
-            </View>
-
+                <Text style={styles.errorInput}>{errorMessage}</Text>
+               </View>  
+                <PrimaryButton
+                    
+                    text='Sign Up'
+                    onPress={() => handlePressPrimaryButton()}
+                />
         </KeyboardAvoidingView>
     )
 }
@@ -105,10 +99,11 @@ export default function SignUpScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
+        /* flexDirection: 'column', */
         alignItems: 'center',
-        justifyContent: 'center',
+       /*  justifyContent: 'center', */
         backgroundColor: '#251E1E',
+       
           
     },
 
@@ -118,7 +113,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         height: '100%',
         width: '100%', 
-        marginBottom :'29%',
+        paddingBottom : '40%',
+      
     },
 
     image: {
@@ -131,15 +127,21 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: "bold",
         color: '#F0F0F0',
+        marginBottom: '15%',
     },
 
-    input: {
+    fieldName: {
+        alignItems: 'flex-start',
+        color :"white",
+        marginTop:'3%',
+        marginBottom: '-3%',
+        marginLeft: '-65%',
+        fontSize: 14,        
+    },
 
-
-        marginTop: '30%',
-        fontSize: 30,
-        fontWeight: "bold",
-        color: '#979797',
+    errorInput: {
+        fontSize : '12',
+        color : 'red',
 
     },
 
