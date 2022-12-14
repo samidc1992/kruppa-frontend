@@ -2,19 +2,28 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useState } from 'react';
 
-function DoubleTab(props) {
+function TrippleTab(props) {
     const [isTabLeftFocused, setIsTabLeftFocused] = useState(true);
+    const [isTabMiddleFocused, setIsTabMiddleFocused] = useState(false);
     const [isTabRightFocused, setIsTabRightFocused] = useState(false);
 
     function handleClickTabLeft() {
         setIsTabLeftFocused(true);
+        setIsTabMiddleFocused(false);
         setIsTabRightFocused(false);
-        props.onPressLeft()
+        props.onPressLeft();
+    };
+    function handleClickTabMiddle() {
+        setIsTabLeftFocused(false);
+        setIsTabMiddleFocused(true);
+        setIsTabRightFocused(false);
+        props.onPressMiddle();
     };
     function handleClickTabRight() {
-        setIsTabRightFocused(true);
         setIsTabLeftFocused(false);
-        props.onPressRight()
+        setIsTabMiddleFocused(false);
+        setIsTabRightFocused(true);
+        props.onPressRight();
     };
     return (
         <View style={styles.container}>
@@ -24,6 +33,14 @@ function DoubleTab(props) {
                     onPress={() => handleClickTabLeft()}
                 >
                     {props.textTabLeft}
+                </Text>
+            </View>
+            <View style={ isTabMiddleFocused ? styles.tabFocus : styles.tab }>
+                <Text 
+                    style={ isTabMiddleFocused ? styles.tabTextFocus : styles.tabText }
+                    onPress={() => handleClickTabMiddle()}
+                >
+                    {props.textTabMiddle}
                 </Text>
             </View>
             <View style={ isTabRightFocused ? styles.tabFocus : styles.tab }>
@@ -48,7 +65,7 @@ const styles = StyleSheet.create({
     },
     tabFocus: {
         height: 30,
-        width: '42.5%',
+        width: '30%',
         alignItems: 'center',
         justifyContent: 'center',
         borderBottomColor: "#FF6317",
@@ -65,7 +82,7 @@ const styles = StyleSheet.create({
     },
     tab: {
         height: 30,
-        width: '42.5%',
+        width: '30%',
         alignItems: 'center',
         justifyContent: 'center',
         borderBottomColor: "#7E8284",
@@ -82,4 +99,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DoubleTab
+export default TrippleTab
