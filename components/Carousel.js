@@ -34,8 +34,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   textContainer: {
-    paddingTop: '155%',
     width: '85%',
+    position: 'absolute',
+    bottom: 200
   },
   body: {
     color: 'white',
