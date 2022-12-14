@@ -10,24 +10,19 @@ export default function SignUpScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [emptyField, SetEmptyField] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [fieldError, setFieldError] = useState('');
 
     const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     
     const handleUsernameInputChange = value => yasetUsername(value);
-
-    const handleEmailInputChange = value => setEmail(value);
-      
-     
-
+    const handleEmailInputChange = value => setEmail(value);     
     const handlePasswordInputChange = value => setPassword(value);
     
 
     const handlePressPrimaryButton = () => {
 
-        const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
+        const BACKEND_ADDRESS = 'http://192.168.10.147:3000';
         
         fetch(`${BACKEND_ADDRESS}/users/signup`, {
             method : 'POST',
@@ -40,54 +35,57 @@ export default function SignUpScreen({ navigation }) {
              })
             .then(response => response.json())
             .then (data => {               
-              if (data.result) {          
+              if (data.result && EMAIL_REGEX.test(email)) {          
                 setUsername('');
                 setEmail('');
                 setPassword(''); 
                  navigation.navigate('SignUpProfile');              
-              } else {
-                SetEmptyField(true);
-                setErrorMessage ('Required fields should be filled out');
-              }
+              } else {          
+                setUsername('');
+                setEmail('');
+                setPassword('');               
+                setFieldError(true);
+              } 
             });  
     }
 
     return (     
             
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-             {/* <Image  source={require('')} style={styles.image}/> */}  
+            {/* <Image  source={require('')} style={styles.image}/> */}  
+
             <View style={styles.inputContainer}>
+            <Text style={styles.header}>Welcome to Kruppa</Text>
             
-             <Text style={styles.title}>Welcome to Kruppa</Text>
                 <Text style={styles.fieldName}>username</Text>
                 <StandardFormInput
-                    placeholder="username"        
+                    placeholder="your username"        
                     value={username}
                     handleChange={handleUsernameInputChange}
                 />
 
                 <Text style={styles.fieldName}>email       </Text>
                 <StandardFormInput
-                    placeholder="email"        
-                    keyboardType="email-address"
+                    placeholder="your email"        
+                   keyboardType="email-address"
                     value={email}
                     handleChange={handleEmailInputChange}
                 />
 
                 <Text style={styles.fieldName}>password</Text>
                 <StandardFormInput                        
-                    placeholder="password"   
+                    placeholder="your password"   
                     secureTextEntry ='true'     
                     value={password}
                     handleChange={handlePasswordInputChange}
                 />
-                <Text style={styles.errorInput}>{errorMessage}</Text>
-               </View>  
-                <PrimaryButton
-                    
+                 {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
+               </View>         
+                <PrimaryButton                    
                     text='Sign Up'
                     onPress={() => handlePressPrimaryButton()}
-                />
+                />       
+               
         </KeyboardAvoidingView>
     )
 }
@@ -98,8 +96,7 @@ const styles = StyleSheet.create({
         /* flexDirection: 'column', */
         alignItems: 'center',
        /*  justifyContent: 'center', */
-        backgroundColor: '#251E1E',
-       
+        backgroundColor: '#251E1E',      
           
     },
 
@@ -109,21 +106,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         height: '100%',
         width: '100%', 
-        paddingBottom : '40%',
-      
+        paddingTop: '5%',
+        paddingBottom : '40%',      
     },
 
     image: {
 
     },
 
-    title: {
+    header: {
         alignSelf: 'center',
-        marginTop: '50%',
+        marginTop: '35%',
         fontSize: 30,
         fontWeight: "bold",
-        color: '#F0F0F0',
-        marginBottom: '15%',
+        color: '#F0F0F0',       
+        marginBottom: '10%',      
+
     },
 
     fieldName: {
@@ -135,10 +133,17 @@ const styles = StyleSheet.create({
         fontSize: 14,        
     },
 
-    errorInput: {
-        fontSize : '12',
+    error: {
+        marginTop : 15,
+        fontSize : '15',
         color : 'red',
+    },
 
+    buttonsContainer: {
+        width: '100%',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 40
     },
 
     input: {
@@ -156,6 +161,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#fff',
     },
+    
     inputFocus: {
         alignItems: 'center',
         justifyContent: 'center',
