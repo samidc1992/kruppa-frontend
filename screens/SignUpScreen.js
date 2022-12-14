@@ -10,7 +10,6 @@ export default function SignUpScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-<<<<<<< HEAD
     const [usernameIsFocused, setUsernameIsFocused] = useState(false);
     const [emailIsFocused, setEmailIsFocused] = useState(false);
     const [passwordIsFocused, setPasswordIsFocused] = useState(false);
@@ -40,34 +39,6 @@ export default function SignUpScreen({ navigation }) {
                  navigation.navigate('SignUpProfile');              
               }
             });  
-=======
-
-    const handleSubmit = () => {
-        const [usernameIsFocused, setUsernameIsFocused] = useState(false);
-        const [emailIsFocused, setEmailIsFocused] = useState(false);
-        const [passwordIsFocused, setPasswordIsFocused] = useState(false);
-
-        //const BACKEND_ADDRESS = '';
-
-        const handleSubmit = () => {
-            fetch('http://192.168.10.134:3000/users/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password: password,
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.result) {
-                        navigation.navigate('SignUpProfile');
-                    }
-                });
-        }
-
->>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     }
 
     return (     
@@ -76,39 +47,6 @@ export default function SignUpScreen({ navigation }) {
         
              {/* <Image  source={require('')} style={styles.image}/> */}  
             <View style={styles.inputContainer}>
-<<<<<<< HEAD
-            
-             <Text style={styles.title}>Welcome to Kruppa</Text>
-                <TextInput style={styles.fieldName}>username</TextInput>
-                <StandardFormInput
-                    placeholder="username"        
-                    value={username}
-                    handleChange={handleUsernameInputChange}
-                />
-
-                <Text style={styles.fieldName}>email       </Text>
-                <StandardFormInput
-                    placeholder="email"        
-                    keyboardType="email-address"
-                    value={email}
-                    handleChange={handleEmailInputChange}
-                />
-
-                <Text style={styles.fieldName}>password</Text>
-                <StandardFormInput                        
-                    placeholder="password"   
-                    secureTextEntry ='true'     
-                    value={password}
-                    handleChange={handlePasswordInputChange}
-                />
-               </View>  
-              
-                <PrimaryButton
-                    text='Sign Up'
-                    onPress={() => handlePressPrimaryButton()}
-                />
-        </KeyboardAvoidingView>
-=======
                 <TextInput placeholder="your username" onChangeText={(value) => setUsername(value)} value={username} style={styles.input} />
                 <TextInput placeholder="your email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} />
                 <TextInput placeholder="your password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} />
@@ -161,7 +99,6 @@ export default function SignUpScreen({ navigation }) {
             </View>
 
         </SafeAreaView>
->>>>>>> 956c5dcf17a232f532b632196744f53db0e69f13
     )
 }
 
