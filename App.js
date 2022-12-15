@@ -66,6 +66,7 @@ export default function App() {
         <Stack.Screen name="SignUpProfile" component={SignUpProfileScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
 
 
       </Stack.Navigator>

@@ -10,10 +10,9 @@ function StandardFormInput (props) {
     const [inputOutlineIsFocused, setInputOutlineIsFocused] = useState('');
     
     return (
-      <View>
+      <View style={styles.container}>
         <Text style={styles.inputLabel}>{props.inputLabel}</Text>
-        <InputOutline
-         
+      <InputOutline
          style={inputOutlineIsFocused ? styles.inputFocus : styles.input}
          onChangeText={value => props.handleChange(value)}
          value={props.value}
@@ -22,46 +21,51 @@ function StandardFormInput (props) {
          activeColor ='#FF6317'    
          secureTextEntry ={props.secureTextEntry }
          keyboardType={props.keyboardType}
-
          onBlur={() => setInputOutlineIsFocused(false)}
          onFocus={() => setInputOutlineIsFocused(true)}
-         
-         
-        />
+      />
       </View>
     )
 }
 
 const styles = StyleSheet.create({
+      container :{
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '85%',
+      },
 
-    input: {
+      inputLabel: {
+        fontSize: 15,
+        color:'white',       
+        alignSelf:'stretch',
+        marginTop: '3%'
+      
+      },
+
+     input: {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#3A474E',
-        width: '80%',
         height: 50,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        margin: 5,
         borderBottomColor: '#7E8284',
         borderBottomWidth: 1,
-        paddingLeft: 10,
-        fontSize: 20,
+        fontSize: 15,
         color: '#fff',
     },
-    inputFocus: {
+
+     inputFocus: {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#3A474E',
-        width: '80%',
         height: 50,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        margin: 5,
         borderBottomColor: '#ec6e5b',
         borderBottomWidth: 2,
-        paddingLeft: 10,
-        fontSize: 20,
+        fontSize: 15,
         color: '#fff',
 
     },

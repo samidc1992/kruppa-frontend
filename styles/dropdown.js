@@ -56,12 +56,12 @@ export const dropdownStyles = StyleSheet.create({
         paddingLeft: 10,
     },
     text: {
-        fontSize: 20,
+        fontSize: 15,
         color: '#7E8284',
     },
     container: {
         width: '85%',
-        margin: 5
+        margin: 10,
     },
 
 })
