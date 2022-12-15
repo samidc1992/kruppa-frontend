@@ -3,9 +3,6 @@ import { useState } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
 
-
-
-
 export default function SignUpScreen({ navigation }) {
 
     const [username, setUsername] = useState('');
@@ -40,7 +37,7 @@ export default function SignUpScreen({ navigation }) {
                 setUsername('');
                 setEmail('');
                 setPassword(''); 
-                 navigation.navigate('SignUpProfile');              
+                navigation.navigate('SignUpProfile');              
               } else {          
                 setUsername('');
                 setEmail('');
