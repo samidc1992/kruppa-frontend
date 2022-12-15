@@ -10,7 +10,7 @@ function TopBar(props) {
                 name="arrow-left"
                 color="white"
                 size={25}
-                onPress={() => navigation.goBack()} 
+                onPress={() => props.onPress()} 
             />
             <Text style={styles.topBarText}>{props.text}</Text>
         </View>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     topBarText: {
         marginBottom: 20,
         fontSize: 20,
-        fontFamily: 'Inter',
+        //fontFamily: 'Inter',
         color: 'white',
         textTransform: 'lowercase'
     }
