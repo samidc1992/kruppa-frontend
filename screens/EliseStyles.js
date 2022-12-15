@@ -1,85 +1,66 @@
-import { TouchableOpacity, StyleSheet, Text, View, TextInput } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { dropdownStyles } from '../styles/dropdown';
-import PrimaryButton from '../components/PrimaryButton';
-import SecondaryButton from '../components/SecondaryButton'
-import PrimaryButtonSmall from '../components/PrimaryButtonSmall'
-import SecondaryButtonSmall from '../components/SecondaryButtonSmall'
-import SearchInput from '../components/SearchInput'
-
-// const myTheme = require('../styles/darkDropdownTheme');
-
-// DropDownPicker.addTheme("darkDropdownTheme", myTheme);
-// DropDownPicker.setTheme("darkDropdownTheme");
-
-import { useState } from 'react';
-import React from 'react';
+import { TouchableHighlight, TouchableOpacity, StyleSheet, Text, View, TextInput, Image } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import React, { useState, useEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function EliseStylesScreen({ navigation }) {
+    const [image, setImage] = useState(null);
 
-    const [searchInputValue, setSearchInputValue] = useState('')
-    const handleSearchInputChange = value => setSearchInputValue(value)
+    const BACKEND_ADDRESS = 'http://192.168.10.128'
 
-    const handlePressPrimaryButton = () => {
-        console.log('handlePressPrimaryButton')
-    }
-    const handlePressSecondaryButton = () => {
-        console.log('handlePressSecondaryButton')
-    }
 
-    DropDownPicker.setTheme("DARK");
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' },
-        { label: 'Pear', value: 'pear' },
-        { label: 'Kiwi', value: 'kiwi' },
-        { label: 'Ananas', value: 'ananas' },
-    ]);
+    //pick image from user's gallery
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+
+            //upload photo to backend
+            const formData = new FormData();
+
+            formData.append('profilePicture', {
+                uri: image,
+                name: 'profilePicture.jpg',
+                type: 'image/jpeg',
+            });
+
+            fetch(`${BACKEND_ADDRESS}/users/upload`, {
+                method: 'POST',
+                body: formData,
+            }).then((response) => response.json())
+                .then((data) => {
+                    console.log(data)
+                });
+        }
+    };
 
     return (
+
         <View style={styles.container}>
+            <View styles={styles.headerContainer}>
+                {image && <Image source={{ uri: image }} style={{
+                    width: 100, height: 100, borderRadius: 100, justifyContent: 'center', alignSelf: 'center', marginTop: '2%'
+                }}
+                />}
 
-            <DropDownPicker
-                style={dropdownStyles.header}
-                textStyle={dropdownStyles.text}
-                containerStyle={dropdownStyles.container}
-                multiple={true}
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
-            />
+                <View style={styles.uploadPicture}>
+                    <Text style={styles.underlineText}>Upload Profile Picture</Text>
+                    <FontAwesome name='upload' onPress={() => pickImage()} size={18} color='#979797' />
+                </View>
 
-            <SearchInput
-                placeholder="Where ?"
-                value={searchInputValue}
-                handleChange={handleSearchInputChange}
-            />
-
-            <PrimaryButton
-                text='Primary Button'
-                onPress={() => handlePressPrimaryButton()}
-            />
-            <SecondaryButton
-                text='Secondary Button'
-                onPress={() => handlePressSecondaryButton()}
-            />
-            <PrimaryButtonSmall
-                text='Primary'
-                onPress={() => handlePressPrimaryButton()}
-            />
-            <SecondaryButtonSmall
-                text='Secondary'
-                onPress={() => handlePressSecondaryButton()}
-            />
+            </View>
 
         </View>
-    )
+    );
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -89,4 +70,94 @@ const styles = StyleSheet.create({
         backgroundColor: '#272D31'
     },
 
+
+    pageContainer: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#251E1E',
+        justifyContent: 'center',
+    },
+
+    inputContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        width: '100%',
+    },
+
+
+    headerContainer: {
+        /*  alignSelf: 'center',
+         marginTop: '35%',
+         fontSize: 30,
+         fontWeight: "bold",
+         color: '#F0F0F0',       
+         marginBottom: '10%',  */
+
+    },
+    profilePicture: {
+        borderRadius: 100,
+        width: 100,
+        height: 100,
+        backgroundColor: '#979797',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: '2%',
+    },
+
+    uploadPicture: {
+        flexDirection: 'row',
+        marginTop: '2%',
+    },
+
+    underlineText: {
+        color: '#979797',
+        marginTop: '2%',
+        marginBottom: '5%',
+        marginRight: '5%',
+
+    },
+
+
+    fieldName: {
+        color: "white",
+        marginTop: '4%',
+        fontSize: 15,
+        alignSelf: 'stretch',
+        marginLeft: '8%',
+        marginBottom: '-2%',
+    },
+
+    error: {
+        marginTop: 15,
+        fontSize: '15',
+        color: 'red',
+    },
+
+    buttonsContainer: {
+        width: '100%',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 40
+    },
+
+    rightUnderlineText: {
+        fontSize: 18,
+        color: '#FF6317',
+        alignSelf: 'flex-end',
+        marginTop: '5%',
+        marginRight: '7%',
+    },
+
+    bottomContainer: {
+        width: '100%',
+        alignItems: 'center',
+        position: 'absolute',
+        top: 30,
+        bottom: 30,
+    }
+
 })
+
+

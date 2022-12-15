@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import CarouselCardItem, { slider_width, item_width }from '../components/Carousel';
+import CarouselCardItem, { slider_width, item_width } from '../components/Carousel';
 import { useRef } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
 import PrimaryButtonSmall from '../components/PrimaryButtonSmall';
 
 export default function WelcomeScreen({ navigation }) {
-    
+
     const isCarousel = useRef(null);
 
     const data = [
@@ -24,8 +24,8 @@ export default function WelcomeScreen({ navigation }) {
             header: "CONNECT TO PEOPLE",
             body: "Reach out to people and workout with them.",
             image: require("../assets/workout-1.jpg"),
-          },
-      ];
+        },
+    ];
 
     return (
         <View style={styles.container}>
@@ -48,17 +48,20 @@ export default function WelcomeScreen({ navigation }) {
                 {/* <PrimaryButtonSmall 
                 text='Sami Styles' 
                 onPress={() => navigation.navigate('Sami')}/> */}
+                <PrimaryButtonSmall
+                    text='Test upload'
+                    onPress={() => navigation.navigate('Elise')} />
                 <View style={styles.smallBtnsContainer}>
-                    <PrimaryButtonSmall 
-                    text='Join Now' 
-                    onPress={() => navigation.navigate('SignUp')}/>
-                    <PrimaryButtonSmall 
-                    text='Sign In' 
-                    onPress={() => navigation.navigate('SignIn')}/>
+                    <PrimaryButtonSmall
+                        text='Join Now'
+                        onPress={() => navigation.navigate('SignUp')} />
+                    <PrimaryButtonSmall
+                        text='Sign In'
+                        onPress={() => navigation.navigate('SignIn')} />
                 </View>
-                <PrimaryButton 
-                text='Explore' 
-                onPress={() => navigation.navigate('TabNavigator', { screen: 'Search' })}/>
+                <PrimaryButton
+                    text='Explore'
+                    onPress={() => navigation.navigate('TabNavigator', { screen: 'Search' })} />
             </View>
         </View>
     )
