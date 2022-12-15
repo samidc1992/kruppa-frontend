@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView,Image, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
+
 
 
 
@@ -15,14 +16,14 @@ export default function SignUpScreen({ navigation }) {
     const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     
-    const handleUsernameInputChange = value => yasetUsername(value);
+    const handleUsernameInputChange = value => setUsername(value);
     const handleEmailInputChange = value => setEmail(value);     
     const handlePasswordInputChange = value => setPassword(value);
     
 
     const handlePressPrimaryButton = () => {
 
-        const BACKEND_ADDRESS = 'http://192.168.10.147:3000';
+        /* const BACKEND_ADDRESS = 'http://192.168.10.147:3000';
         
         fetch(`${BACKEND_ADDRESS}/users/signup`, {
             method : 'POST',
@@ -46,7 +47,8 @@ export default function SignUpScreen({ navigation }) {
                 setPassword('');               
                 setFieldError(true);
               } 
-            });  
+            });  */ 
+            navigation.navigate('SignUpProfile');  
     }
 
     return (     
@@ -57,34 +59,39 @@ export default function SignUpScreen({ navigation }) {
             <View style={styles.inputContainer}>
             <Text style={styles.header}>Welcome to Kruppa</Text>
             
-                <Text style={styles.fieldName}>username</Text>
+             
                 <StandardFormInput
+                    inputLabel= "Username"
                     placeholder="your username"        
                     value={username}
                     handleChange={handleUsernameInputChange}
                 />
 
-                <Text style={styles.fieldName}>email       </Text>
+                
                 <StandardFormInput
+                    inputLabel= "Email"
                     placeholder="your email"        
                    keyboardType="email-address"
                     value={email}
                     handleChange={handleEmailInputChange}
                 />
 
-                <Text style={styles.fieldName}>password</Text>
-                <StandardFormInput                        
+                
+                <StandardFormInput
+                    inputLabel= "Password"                        
                     placeholder="your password"   
                     secureTextEntry ='true'     
                     value={password}
                     handleChange={handlePasswordInputChange}
                 />
                  {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
-               </View>         
+               </View> 
+             {/*   <View styles={styles.bottomContainer}>    */}             
                 <PrimaryButton                    
                     text='Sign Up'
                     onPress={() => handlePressPrimaryButton()}
                 />       
+               {/*  </View>    */}     
                
         </KeyboardAvoidingView>
     )
@@ -92,10 +99,8 @@ export default function SignUpScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        /* flexDirection: 'column', */
-        alignItems: 'center',
-       /*  justifyContent: 'center', */
+        flex: 1,     
+        alignItems: 'center',   
         backgroundColor: '#251E1E',      
           
     },
@@ -125,12 +130,11 @@ const styles = StyleSheet.create({
     },
 
     fieldName: {
-        alignItems: 'flex-start',
         color :"white",
-        marginTop:'3%',
-        marginBottom: '-3%',
-        marginLeft: '-65%',
-        fontSize: 14,        
+        marginTop:'4%',       
+        fontSize: 15,  
+        alignSelf: 'stretch',
+        marginLeft: '8%',       
     },
 
     error: {
@@ -139,12 +143,11 @@ const styles = StyleSheet.create({
         color : 'red',
     },
 
-    buttonsContainer: {
-        width: '100%',
+   /*  bottomContainer: {        
         alignItems: 'center',
         position: 'absolute',
-        bottom: 40
-    },
+        bottom: 100,
+    }, */
 
     input: {
         alignItems: 'center',

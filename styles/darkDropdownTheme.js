@@ -78,7 +78,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         borderColor: 'black',
         borderWidth: 1,
-        width: '100%',
+        width: '85%',
         overflow: 'hidden',
         zIndex: 1000
     },
@@ -90,7 +90,8 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 10,
-        height: 40
+        height: 40,
+        width: '8%',
     },
     listItemLabel: {
         flex: 1,
