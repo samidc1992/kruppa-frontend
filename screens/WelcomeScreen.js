@@ -45,9 +45,9 @@ export default function WelcomeScreen({ navigation }) {
             />
             <Text style={styles.header}>Welcome to Kruppa</Text>
             <View style={styles.buttonsContainer}>
-                <PrimaryButtonSmall 
+                {/* <PrimaryButtonSmall 
                 text='Sami Styles' 
-                onPress={() => navigation.navigate('Sami')}/>
+                onPress={() => navigation.navigate('Sami')}/> */}
                 <View style={styles.smallBtnsContainer}>
                     <PrimaryButtonSmall 
                     text='Join Now' 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         width: '85%',
         fontSize: 34,
         fontWeight: '600',
-        fontFamily: 'Inter',
+        //fontFamily: 'Inter',
         position: 'absolute',
         top: 60,
         textAlign: 'center'

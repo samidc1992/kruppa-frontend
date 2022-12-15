@@ -14,7 +14,13 @@ import EliseStylesScreen from './screens/EliseStyles';
 import NawelStylesScreen from './screens/NawelStyles';
 import SamiStylesScreen from './screens/SamiStyles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import user from './reducers/user';
 
+const store = configureStore({
+  reducer: { user },
+});
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -54,22 +60,22 @@ const TabNavigator = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="Group" component={GroupScreen} />
-        <Stack.Screen name="Elise" component={EliseStylesScreen} />
-        <Stack.Screen name="Nawel" component={NawelStylesScreen} />
-        <Stack.Screen name="Sami" component={SamiStylesScreen} />
-        <Stack.Screen name="SignUpProfile" component={SignUpProfileScreen} />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        <Stack.Screen name="Search" component={SearchScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-
-
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} />
+          <Stack.Screen name="Group" component={GroupScreen} />
+          <Stack.Screen name="Elise" component={EliseStylesScreen} />
+          <Stack.Screen name="Nawel" component={NawelStylesScreen} />
+          <Stack.Screen name="Sami" component={SamiStylesScreen} />
+          <Stack.Screen name="SignUpProfile" component={SignUpProfileScreen} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="Search" component={SearchScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
