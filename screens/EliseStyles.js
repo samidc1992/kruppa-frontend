@@ -31,12 +31,28 @@ export default function EliseStylesScreen({ navigation }) {
                 type: 'image/jpeg',
             });
 
+            //UPLOAD picture in backend
             fetch(`${BACKEND_ADDRESS}/users/upload`, {
                 method: 'POST',
                 body: formData,
             }).then((response) => response.json())
                 .then((data) => {
                     console.log(data)
+                    const userToUpdate = { token: 'h6q18eUZKrMIaAdiYE3jseSmW0hvTTz9', url: data.url };
+
+                    //update user with photo url
+                    fetch(`${BACKEND_ADDRESS}/users/picture`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userToUpdate),
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log('Success:', data);
+                        })
+
                 });
         }
     };
