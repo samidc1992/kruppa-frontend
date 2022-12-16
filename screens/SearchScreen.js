@@ -6,11 +6,14 @@ import { useState, useEffect } from 'react';
 import SearchInput from '../components/SearchInput'
 import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
+import { useDispatch } from 'react-redux';
+import { storeGroupId } from '../reducers/group';
 
 
 export default function SearchScreen({ navigation }) {
 
-    const BACKEND_ADRESS = 'http://192.168.10.128:3000'
+    const BACKEND_ADRESS = 'http://192.168.10.154:3000';
+    const dispatch = useDispatch();
 
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
@@ -171,7 +174,17 @@ export default function SearchScreen({ navigation }) {
 
     //get markers from search result and display on Map
     const markers = searchResults.map((data, i) => {
-        return <Marker key={i} coordinate={{ latitude: data.workout_location.location.coordinates[1], longitude: data.workout_location.location.coordinates[0] }} title={data.name} />;
+        return <Marker 
+        key={i} 
+        coordinate={{ 
+            latitude: data.workout_location.location.coordinates[1], 
+            longitude: data.workout_location.location.coordinates[0] 
+        }} 
+        title={data.name} 
+        description={data.description}
+        onPress={() => dispatch(storeGroupId(data._id))}
+        onCalloutPress={() => navigation.navigate('Group')}
+        />;
     });
 
 

@@ -3,7 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import GroupScreen from './screens/GroupScreen';
+import GroupScreenMain from './screens/GroupScreenMain';
+import GroupScreenMembers from './screens/GroupScreenMembers';
+import GroupScreenSessions from './screens/GroupScreenSessions';
 import SearchScreen from './screens/SearchScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -17,9 +19,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
+import group from './reducers/group';
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, group },
 });
 
 const Stack = createNativeStackNavigator();
@@ -66,7 +69,9 @@ export default function App() {
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
-          <Stack.Screen name="Group" component={GroupScreen} />
+          <Stack.Screen name="Group" component={GroupScreenMain} />
+          <Stack.Screen name="GroupMembers" component={GroupScreenMembers} />
+          <Stack.Screen name="GroupSessions" component={GroupScreenSessions} />
           <Stack.Screen name="Elise" component={EliseStylesScreen} />
           <Stack.Screen name="Nawel" component={NawelStylesScreen} />
           <Stack.Screen name="Sami" component={SamiStylesScreen} />

@@ -3,29 +3,68 @@ import TrippleTab from '../components/TrippleTab';
 import TopBar from '../components/TopBar';
 import PrimaryButton from '../components/PrimaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import group from '../reducers/group';
 
-export default function GroupScreen({ navigation }) {
+
+export default function GroupScreenMain({ navigation }) {
+
+    const BACKEND_ADRESS = 'http://192.168.10.154:3000';
+    const group_id = useSelector((state) => state.group.value);
+    const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
+
+    useEffect(()=> {
+        fetch(`${BACKEND_ADRESS}/groups/main`, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({group_id}),
+        }).then(response => response.json())
+        .then(data => {
+            if(data.result) {
+                let { name, description, genders, levels, sport, admin, workout_location} = data.groupData;
+                let formattedLevels = levels.map(level => {
+                    return level[0].toUpperCase() + level.slice(1).toLowerCase()
+                });
+                let level = formattedLevels.join(' | ');
+
+                setGroupDataToDisplay({
+                    name,
+                    description,
+                    genders,
+                    level,
+                    sport: sport.label,
+                    username: admin.username[0].toUpperCase() + admin.username.slice(1).toLowerCase(),
+                    location: workout_location.label,
+                })
+            }
+        })
+    }, [])
+
+
     return(
         <View style={styles.container}>
             <TopBar
                 onPress={() => navigation.goBack()}
             />
-            <Text style={styles.header}>Nina's Yoga Club</Text>
+            <Text style={styles.header}>{groupDataToDisplay.name}</Text>
             <View style={styles.tabContainer}>
                 <TrippleTab
                     textTabLeft="information"
                     textTabMiddle="sessions"
                     textTabRight="members"
-                //onPressLeft={() =>}
-                //onPressMiddle={() =>}
-                //onPressRight={() =>}
+                onPressLeft={() => navigation.navigate('Group')}
+                onPressMiddle={() => navigation.navigate('GroupSessions')}
+                onPressRight={() => navigation.navigate('GroupMembers')}
                 />
             </View>
             <Image 
                 style={styles.image}
                 source={require('../assets/yoga-2.jpg')}
             />
-            <Text style={styles.subHeader}>Yoga</Text>
+            <Text style={styles.subHeader}>{groupDataToDisplay.sport}</Text>
             <View style={styles.groupInformationContainer}>
                 <View style={styles.infoIconsContainer}>
                     <FontAwesome
@@ -50,14 +89,20 @@ export default function GroupScreen({ navigation }) {
                     />
                 </View>
                 <View style={styles.infoTextContainer}>
-                    <Text style={styles.body}>Intermediate and beginner</Text>
-                    <Text style={styles.body}>3/5 members</Text>
-                    <Text style={styles.body}>Gather at Parc Monceau</Text>
-                    <Text style={styles.body}>Create by Nawel</Text>
+                    <Text style={styles.body}>{groupDataToDisplay.level}</Text>
+                    <Text style={styles.body}> [Hardcoded] 3/5 members</Text>
+                    <Text style={styles.body}>Gather at
+                        <Text> </Text>
+                        <Text style={styles.location}>{groupDataToDisplay.location}</Text>
+                    </Text>
+                    <Text style={styles.body}>Created by 
+                        <Text> </Text>
+                        <Text style={styles.admin}>{groupDataToDisplay.username}</Text>
+                    </Text>
                 </View>
             </View>
             <Text style={styles.subHeader}>Description</Text>
-            <Text style={styles.description}>We do yoga at Parc Monceau every Tuesday and Thursday from 7 to 8:00 PM. We’re a group of 3 people willing to meet our neighboors.</Text>
+            <Text style={styles.description}>{groupDataToDisplay.description}</Text>
             <View style={styles.buttonContainer}>
                 <PrimaryButton
                     text="join group"
@@ -128,5 +173,11 @@ const styles = StyleSheet.create({
     infoTextContainer: {
         height: 80,
         justifyContent: 'space-around'
+    },
+    location: {
+        textDecorationLine: 1,
+    },
+    admin: {
+        textDecorationLine: 1,
     }
 })
