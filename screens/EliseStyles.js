@@ -4,13 +4,15 @@ import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function EliseStylesScreen({ navigation }) {
-    const [image, setImage] = useState(null);
+    // const [image, setImage] = useState(null);
+    let image = null
 
-    const BACKEND_ADDRESS = 'http://192.168.10.128'
+    const BACKEND_ADDRESS = 'http://192.168.10.132:3000'
 
 
     //pick image from user's gallery
     const pickImage = async () => {
+        console.log('enter pick image')
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -18,18 +20,24 @@ export default function EliseStylesScreen({ navigation }) {
             aspect: [4, 3],
             quality: 1,
         });
+        console.log(result)
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            console.log('!result.canceled')
+            image = result.assets[0].uri;
 
             //upload photo to backend
             const formData = new FormData();
+
 
             formData.append('profilePicture', {
                 uri: image,
                 name: 'profilePicture.jpg',
                 type: 'image/jpeg',
             });
+            console.log('fromData : ' + JSON.stringify(formData))
+
+            //travail en cours - on entre bien dans le backend mais ça plante - à continuer
 
             //UPLOAD picture in backend
             fetch(`${BACKEND_ADDRESS}/users/upload`, {
@@ -39,6 +47,7 @@ export default function EliseStylesScreen({ navigation }) {
                 .then((data) => {
                     console.log(data)
                     const userToUpdate = { token: 'h6q18eUZKrMIaAdiYE3jseSmW0hvTTz9', url: data.url };
+                    console.log(userToUpdate)
 
                     //update user with photo url
                     fetch(`${BACKEND_ADDRESS}/users/picture`, {

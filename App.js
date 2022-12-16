@@ -20,9 +20,12 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
 import group from './reducers/group';
+import workoutLocation from './reducers/workoutLocation';
+import CreateGroupScreen from './screens/CreateGroupScreen';
+import SearchWorkoutLocationScreen from './screens/SearchWorkoutLocationScreen';
 
 const store = configureStore({
-  reducer: { user, group },
+  reducer: { user, group, workoutLocation },
 });
 
 const Stack = createNativeStackNavigator();
@@ -51,7 +54,7 @@ const TabNavigator = () => {
       tabBarStyle: {
         backgroundColor: '#251E1E',
         borderTopColor: '#251E1E'
-      } 
+      }
     })}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
@@ -78,7 +81,9 @@ export default function App() {
           <Stack.Screen name="SignUpProfile" component={SignUpProfileScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Search" component={SearchScreen} />
+          <Stack.Screen name="SearchWorkoutLocation" component={SearchWorkoutLocationScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="GroupCreation" component={CreateGroupScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -18,50 +18,50 @@ export default function SignInScreen({ navigation }) {
     const handleSearchInputChangePassword = value => setPassword(value)
 
     function handleSignIn() {
-        fetch('http://192.168.10.146:3000/users/signin', {
+        fetch('http://192.168.10.128:3000/users/signin', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
         })
-        .then(response => response.json())
-        .then(userData => {
-            console.log(userData);
-            if (userData.result && EMAIL_REGEX.test(email)) {
-                dispatch(login({
-                    token: userData.user.token, 
-                    username: userData.user.username 
-                }));
-                setEmail('');
-                setPassword('');
-                setFieldError(false);
-                navigation.navigate('TabNavigator');
-            } else {
-                setEmail('');
-                setPassword('');
-                setFieldError(true);
-            }
-        });
+            .then(response => response.json())
+            .then(userData => {
+                console.log(userData);
+                if (userData.result && EMAIL_REGEX.test(email)) {
+                    dispatch(login({
+                        token: userData.user.token,
+                        username: userData.user.username
+                    }));
+                    setEmail('');
+                    setPassword('');
+                    setFieldError(false);
+                    navigation.navigate('TabNavigator');
+                } else {
+                    setEmail('');
+                    setPassword('');
+                    setFieldError(true);
+                }
+            });
     };
 
     return (
-    <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-            <SearchInput
-                placeholder="Email"
-                value={email}
-                handleChange={handleSearchInputChangeMail}/>
-            <SearchInput
-                placeholder="Password"
-                value={password}
-                handleChange={handleSearchInputChangePassword}/>            
+        <SafeAreaView style={styles.container}>
+            <View style={styles.content}>
+                <SearchInput
+                    placeholder="Email"
+                    value={email}
+                    handleChange={handleSearchInputChangeMail} />
+                <SearchInput
+                    placeholder="Password"
+                    value={password}
+                    handleChange={handleSearchInputChangePassword} />
                 {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
-        </View>
-        <View style={styles.inputContainer}>
-            <PrimaryButton
-                text='Sign In'
-                onPress={() => handleSignIn()}/>
-        </View>
-    </SafeAreaView>
+            </View>
+            <View style={styles.inputContainer}>
+                <PrimaryButton
+                    text='Sign In'
+                    onPress={() => handleSignIn()} />
+            </View>
+        </SafeAreaView>
     );
 };
 
@@ -76,10 +76,10 @@ const styles = StyleSheet.create({
     content: {
         width: '90%',
         marginLeft: '20%',
-        marginRight: '10%',   
+        marginRight: '10%',
     },
     signinview: {
-        backgroundColor:'red'
+        backgroundColor: 'red'
     },
     inputContainer: {
         alignItems: 'center',
