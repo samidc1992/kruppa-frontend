@@ -17,10 +17,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
+import workoutLocation from './reducers/workoutLocation';
 import CreateGroupScreen from './screens/CreateGroupScreen';
+import SearchWorkoutLocationScreen from './screens/SearchWorkoutLocationScreen';
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, workoutLocation },
 });
 
 const Stack = createNativeStackNavigator();
@@ -74,6 +76,7 @@ export default function App() {
           <Stack.Screen name="SignUpProfile" component={SignUpProfileScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Search" component={SearchScreen} />
+          <Stack.Screen name="SearchWorkoutLocation" component={SearchWorkoutLocationScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="GroupCreation" component={CreateGroupScreen} />
         </Stack.Navigator>
