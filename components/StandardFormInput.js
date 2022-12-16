@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
         color:'white',       
         alignSelf:'stretch',
         marginTop: '3%'
-      
       },
 
      input: {
@@ -54,6 +53,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         fontSize: 15,
         color: '#fff',
+        width:'100%',
     },
 
      inputFocus: {
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         fontSize: 15,
         color: '#fff',
+        width:'100%',
 
     },
     
