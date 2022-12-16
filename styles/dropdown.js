@@ -15,6 +15,7 @@ import { StyleSheet } from 'react-native';
 //     { label: 'Ananas', value: 'ananas' },
 // ]);
 
+
 //To get the items selected : value
 
 //  <DropDownPicker
@@ -28,6 +29,7 @@ import { StyleSheet } from 'react-native';
 //     setOpen={setOpen}
 //     setValue={setValue}
 //     setItems={setItems}
+//   
 // /> 
 
 
@@ -59,10 +61,19 @@ export const dropdownStyles = StyleSheet.create({
         fontSize: 15,
         color: '#7E8284',
     },
-    container: {
+    
+    closedDropContainer: {
         width: '85%',
         margin: 10,
+        zIndex :1,
     },
+
+    openDropContainer: {
+        width: '85%',
+        margin: 10,
+        zIndex :999,
+    },
+
 
 })
 

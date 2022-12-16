@@ -83,12 +83,12 @@ export default function SignUpScreen({ navigation }) {
                 />
                  {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
                </View> 
-             {/*   <View styles={styles.bottomContainer}>    */}             
+                 
                 <PrimaryButton                    
                     text='Sign Up'
                     onPress={() => handlePressPrimaryButton()}
                 />       
-               {/*  </View>    */}     
+              
                
         </KeyboardAvoidingView>
     )

@@ -7,6 +7,7 @@ function PrimaryButton(props) {
         <TouchableOpacity
             style={styles.button}
             activeOpacity={0.8}
+            disabled={props.disabled}
             onPress={() => props.onPress()}
         >
             <Text style={styles.buttonText}>{props.text}</Text>
