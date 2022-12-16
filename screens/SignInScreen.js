@@ -8,6 +8,8 @@ import { login } from '../reducers/user';
 
 export default function SignInScreen({ navigation }) {
 
+    const BACKEND_ADDRESS = 'http://192.168.10.132:3000'
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fieldError, setFieldError] = useState('');
@@ -18,7 +20,7 @@ export default function SignInScreen({ navigation }) {
     const handleSearchInputChangePassword = value => setPassword(value)
 
     function handleSignIn() {
-        fetch('http://192.168.10.128:3000/users/signin', {
+        fetch(`${BACKEND_ADDRESS}/users/signin`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
