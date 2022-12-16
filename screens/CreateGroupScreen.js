@@ -7,15 +7,18 @@ import StandardFormInput from '../components/StandardFormInput';
 import { dropdownStyles } from '../styles/dropdown';
 import NumericInput from 'react-native-numeric-input'
 import { useSelector } from 'react-redux';
-import workoutLocation from '../reducers/workoutLocation';
-
-
 
 export default function CreateGroupScreen({ navigation }) {
     const BACKEND_ADDRESS = 'http://192.168.10.132:3000'
 
     //get workout location chosen by user on screen "search workout location" from reducer
     const workoutLocationSelected = useSelector((state) => state.workoutLocation.value);
+
+    //get user connected from reducer
+    const userLogged = useSelector((state) => state.user.value)
+    console.log('user logged in : ' + JSON.stringify(userLogged))
+
+
 
     //dropdown style
     DropDownPicker.setTheme("DARK");
@@ -32,6 +35,8 @@ export default function CreateGroupScreen({ navigation }) {
         { label: 'Advanced', value: 'advanced' },
     ]);
 
+    //manage error messages
+    const [errorMessage, setErrorMessage] = useState('')
 
     //sports dropdown
     const [openSportDrop, setOpenSportDrop] = useState(false);
@@ -79,6 +84,43 @@ export default function CreateGroupScreen({ navigation }) {
     const handleSubmit = () => {
         //clean reducer
         console.log('submit')
+
+        if (!userLogged.token) {
+            setErrorMessage('Please sign in before creating a group.')
+            return
+        }
+
+        //create request body
+        const newGroup = {
+            token: userLogged.token,
+            photo: '.jpeg',
+            name: name,
+            sport_id: '6397406b70285c5599d6b0ba',
+            maxMembers: maxNumber,
+            genders: gendersValue,
+            levels: levelValue,
+            ageMin: 0,
+            ageMax: 99,
+            description: description,
+            label: workoutLocationSelected.label,
+            latitude: workoutLocationSelected.latitude,
+            longitude: workoutLocationSelected.longitude
+
+        }
+        console.log(newGroup)
+
+        //POST new group 
+        fetch(`${BACKEND_ADDRESS}/groups/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newGroup),
+        }).then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+            })
+
     }
 
     return (
@@ -118,7 +160,7 @@ export default function CreateGroupScreen({ navigation }) {
                                 placeholder='Select a sport'
                                 style={dropdownStyles.header}
                                 textStyle={dropdownStyles.text}
-                                containerStyle={dropdownStyles.container}
+                                containerStyle={openSportDrop ? dropdownStyles.openDropContainer : dropdownStyles.closedDropContainer}
                                 multiple={false}
                                 open={openSportDrop}
                                 value={sportValue}
@@ -133,7 +175,7 @@ export default function CreateGroupScreen({ navigation }) {
                                 placeholder='Which levels does your group accept ?'
                                 style={dropdownStyles.header}
                                 textStyle={dropdownStyles.text}
-                                containerStyle={dropdownStyles.container}
+                                containerStyle={levelSportDrop ? dropdownStyles.openDropContainer : dropdownStyles.closedDropContainer}
                                 multiple={true}
                                 open={levelSportDrop}
                                 value={levelValue}
@@ -169,7 +211,7 @@ export default function CreateGroupScreen({ navigation }) {
                                 placeholder='Select genders'
                                 style={dropdownStyles.header}
                                 textStyle={dropdownStyles.text}
-                                containerStyle={dropdownStyles.container}
+                                containerStyle={openGenderDrop ? dropdownStyles.openDropContainer : dropdownStyles.closedDropContainer}
                                 multiple={false}
                                 open={openGenderDrop}
                                 value={gendersValue}
@@ -190,6 +232,7 @@ export default function CreateGroupScreen({ navigation }) {
                                 value={description}
                                 handleChange={(value) => setDescription(value)}
                             />
+                            {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
 
                             <PrimaryButton
                                 text='Create group'
@@ -210,7 +253,7 @@ const styles = StyleSheet.create({
     pageContainer: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#251E1E',
+        backgroundColor: '#272D31',
         justifyContent: 'center',
     },
 
@@ -244,7 +287,6 @@ const styles = StyleSheet.create({
 
     },
 
-
     fieldName: {
         color: "white",
         marginTop: '4%',
@@ -255,9 +297,10 @@ const styles = StyleSheet.create({
     },
 
     error: {
-        marginTop: 15,
-        fontSize: '15',
         color: 'red',
+        textAlign: 'left',
+        width: '85%',
+        fontSize: 16,
     },
 
     buttonsContainer: {
