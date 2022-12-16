@@ -10,7 +10,7 @@ import * as Location from 'expo-location';
 
 export default function SearchScreen({ navigation }) {
 
-    const BACKEND_ADRESS = 'http://192.168.10.128:3000'
+    const BACKEND_ADRESS = 'http://192.168.10.132:3000'
 
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
