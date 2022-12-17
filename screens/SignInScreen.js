@@ -5,10 +5,12 @@ import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
+import { BACKEND_ADDRESS } from '../backendAdress';
+
 
 export default function SignInScreen({ navigation }) {
 
-    const BACKEND_ADDRESS = 'http://192.168.10.132:3000'
+    // const BACKEND_ADDRESS = 'http://192.168.1.87:3000'
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

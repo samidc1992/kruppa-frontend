@@ -8,11 +8,13 @@ import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
 import { useDispatch } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
+import { BACKEND_ADDRESS } from '../backendAdress';
+
 
 
 export default function SearchScreen({ navigation }) {
 
-    const BACKEND_ADRESS = 'http://192.168.10.154:3000';
+    // const BACKEND_ADRESS = 'http://192.168.10.154:3000';
     const dispatch = useDispatch();
 
     //state for user current position
@@ -44,7 +46,7 @@ export default function SearchScreen({ navigation }) {
     //fetch sports in DB for the dropdown list
     const [sports, setSports] = useState([])
     useEffect(() => {
-        fetch(`${BACKEND_ADRESS}/sports`)
+        fetch(`${BACKEND_ADDRESS}/sports`)
             .then(response => response.json())
             .then(data => {
                 //format sports for the dropdown list
@@ -151,7 +153,7 @@ export default function SearchScreen({ navigation }) {
 
         //building query URL for fetching route search
         const url = (
-            `${BACKEND_ADRESS}/groups/search?sport${urlParams.sport && '=' + urlParams.sport}&latitude${urlParams.latitude && '=' + urlParams.latitude}&longitude${urlParams.longitude && '=' + urlParams.longitude}`
+            `${BACKEND_ADDRESS}/groups/search?sport${urlParams.sport && '=' + urlParams.sport}&latitude${urlParams.latitude && '=' + urlParams.latitude}&longitude${urlParams.longitude && '=' + urlParams.longitude}`
         );
 
         //fetch route search
@@ -174,16 +176,16 @@ export default function SearchScreen({ navigation }) {
 
     //get markers from search result and display on Map
     const markers = searchResults.map((data, i) => {
-        return <Marker 
-        key={i} 
-        coordinate={{ 
-            latitude: data.workout_location.location.coordinates[1], 
-            longitude: data.workout_location.location.coordinates[0] 
-        }} 
-        title={data.name} 
-        description={data.description}
-        onPress={() => dispatch(storeGroupId(data._id))}
-        onCalloutPress={() => navigation.navigate('Group')}
+        return <Marker
+            key={i}
+            coordinate={{
+                latitude: data.workout_location.location.coordinates[1],
+                longitude: data.workout_location.location.coordinates[0]
+            }}
+            title={data.name}
+            description={data.description}
+            onPress={() => dispatch(storeGroupId(data._id))}
+            onCalloutPress={() => navigation.navigate('Group')}
         />;
     });
 

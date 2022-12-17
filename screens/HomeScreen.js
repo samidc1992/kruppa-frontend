@@ -1,19 +1,23 @@
 import { TouchableOpacity, StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton'
+import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function HomeScreen({ navigation }) {
-    return(
-<SafeAreaView style={styles.container}>
-            <Text style={styles.mygroup}>Elise's Groups</Text> 
+    return (
+        <SafeAreaView style={styles.container}>
+            <Text style={styles.mygroup}>Elise's Groups</Text>
             <View>
-            <PrimaryButton
-            text='Creat a new group'/>
+                <PrimaryButton
+                    text='Create new group'
+                    onPress={() => navigation.navigate('GroupCreation')}
+                />
             </View>
             <Text style={styles.baseText}>
-        
-        My groups            
+
+                My groups
             </Text>
-</SafeAreaView>)}
+        </SafeAreaView>)
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -21,17 +25,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         backgroundColor: '#374146',
-},
-        
+    },
+
     mygroup: {
-    fontWeight: 'bold',
-    fontSize: 40,
-    color:'#ffffff',
-},
+        fontWeight: 'bold',
+        fontSize: 40,
+        color: '#ffffff',
+    },
     baseText: {
         fontSize: 30,
         fontWeight: 'bold',
-        color:'#ffffff'
+        color: '#ffffff'
 
     }
-    })
+})

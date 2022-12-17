@@ -7,8 +7,6 @@ import SecondaryButton from '../components/SecondaryButton'
 import * as Location from 'expo-location';
 import { saveWorkoutLocation, removeWorkoutLocation } from '../reducers/workoutLocation'
 import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-
 
 
 export default function SearchWorkoutLocationScreen({ navigation }) {
@@ -17,7 +15,7 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
 
 
 
-    const BACKEND_ADRESS = 'http://192.168.10.132:3000'
+    // const BACKEND_ADRESS = 'http://192.168.10.132:3000'
 
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
