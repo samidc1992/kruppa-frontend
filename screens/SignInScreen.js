@@ -8,7 +8,7 @@ import { login } from '../reducers/user';
 
 export default function SignInScreen({ navigation }) {
 
-    const BACKEND_ADDRESS = 'http://192.168.10.132:3000'
+    const BACKEND_ADDRESS = 'http://192.168.1.72:3000'
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -27,7 +27,6 @@ export default function SignInScreen({ navigation }) {
         })
             .then(response => response.json())
             .then(userData => {
-                console.log(userData);
                 if (userData.result && EMAIL_REGEX.test(email)) {
                     dispatch(login({
                         token: userData.user.token,
@@ -38,7 +37,7 @@ export default function SignInScreen({ navigation }) {
                     setFieldError(false);
                     navigation.navigate('TabNavigator');
                 } else {
-                    setEmail('');
+                    //setEmail('');
                     setPassword('');
                     setFieldError(true);
                 }
@@ -47,6 +46,7 @@ export default function SignInScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Text style={styles.header}>Welcome back to Kruppa</Text>
             <View style={styles.content}>
                 <SearchInput
                     placeholder="Email"
@@ -56,9 +56,18 @@ export default function SignInScreen({ navigation }) {
                     placeholder="Password"
                     value={password}
                     handleChange={handleSearchInputChangePassword} />
-                {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
+                {fieldError && <Text style={styles.error}>Invalid email or password.</Text>}
+                <Text style={styles.signupOption}>
+                    Do not have an account yet? Sign up 
+                    <Text> </Text>
+                    <Text
+                    style={styles.signupLink}
+                    onPress={() => navigation.navigate('SignUp')}
+                    >here</Text>
+                .
+                </Text>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={styles.buttonContainer}>
                 <PrimaryButton
                     text='Sign In'
                     onPress={() => handleSignIn()} />
@@ -70,23 +79,44 @@ export default function SignInScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         backgroundColor: '#374146',
+    },
+    header: {
+        color: 'white',
+        width: '85%',
+        fontSize: 34,
+        fontWeight: '600',
+        //fontFamily: 'Inter',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 90,
     },
     content: {
         width: '90%',
-        marginLeft: '20%',
-        marginRight: '10%',
+        alignItems: 'center'
     },
-    signinview: {
-        backgroundColor: 'red'
-    },
-    inputContainer: {
+    buttonContainer: {
         alignItems: 'center',
         justifyContent: 'center',
         height: '20%',
         width: '100%',
+        position: 'absolute',
+        bottom: 40
     },
+    error: {
+        color: 'red',
+        width: '85%',
+        marginTop: 5,
+    },
+    signupOption: {
+        color: 'white',
+        width: '85%',
+        marginTop: 5,
+    },
+    signupLink: {
+        textDecorationLine: 1,
+        color: 'lightblue'
+    }
 })
