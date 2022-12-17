@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
 import { removeWorkoutLocation } from '../reducers/workoutLocation';
 import { BACKEND_ADDRESS } from '../backendAdress';
+import TopBar from '../components/TopBar';
 
 //exp://pa7kdou.elisemery.19000.exp.direct:80
 
@@ -29,6 +30,10 @@ export default function CreateGroupScreen({ navigation }) {
 
     //group name
     const [name, setName] = useState("")
+
+    //ages input
+    const [ageMin, setAgeMin] = useState(18)
+    const [ageMax, setAgeMax] = useState(99)
 
     //level dropdown
     const [levelSportDrop, setLevelSportDrop] = useState(false);
@@ -84,6 +89,19 @@ export default function CreateGroupScreen({ navigation }) {
         navigation.navigate('SearchWorkoutLocation')
     }
 
+    const cleanScreen = () => {
+        dispatch(removeWorkoutLocation())
+        setName('')
+        setDescription('')
+        setErrorMessage('')
+        setLevelValue(null)
+        setMaxNumber(0)
+        setSportValue(null)
+        setGendersValue(null)
+        setAgeMin(18)
+        setAgeMax(99)
+    }
+
     //submit group creation
     const handleSubmit = () => {
 
@@ -92,17 +110,24 @@ export default function CreateGroupScreen({ navigation }) {
             return
         }
 
+        //fields control
+        if (!name || !sportValue || !maxNumber || !gendersValue || !levelValue || !ageMin || !ageMax || !workoutLocationSelected) {
+            setErrorMessage('Please fill all informations before creating the group.')
+            return
+
+        }
+
         //create request body
         const newGroup = {
             token: userLogged.token,
             photo: '.jpeg',
             name: name,
-            sport_id: '6397406b70285c5599d6b0ba',
+            sport: sportValue,
             maxMembers: maxNumber,
             genders: gendersValue,
             levels: levelValue,
-            ageMin: 0,
-            ageMax: 99,
+            ageMin: ageMin,
+            ageMax: ageMax,
             description: description,
             label: workoutLocationSelected.label,
             latitude: workoutLocationSelected.latitude,
@@ -120,14 +145,8 @@ export default function CreateGroupScreen({ navigation }) {
             .then((newEntry) => {
 
                 //clean reducer and states
-                dispatch(removeWorkoutLocation())
-                setName('')
-                setDescription('')
-                setErrorMessage('')
-                setLevelValue(null)
-                setMaxNumber(0)
-                setSportValue(null)
-                setGendersValue(null)
+                cleanScreen()
+
                 //dipatch group id for navigation
                 dispatch(storeGroupId(newEntry.data._id))
 
@@ -140,11 +159,21 @@ export default function CreateGroupScreen({ navigation }) {
     return (
 
         <SafeAreaView style={styles.pageContainer}>
+
+            <TopBar
+                onPress={() => {
+                    cleanScreen()
+                    navigation.goBack(null)
+                }}
+                text='Back'
+            />
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={styles.container}>
+                style={{ width: '100%', height: '100%' }}>
+
 
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
 
                     <ScrollView style={{ width: '100%' }}>
                         <View style={styles.contentContainer}>
@@ -211,6 +240,7 @@ export default function CreateGroupScreen({ navigation }) {
                                     valueType='real'
                                     containerStyle={styles.numericInput}
                                     minValue={0}
+                                    value={maxNumber}
                                     textColor='#7E8284'
                                     iconStyle={{ color: 'grey' }}
                                     upDownButtonsBackgroundColor='#3A474E'
@@ -235,6 +265,50 @@ export default function CreateGroupScreen({ navigation }) {
                                 setItems={setGendersItems}
                             />
 
+                            <Text style={styles.fieldName}>Minimum age</Text>
+                            <View style={{ width: '85%' }}>
+
+                                <NumericInput type='up-down'
+                                    onChange={value => setAgeMin(value)}
+                                    totalWidth={150}
+                                    totalHeight={45}
+                                    iconSize={25}
+                                    step={1}
+                                    value={ageMin}
+                                    valueType='real'
+                                    containerStyle={styles.numericInput}
+                                    minValue={0}
+                                    textColor='#7E8284'
+                                    iconStyle={{ color: 'grey' }}
+                                    upDownButtonsBackgroundColor='#3A474E'
+                                    borderColor='#7E8284'
+                                    leftButtonBackgroundColor='#3A474E'
+                                    rightButtonBackgroundColor='#3A474E'
+                                />
+                            </View>
+
+                            <Text style={styles.fieldName}>Maximum age</Text>
+                            <View style={{ width: '85%' }}>
+
+                                <NumericInput type='up-down'
+                                    onChange={value => setAgeMax(value)}
+                                    totalWidth={150}
+                                    totalHeight={45}
+                                    iconSize={25}
+                                    step={1}
+                                    valueType='real'
+                                    value={ageMax}
+                                    containerStyle={styles.numericInput}
+                                    minValue={0}
+                                    textColor='#7E8284'
+                                    iconStyle={{ color: 'grey' }}
+                                    upDownButtonsBackgroundColor='#3A474E'
+                                    borderColor='#7E8284'
+                                    leftButtonBackgroundColor='#3A474E'
+                                    rightButtonBackgroundColor='#3A474E'
+                                />
+                            </View>
+
                             <Text style={styles.fieldName}>Workout location</Text>
                             {workoutLocationSelected.label != null && workoutLocationElement}
 
@@ -253,8 +327,6 @@ export default function CreateGroupScreen({ navigation }) {
                                 onPress={() => handleSubmit()}
                             />
                         </View>
-
-
                     </ScrollView>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
@@ -315,6 +387,8 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         width: '85%',
         fontSize: 16,
+        marginBottom: 10,
+        marginTop: 5
     },
 
     buttonsContainer: {

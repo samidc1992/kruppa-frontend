@@ -189,7 +189,6 @@ export default function SearchScreen({ navigation }) {
     });
 
 
-    console.log(regionView)
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -210,18 +209,21 @@ export default function SearchScreen({ navigation }) {
             </TouchableWithoutFeedback>
 
             <View style={styles.contentContainer}>
-                <DropDownPicker
-                    style={dropdownStyles.header}
-                    textStyle={dropdownStyles.text}
-                    containerStyle={dropdownStyles.container}
-                    multiple={false}
-                    open={open}
-                    value={sportValue}
-                    items={sports}
-                    setOpen={setOpen}
-                    setValue={setSportValue}
-                    setItems={setSports}
-                />
+
+                <View style={{ width: '85%', marginBottom: 5, marginLeft: '15%', marginRight: '15%' }}>
+                    <DropDownPicker
+                        style={dropdownStyles.header}
+                        textStyle={dropdownStyles.text}
+                        containerStyle={dropdownStyles.container}
+                        multiple={false}
+                        open={open}
+                        value={sportValue}
+                        items={sports}
+                        setOpen={setOpen}
+                        setValue={setSportValue}
+                        setItems={setSports}
+                    />
+                </View>
                 <SearchInput
                     placeholder="Where ?"
                     value={searchInputValue}
