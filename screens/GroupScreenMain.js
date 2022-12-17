@@ -2,17 +2,21 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import TrippleTab from '../components/TrippleTab';
 import TopBar from '../components/TopBar';
 import PrimaryButton from '../components/PrimaryButton';
+import SecondaryButton from '../components/SecondaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import group from '../reducers/group';
+
 
 
 export default function GroupScreenMain({ navigation }) {
 
-    const BACKEND_ADRESS = 'http://192.168.10.154:3000';
+    const BACKEND_ADRESS = 'http://192.168.1.72:3000';
     const group_id = useSelector((state) => state.group.value);
+    const user = useSelector((state) => state.user.value);
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
+    const [joined, setJoined] = useState(false);
+
 
     useEffect(()=> {
         fetch(`${BACKEND_ADRESS}/groups/main`, {
@@ -24,7 +28,7 @@ export default function GroupScreenMain({ navigation }) {
         }).then(response => response.json())
         .then(data => {
             if(data.result) {
-                let { name, description, genders, levels, sport, admin, workout_location} = data.groupData;
+                let { name, description, genders, levels, sport, admin, workout_location, photo } = data.groupData;
                 let formattedLevels = levels.map(level => {
                     return level[0].toUpperCase() + level.slice(1).toLowerCase()
                 });
@@ -38,11 +42,34 @@ export default function GroupScreenMain({ navigation }) {
                     sport: sport.label,
                     username: admin.username[0].toUpperCase() + admin.username.slice(1).toLowerCase(),
                     location: workout_location.label,
+                    photo
                 })
             }
         })
     }, [])
 
+    
+    function handleJoinGroup() {
+        if(user.token) {
+            fetch(`${BACKEND_ADRESS}/users/join-group`, {
+                method: 'PUT', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({group_id, token: user.token}),
+            }).then(response => response.json())
+            .then(data => {
+                if (data.result) {
+                    setJoined(true);
+                } else {
+                    setJoined(false);
+                }
+            })
+        } else {
+            navigation.navigate('SignIn')
+        }
+        
+    }
 
     return(
         <View style={styles.container}>
@@ -93,21 +120,39 @@ export default function GroupScreenMain({ navigation }) {
                     <Text style={styles.body}> [Hardcoded] 3/5 members</Text>
                     <Text style={styles.body}>Gather at
                         <Text> </Text>
-                        <Text style={styles.location}>{groupDataToDisplay.location}</Text>
+                        <Text 
+                            style={styles.location}
+                            onPress={() => navigation.goBack()}
+                        >
+                            {groupDataToDisplay.location}
+                        </Text>
                     </Text>
                     <Text style={styles.body}>Created by 
                         <Text> </Text>
-                        <Text style={styles.admin}>{groupDataToDisplay.username}</Text>
+                        <Text 
+                            style={styles.admin}
+                            onPress={() => navigation.navigate('Profile')}
+                        >
+                            {groupDataToDisplay.username}
+                        </Text>
                     </Text>
                 </View>
             </View>
             <Text style={styles.subHeader}>Description</Text>
             <Text style={styles.description}>{groupDataToDisplay.description}</Text>
             <View style={styles.buttonContainer}>
-                <PrimaryButton
-                    text="join group"
-                    //onPress={()=> handleGroupJoin()}
-                />
+                {
+                    joined ?
+                    (<SecondaryButton
+                    text="leave group"
+                    onPress={()=> setJoined(false)}
+                    />)
+                    :
+                    (<PrimaryButton
+                        text="join group"
+                        onPress={()=> handleJoinGroup()}
+                        />) 
+                } 
             </View>
         </View>
     )
