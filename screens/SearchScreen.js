@@ -12,7 +12,7 @@ import { storeGroupId } from '../reducers/group';
 
 export default function SearchScreen({ navigation }) {
 
-    const BACKEND_ADRESS = 'http://192.168.10.154:3000';
+    const BACKEND_ADRESS = 'http://192.168.1.72:3000';
     const dispatch = useDispatch();
 
     //state for user current position
@@ -167,7 +167,6 @@ export default function SearchScreen({ navigation }) {
         else {
             setErrorMessage('No groups found.')
         }
-
         //clean screen
         Keyboard.dismiss()
     }

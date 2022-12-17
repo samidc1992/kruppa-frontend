@@ -10,7 +10,6 @@ export const groupSlice = createSlice({
     reducers: {
         storeGroupId: (state, action) => {
             state.value = action.payload;
-            console.log(state)
         },
     },
 });
