@@ -5,10 +5,12 @@ import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
+import { BACKEND_ADDRESS } from '../backendAdress';
+
 
 export default function SignInScreen({ navigation }) {
 
-    const BACKEND_ADDRESS = 'http://192.168.1.72:3000'
+    // const BACKEND_ADDRESS = 'http://192.168.1.87:3000'
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -58,13 +60,13 @@ export default function SignInScreen({ navigation }) {
                     handleChange={handleSearchInputChangePassword} />
                 {fieldError && <Text style={styles.error}>Invalid email or password.</Text>}
                 <Text style={styles.signupOption}>
-                    Do not have an account yet? Sign up 
+                    Do not have an account yet? Sign up
                     <Text> </Text>
                     <Text
-                    style={styles.signupLink}
-                    onPress={() => navigation.navigate('SignUp')}
+                        style={styles.signupLink}
+                        onPress={() => navigation.navigate('SignUp')}
                     >here</Text>
-                .
+                    .
                 </Text>
             </View>
             <View style={styles.buttonContainer}>

@@ -6,10 +6,16 @@ import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
 import { dropdownStyles } from '../styles/dropdown';
 import NumericInput from 'react-native-numeric-input'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { storeGroupId } from '../reducers/group';
+import { removeWorkoutLocation } from '../reducers/workoutLocation';
+import { BACKEND_ADDRESS } from '../backendAdress';
+
+//exp://pa7kdou.elisemery.19000.exp.direct:80
 
 export default function CreateGroupScreen({ navigation }) {
-    const BACKEND_ADDRESS = 'http://192.168.10.132:3000'
+
+    const dispatch = useDispatch()
 
     //get workout location chosen by user on screen "search workout location" from reducer
     const workoutLocationSelected = useSelector((state) => state.workoutLocation.value);
@@ -17,8 +23,6 @@ export default function CreateGroupScreen({ navigation }) {
     //get user connected from reducer
     const userLogged = useSelector((state) => state.user.value)
     console.log('user logged in : ' + JSON.stringify(userLogged))
-
-
 
     //dropdown style
     DropDownPicker.setTheme("DARK");
@@ -82,8 +86,6 @@ export default function CreateGroupScreen({ navigation }) {
 
     //submit group creation
     const handleSubmit = () => {
-        //clean reducer
-        console.log('submit')
 
         if (!userLogged.token) {
             setErrorMessage('Please sign in before creating a group.')
@@ -105,9 +107,7 @@ export default function CreateGroupScreen({ navigation }) {
             label: workoutLocationSelected.label,
             latitude: workoutLocationSelected.latitude,
             longitude: workoutLocationSelected.longitude
-
         }
-        console.log(newGroup)
 
         //POST new group 
         fetch(`${BACKEND_ADDRESS}/groups/create`, {
@@ -117,8 +117,22 @@ export default function CreateGroupScreen({ navigation }) {
             },
             body: JSON.stringify(newGroup),
         }).then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
+            .then((newEntry) => {
+
+                //clean reducer and states
+                dispatch(removeWorkoutLocation())
+                setName('')
+                setDescription('')
+                setErrorMessage('')
+                setLevelValue(null)
+                setMaxNumber(0)
+                setSportValue(null)
+                setGendersValue(null)
+                //dipatch group id for navigation
+                dispatch(storeGroupId(newEntry.data._id))
+
+                //go to group page
+                navigation.navigate('Group')
             })
 
     }
