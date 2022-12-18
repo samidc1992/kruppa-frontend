@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '400',
-    fontFamily: 'Inter',
+    //fontFamily: 'Inter',
   },
   header: {
     color: 'white',
     width: '85%',
     fontSize: 18,
     fontWeight: '600',
-    fontFamily: 'Inter',
+    //fontFamily: 'Inter',
   }
 })
 
