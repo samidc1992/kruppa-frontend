@@ -30,15 +30,13 @@ function StandardFormInput (props) {
 
 const styles = StyleSheet.create({
   container :{
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   input: {
     width: '85%',
     height: 55,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 10
   },
 })
 
