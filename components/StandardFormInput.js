@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#F0F0F0',
         width:'100%',
-
     },
     
   

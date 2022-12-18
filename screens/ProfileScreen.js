@@ -29,7 +29,6 @@ export default function ProfileScreen({ navigation }) {
             .then(response => response.json())
             .then(data => { 
               if (data.result) { 
-                console.log(data.userData.username);
                 dispatch(login({
                   token: user.token, 
                   username: data.userData.username,  
@@ -43,7 +42,7 @@ export default function ProfileScreen({ navigation }) {
                 return (     
                   <View style={styles.sportsListDisplay}>
                     <Text key={i} style={styles.boldTextStyle}>{data.sport} </Text>
-                    <Text key={i} style= {styles.textStyle}>({data.level}) </Text>
+                    <Text key={i} style= {styles.textItalicStyle}>({data.level}) </Text>
                   </View>   
               ) 
       })
@@ -181,11 +180,18 @@ const styles = StyleSheet.create({
       marginTop: 5,
     },
 
-    textStyle : {
+    textItalicStyle: {
       fontSize: 15,
       color: '#F0F0F0',
       fontStyle : 'italic',
       marginTop: 5,
+    },
+
+    textStyle : {
+      fontSize: 15,
+      color: '#F0F0F0',
+      marginTop: 5,
+      marginLeft: 10,
     },
    
 

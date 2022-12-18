@@ -7,7 +7,7 @@ import { dropdownStyles } from '../styles/dropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import user from '../reducers/user';
-import {login, removeSport, addFavoriteSports} from '../reducers/user';
+import {login, updateDate, addFavoriteSports} from '../reducers/user';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DatePicker from  "react-native-datepicker";
 import { notInitialized } from "react-redux/es/utils/useSyncExternalStore";
@@ -85,7 +85,6 @@ export default function SignUpProfileScreen({ navigation }) {
          setUserAge (Age);
       };
    
-   
      // Add selected sports to user's profile  
 
     const handleAddPress =() => {
@@ -109,7 +108,6 @@ export default function SignUpProfileScreen({ navigation }) {
 
      // Remove a selected sport to delete from DB
      //   const handleRemoveSport = () => {}
-  
      // Handle add a picture    
 
 
@@ -129,11 +127,13 @@ export default function SignUpProfileScreen({ navigation }) {
              })})
             .then(response => response.json())
             .then (data => {
+                console.log('information', userAge);
               if (data.result) {   
                  dispatch(login({ 
                     token: user.token, 
-                    userAge: userAge
+                    //userAge: userAge,
                 }));  
+                  dispatch(updateDate({userAge : userAge}));
                   dispatch (addFavoriteSports(selectedSportsandLevels));
                   navigation.navigate('TabNavigator', { screen: 'Profile' });
                 } else {  
@@ -185,6 +185,7 @@ export default function SignUpProfileScreen({ navigation }) {
                     mode="date" 
                     placeholder="YYYY-MM-DD"
                     format="YYYY-MM-DD"
+                    minDate={1960-12-31}
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
                     customStyles={styles.customDatePickerStyles}
@@ -332,7 +333,6 @@ const styles = StyleSheet.create({
 
     customDatePickerStyles: {    
             dateIcon: {
-           /*  display: 'none', */
             position: 'absolute',
             right: 0,
             top: 4,
@@ -342,6 +342,11 @@ const styles = StyleSheet.create({
             borderWidth: 0,
             bborderRadius: 5,
             }, 
+            dateText: {
+                color: '#F0F0F0',
+                alignSelf:'',
+                marginLeft: 10,
+              },
             btnTextConfirm : {
                 color: '#FF6317',
                 fontWeight :'600',

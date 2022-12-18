@@ -55,12 +55,9 @@ export default function SignUpScreen({ navigation }) {
     return (     
             
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            {/* <Image  source={require('')} style={styles.image}/> */}  
-
             <View style={styles.inputContainer}>
+
             <Text style={styles.header}>Welcome to Kruppa</Text>
-            
-             
                 <StandardFormInput
                     inputLabel= "Username"
                     placeholder="your username"        
@@ -68,7 +65,6 @@ export default function SignUpScreen({ navigation }) {
                     handleChange={handleUsernameInputChange}
                 />
 
-                
                 <StandardFormInput
                     inputLabel= "Email"
                     placeholder="your email"        
@@ -93,7 +89,6 @@ export default function SignUpScreen({ navigation }) {
                     onPress={() => handlePressPrimaryButton()}
                 />       
               
-               
         </KeyboardAvoidingView>
     )
 }
@@ -116,9 +111,6 @@ const styles = StyleSheet.create({
         paddingBottom : '40%',      
     },
 
-    image: {
-
-    },
 
     header: {
         alignSelf: 'center',
