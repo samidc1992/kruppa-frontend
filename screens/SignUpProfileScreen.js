@@ -110,6 +110,7 @@ export default function SignUpProfileScreen({ navigation }) {
                     </View>                
                 ) }
         })
+    }
 
      // Remove a selected sport to delete from DB
      //   const handleRemoveSport = () => {}
