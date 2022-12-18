@@ -8,16 +8,12 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
-
-
 export default function GroupScreenMain({ navigation }) {
 
-    // const BACKEND_ADRESS = 'http://192.168.1.72:3000';
     const group_id = useSelector((state) => state.group.value);
     const user = useSelector((state) => state.user.value);
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [joined, setJoined] = useState(false);
-
 
     useEffect(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
@@ -47,8 +43,26 @@ export default function GroupScreenMain({ navigation }) {
                     })
                 }
             })
-    }, [])
+    }, [joined])
 
+    useEffect(() => {
+        if (user.token) {
+            fetch(`${BACKEND_ADDRESS}/users/join-group`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ group_id, token: user.token }),
+            }).then(response => response.json())
+            .then(data => {
+                if (!data.result) {
+                    setJoined(true);
+                } else {
+                    setJoined(false);
+                }
+            })
+        } 
+    }, [])
 
     function handleJoinGroup() {
         if (user.token) {
@@ -69,7 +83,27 @@ export default function GroupScreenMain({ navigation }) {
         } else {
             navigation.navigate('SignIn')
         }
+    }
 
+    function handleLeaveGroup() {
+        if (user.token) {
+            fetch(`${BACKEND_ADDRESS}/users/leave-group`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ group_id, token: user.token }),
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.result) {
+                        setJoined(false);
+                    } else {
+                        setJoined(true);
+                    }
+                })
+        } else {
+            navigation.navigate('SignIn')
+        }
     }
 
     return (
@@ -146,7 +180,7 @@ export default function GroupScreenMain({ navigation }) {
                     joined ?
                         (<SecondaryButton
                             text="leave group"
-                            onPress={() => setJoined(false)}
+                            onPress={() => handleLeaveGroup()}
                         />)
                         :
                         (<PrimaryButton
@@ -222,8 +256,10 @@ const styles = StyleSheet.create({
     },
     location: {
         textDecorationLine: 1,
+        color: 'lightblue'
     },
     admin: {
         textDecorationLine: 1,
+        color: 'lightblue'
     }
 })
