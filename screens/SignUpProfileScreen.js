@@ -11,6 +11,7 @@ import {login, updateDate, addFavoriteSports} from '../reducers/user';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DatePicker from  "react-native-datepicker";
 import { notInitialized } from "react-redux/es/utils/useSyncExternalStore";
+import { BACKEND_ADDRESS } from '../backendAdress';
 
 
 const myTheme = require('../styles/darkDropdownTheme');
