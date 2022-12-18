@@ -2,6 +2,9 @@ import { StyleSheet, Text, View, SafeAreaView,Image, KeyboardAvoidingView } from
 import { useState } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
+import { useDispatch, useSelector } from 'react-redux';
+import {login} from '../reducers/user';
+import user from '../reducers/user';
 
 export default function SignUpScreen({ navigation }) {
 
@@ -16,11 +19,13 @@ export default function SignUpScreen({ navigation }) {
     const handleUsernameInputChange = value => setUsername(value);
     const handleEmailInputChange = value => setEmail(value);     
     const handlePasswordInputChange = value => setPassword(value);
+    const user = useSelector((state) => state.user.value);
+    const dispatch = useDispatch();
     
 
     const handlePressPrimaryButton = () => {
 
-        /* const BACKEND_ADDRESS = 'http://192.168.10.147:3000';
+          const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
         
         fetch(`${BACKEND_ADDRESS}/users/signup`, {
             method : 'POST',
@@ -33,19 +38,18 @@ export default function SignUpScreen({ navigation }) {
              })
             .then(response => response.json())
             .then (data => {               
-              if (data.result && EMAIL_REGEX.test(email)) {          
-                setUsername('');
-                setEmail('');
-                setPassword(''); 
-                navigation.navigate('SignUpProfile');              
-              } else {          
+              if (data.result && EMAIL_REGEX.test(email)) {  
+                dispatch(login({
+                      token: data.token
+                }));      
+                 navigation.navigate('SignUpProfile');              
+                 } else {          
                 setUsername('');
                 setEmail('');
                 setPassword('');               
                 setFieldError(true);
               } 
-            });  */ 
-            navigation.navigate('SignUpProfile');  
+            });    
     }
 
     return (     
@@ -137,6 +141,7 @@ const styles = StyleSheet.create({
     error: {
         marginTop : 15,
         fontSize : '15',
+        fontWeight: 'bold',
         color : 'red',
     },
 

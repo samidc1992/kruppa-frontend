@@ -1,13 +1,17 @@
 
-import { View, Text, StyleSheet, SafeAreaView,Image, Dimensions, TouchableHighlight, ScrollView} from "react-native";
+import { View, Text, StyleSheet, SafeAreaView,TouchableHighlight, ScrollView, Pressable} from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
-import { useState } from 'react';
-import {TextInput} from 'react-native-paper';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
 import { dropdownStyles } from '../styles/dropdown'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import user from '../reducers/user';
+import {login, removeSport, addFavoriteSports} from '../reducers/user';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useEffect } from "react";
+import DatePicker from  "react-native-datepicker";
+import { notInitialized } from "react-redux/es/utils/useSyncExternalStore";
+
 
 const myTheme = require('../styles/darkDropdownTheme');
 
@@ -43,6 +47,7 @@ export default function SignUpProfileScreen({ navigation }) {
 
     //Outline setup
     const [dateValue, setDateValue] = useState('');
+    const [userAge, setUserAge] = useState(null);
     const [descriptionValue, setDescriptionValue] = useState('');
 
     //Selected sports setup
@@ -51,26 +56,36 @@ export default function SignUpProfileScreen({ navigation }) {
     const [selectedSport, setSelectedSport] = useState('');
     const [selectedLevel, setSelectedLevel] = useState('');
 
+    const [fieldError, setFieldError] = useState('');
+    const user = useSelector((state) => state.user.value);
+    const dispatch = useDispatch ();
+   
     //Handle inputChange functions
-    const handleDateInputChange = value => setDate(value);
-    const handleDescriptionInputChange = value => setDescription(value);   
+    const handleDescriptionInputChange = value => setDescriptionValue(value);   
 
      // Get sports from DB for dropdown list
     const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
 
-   
     useEffect(() => {   
         fetch(`${BACKEND_ADDRESS}/sports`)
             .then(response => response.json())
-            .then(data => {          
-                //format sports for the dropdown list              
+            .then(data => {       
                 const dropdownSports = data.sports.map(e => { return ({ label: e, value: e }) })
                 setAvailableSports(dropdownSports);
                 setSelectedSportsandLevels([]);
             });
      }, []);
 
- 
+
+    // Calculate user's age 
+    const calculateAge = (birthDate) => {
+        const ageInMs = Date.now() - new Date(birthDate).getTime();
+        const ageDate = new Date(ageInMs);
+        const Age = Math.abs(ageDate.getUTCFullYear()-1970);
+         setUserAge (Age);
+      };
+   
+   
      // Add selected sports to user's profile  
 
     const handleAddPress =() => {
@@ -80,42 +95,58 @@ export default function SignUpProfileScreen({ navigation }) {
             setSelectedSportsandLevels([...selectedSportsandLevels, {sport:selectedSport, level:selectedLevel}]);
         }; 
         };
-
         const selectedSportsList =  selectedSportsandLevels.map((data, i) => {    
             if (selectedSportsandLevels.length > 0 )   {
                 return (      
                     <View style={styles.sportsListContainer}>
                         <Text key={i} style={styles.resultAddText}>{data.sport} ({data.level})</Text>
                          <FontAwesome name='trash-o' 
-                           onPress={() => { setSelectedSportsandLevels(selectedSportsandLevels.filter(e => 
-                            e[i] !== selectedSportsandLevels[i]))
-                            } } size={15} color='#F0F0F0' /> 
+                           onPress={() => handleRemoveSport ()}
+                           size={15} color='#F0F0F0' /> 
                     </View>                
                 ) }
         })
-      
+
+     // Remove a selected sport to delete from DB
+     //   const handleRemoveSport = () => {}
+  
      // Handle add a picture    
 
 
-    // Create the profile and add it in the DB
+    // Create and add the user's  profile in DB
+  
     const handlePressPrimaryButton = () => {
-       navigation.navigate('TabNavigator', { screen: 'Profile' })
+        fetch(`${BACKEND_ADDRESS}/users/signup`, {
+            method : 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                gender: genderValue,
+                birthDate: dateValue,
+                description: descriptionValue,
+                favoriteSports: selectedSportsandLevels,
+                registrations: [],
+                token: user.token,
+             })})
+            .then(response => response.json())
+            .then (data => {
+              if (data.result) {   
+                 dispatch(login({ 
+                    token: user.token, 
+                    userAge: userAge
+                }));  
+                  dispatch (addFavoriteSports(selectedSportsandLevels));
+                  navigation.navigate('TabNavigator', { screen: 'Profile' });
+                } else {  
+                setFieldError(true);
+              } 
+            });   
+      
     }
-
-   /*   // 
-      if (genderValue !== null && selectedSportsandLevels.length > 0 && descriptionValue !== '' && dateValue !== '') {
-        return ( 
-
-        )
-     } */
-
-   
-   
  
     return (     
         
         <SafeAreaView style={styles.screenContainer}>
-            
+         
             <View styles={styles.headerContainer}>
                <TouchableHighlight
                     style = {styles.profilePicture} >
@@ -127,6 +158,7 @@ export default function SignUpProfileScreen({ navigation }) {
                 </View>
             </View>
 
+            {fieldError && <Text style={styles.error}>Oops! Something went wrong... Please try again! </Text>}
 
              <ScrollView contentContainerStyle={styles.scrollView}>  
                <View style={styles.inputContainer}>  
@@ -145,13 +177,23 @@ export default function SignUpProfileScreen({ navigation }) {
                     setItems={setGenderItems}
                     />
 
-                  <StandardFormInput
-                    inputLabel='Date of birth'
-                    placeholder="YYYYMMDD"   
-                    type='date'     
-                    value={dateValue}
-                    handleChange={handleDateInputChange}
-                  />
+
+                 <Text style={styles.fieldName}>Date of birth</Text>
+                 <DatePicker
+                    style={styles.datePickerStyle}
+                    date={dateValue} 
+                    mode="date" 
+                    placeholder="YYYY-MM-DD"
+                    format="YYYY-MM-DD"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    customStyles={styles.customDatePickerStyles}
+                    onDateChange={(date) => { 
+                        setDateValue(date);
+                        calculateAge(date);
+                       
+                    }}
+                    />
 
                   <Text style={styles.fieldName}>My favorite sports</Text>
                   <DropDownPicker
@@ -166,10 +208,9 @@ export default function SignUpProfileScreen({ navigation }) {
                     setOpen={setOpenSportDrop}
                     setValue={setSportValue}
                     setItems={setAvailableSports}
-                    onChangeValue = {(value) => {
-                        setSelectedSport(value);                                           
-                        }}
+                    onChangeValue = {(value) => { setSelectedSport(value) }}
                   /> 
+      
 
                 <DropDownPicker
                     placeholder='select your level'
@@ -183,10 +224,7 @@ export default function SignUpProfileScreen({ navigation }) {
                     setOpen={setOpenLevelDrop}
                     setValue={setLevelValue}
                     setItems={setLevelItems}
-                    onChangeValue = {(value) => {
-                        setSelectedLevel(value); 
-                                                      
-                        }}
+                    onChangeValue = {(value) => { setSelectedLevel(value) }}
                   /> 
                   <Text style={styles.addSportsText} onPress={() => handleAddPress()}>+ add sport</Text>
                   { selectedSportsList}
@@ -246,6 +284,13 @@ const styles = StyleSheet.create({
         color: '#F0F0F0',       
         marginBottom: '10%',  */
     },
+
+    error: {
+        marginTop : 15,
+        fontSize : '15',
+        fontWeight: 'bold',
+        color : 'red',
+    },
     
     profilePicture: {
         borderRadius: 100, 
@@ -269,6 +314,51 @@ const styles = StyleSheet.create({
         marginRight: '5%',
     },
 
+
+    datePickerStyle: {
+      width: 321,
+      height: 45,
+      backgroundColor: '#3A474E',     
+      marginTop : '2%',
+      borderTopLeftRadius: 5,
+      borderTopRightRadius: 5,
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+      borderTopWidth: 0,
+      borderRightWidth: 0,
+      borderBottomColor: '#7E8284',
+      borderBottomWidth: 1,
+    },
+
+    customDatePickerStyles: {    
+            dateIcon: {
+           /*  display: 'none', */
+            position: 'absolute',
+            right: 0,
+            top: 4,
+            marginLeft: 0,
+            }, 
+            dateInput: {     
+            borderWidth: 0,
+            bborderRadius: 5,
+            }, 
+            btnTextConfirm : {
+                color: '#FF6317',
+                fontWeight :'600',
+            },
+            btnTextCancel : {
+                color: '#7E8284',
+                fontWeight :'600',
+            },
+            placeholderText: {
+                fontSize: 15,
+                color: '#7E8284',
+                alignSelf : '',
+                marginLeft : 10,
+            },
+           
+    },
+
     sportsListContainer: {
         flexDirection: 'row',
         width: '100%',
@@ -285,13 +375,18 @@ const styles = StyleSheet.create({
 
     },
 
+    textInputStyles: {
+        fontSize: 15,
+        color: 'white',
+    },
+
 
     fieldName: {       
         color :"white",
         marginTop:'4%',       
         fontSize: 15,  
         alignSelf: 'stretch',
-        marginLeft: '7%',
+        marginLeft: '2%',
         marginBottom :'-2%',
     },
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Text  } from 'react-native';
 import { InputOutline } from 'react-native-input-outline'; 
+
 import { useState } from 'react';
 
 
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#7E8284',
         borderBottomWidth: 1,
         fontSize: 15,
-        color: '#fff',
+        color: '#F0F0F0',
         width:'100%',
     },
 
@@ -63,10 +64,10 @@ const styles = StyleSheet.create({
         height: 50,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        borderBottomColor: '#ec6e5b',
+        borderBottomColor: '#FF6317',
         borderBottomWidth: 2,
         fontSize: 15,
-        color: '#fff',
+        color: '#F0F0F0',
         width:'100%',
 
     },
