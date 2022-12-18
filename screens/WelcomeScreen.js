@@ -48,12 +48,12 @@ export default function WelcomeScreen({ navigation }) {
                 {/* <PrimaryButtonSmall 
                 text='Sami Styles' 
                 onPress={() => navigation.navigate('Sami')}/> */}
-                <PrimaryButtonSmall
+                {/* <PrimaryButtonSmall
                     text='Test upload'
                     onPress={() => navigation.navigate('Elise')} />
                 <PrimaryButtonSmall
                     text='Create group'
-                    onPress={() => navigation.navigate('GroupCreation')} />
+                    onPress={() => navigation.navigate('GroupCreation')} /> */}
                 <View style={styles.smallBtnsContainer}>
                     <PrimaryButtonSmall
                         text='Join Now'
