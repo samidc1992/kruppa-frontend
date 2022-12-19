@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation }) {
         return (
             <GroupCard
                 key={i}
-                image='./assets/tennis.jpg'
+                // image='../assets/tennis.jpg'
                 name={e.group.name}
                 sport={e.group.sport.label}
                 membersNum={3}
@@ -114,6 +114,9 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '85%',
         margin: 10
-
+    },
+    groupsContainer: {
+        alignSelf: 'center',
+        width: '85%',
     }
 })
