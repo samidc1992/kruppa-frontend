@@ -2,9 +2,8 @@ import { StyleSheet, Text, View, SafeAreaView, Image, KeyboardAvoidingView } fro
 import { useState } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
-import user from '../reducers/user';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 
@@ -18,7 +17,6 @@ export default function SignUpScreen({ navigation }) {
     const handleUsernameInputChange = value => setUsername(value);
     const handleEmailInputChange = value => setEmail(value);
     const handlePasswordInputChange = value => setPassword(value);
-    const user = useSelector((state) => state.user.value);
     const dispatch = useDispatch();
 
     const handlePressPrimaryButton = () => {
