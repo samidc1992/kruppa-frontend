@@ -213,7 +213,7 @@ export default function SearchScreen({ navigation }) {
 
             <View style={styles.contentContainer}>
 
-                <View style={{ width: '100%', marginBottom: 5, alignItems: 'center' }}>
+                <View style={{ width: '100%', marginBottom: 5, alignItems: 'center', zIndex: 999 }}>
                     <DropDownPicker
                         style={dropdownStyles.header}
                         textStyle={dropdownStyles.text}
