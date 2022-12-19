@@ -3,7 +3,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SecondaryButton from '../components/SecondaryButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import user from '../reducers/user';
 import { login, logout } from '../reducers/user';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
@@ -12,15 +11,9 @@ export default function ProfileScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
 
-  //const [username, setUsername] = useState('');
-  //const [favoriteSports, setFavoriteSports] = useState([]);
-  //const [userDescription, setUserDescription] = useState('');
-
-
   // Get user's profile information 
-  //  const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
   useEffect(() => {
-    fetch(`${BACKEND_ADDRESS}/users`, {
+    fetch(`${BACKEND_ADDRESS}/users/groups`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -29,6 +22,7 @@ export default function ProfileScreen({ navigation }) {
     })
       .then(response => response.json())
       .then(data => {
+      
         if (data.result) {
           dispatch(login({
             token: user.token,

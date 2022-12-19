@@ -1,13 +1,15 @@
 
-import { View, Text, StyleSheet, SafeAreaView, Image, Dimensions, TouchableHighlight, ScrollView, DatePicker } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView,TouchableHighlight, ScrollView} from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
-import { dropdownStyles } from '../styles/dropdown';
+import { dropdownStyles } from '../styles/dropdown'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { login, updateDate, addFavoriteSports } from '../reducers/user';
+import {login, updateDate, addFavoriteSports} from '../reducers/user';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import DatePicker from  "react-native-datepicker";
+import { notInitialized } from "react-redux/es/utils/useSyncExternalStore";
 import { BACKEND_ADDRESS } from "../backendAdress";
 
 const myTheme = require('../styles/darkDropdownTheme');
@@ -61,9 +63,6 @@ export default function SignUpProfileScreen({ navigation }) {
     const handleDescriptionInputChange = value => setDescriptionValue(value);
 
     // Get sports from DB for dropdown list
-    // const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
-
-
     useEffect(() => {
         fetch(`${BACKEND_ADDRESS}/sports`)
             .then(response => response.json())
@@ -74,9 +73,6 @@ export default function SignUpProfileScreen({ navigation }) {
                 setSelectedSportsandLevels([]);
             });
     }, []);
-
-    console.log(availableSports)
-
 
     // Calculate user's age 
     const calculateAge = (birthDate) => {

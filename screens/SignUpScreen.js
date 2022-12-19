@@ -28,7 +28,6 @@ export default function SignUpScreen({ navigation }) {
 
     const handlePressPrimaryButton = () => {
 
-        // const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
 
         fetch(`${BACKEND_ADDRESS}/users/signup`, {
             method: 'POST',
@@ -45,7 +44,7 @@ export default function SignUpScreen({ navigation }) {
                     dispatch(login({
                         token: data.token
                     }));
-                    navigation.navigate('Home');
+                    navigation.navigate('SignUpProfile');
                 } else {
                     setUsername('');
                     setEmail('');
