@@ -7,12 +7,10 @@ import { dropdownStyles } from '../styles/dropdown';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-// import DatePicker from "react-native-datepicker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BACKEND_ADDRESS } from "../backendAdress";
 
 const myTheme = require('../styles/darkDropdownTheme');
-
 
 export default function SignUpProfileScreen({ navigation }) {
 
@@ -28,7 +26,7 @@ export default function SignUpProfileScreen({ navigation }) {
         { label: 'Male', value: 'male' },
         { label: 'Female', value: 'female' },
         { label: 'Other', value: 'other' },
-        { label: 'Prefer not to discuss', value: 'prefer not to discuss' },
+        { label: 'Prefer not to disclose', value: 'prefer not to disclose' },
     ]);
     const [openSportDrop, setOpenSportDrop] = useState(false);
     const [sportValue, setSportValue] = useState(null);
@@ -43,7 +41,6 @@ export default function SignUpProfileScreen({ navigation }) {
 
     //Outline setup
     const [dateValue, setDateValue] = useState(new Date());
-    const [userAge, setUserAge] = useState(null);
     const [descriptionValue, setDescriptionValue] = useState('');
 
     //Selected sports setup
@@ -53,7 +50,8 @@ export default function SignUpProfileScreen({ navigation }) {
     const [selectedLevel, setSelectedLevel] = useState('');
 
     const [fieldError, setFieldError] = useState('');
-    const user = useSelector((state) => state.user.value);
+    const user = useSelector(state => state.user.value);
+    const group = useSelector(state => state.group.value);
 
     //Handle inputChange functions
     const handleDescriptionInputChange = value => setDescriptionValue(value);
@@ -69,14 +67,6 @@ export default function SignUpProfileScreen({ navigation }) {
                 setSelectedSportsandLevels([]);
             });
     }, []);
-
-    // Calculate user's age 
-    const calculateAge = (birthDate) => {
-        const ageInMs = Date.now() - new Date(birthDate).getTime();
-        const ageDate = new Date(ageInMs);
-        const Age = Math.abs(ageDate.getUTCFullYear() - 1970);
-        setUserAge(Age);
-    };
 
     // Add selected sports to user's profile  
     const handleAddPress = () => {
@@ -99,7 +89,7 @@ export default function SignUpProfileScreen({ navigation }) {
         }
     })
 
-    const handlePressPrimaryButton = () => {
+    const handleSignup = () => {
         fetch(`${BACKEND_ADDRESS}/users/signup`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -114,10 +104,11 @@ export default function SignUpProfileScreen({ navigation }) {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.result) {
+                if (data.result && group === null) {
                     navigation.navigate('TabNavigator', { screen: 'Profile' });
                 } else {
                     setFieldError(true);
+                    navigation.navigate('Group');
                 }
             });
     }
@@ -179,7 +170,6 @@ export default function SignUpProfileScreen({ navigation }) {
                         display='default'
                         onChange={(value) => {
                             setDateValue(new Date(value.nativeEvent.timestamp));
-                            calculateAge(value);
                         }}
                     />
 
@@ -233,7 +223,7 @@ export default function SignUpProfileScreen({ navigation }) {
                     text='Create profile'
                     disabled={false}
                     activeOpacity={0}
-                    onPress={() => handlePressPrimaryButton()}
+                    onPress={() => handleSignup()}
                 />
             </View>
         </KeyboardAvoidingView>
