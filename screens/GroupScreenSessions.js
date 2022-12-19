@@ -9,9 +9,9 @@ export default function GroupScreenSessions({ navigation }) {
                     textTabLeft="information"
                     textTabMiddle="sessions"
                     textTabRight="members"
-                onPressLeft={() => navigation.navigate('Group')}
-                onPressMiddle={() => navigation.navigate('GroupSessions')}
-                onPressRight={() => navigation.navigate('GroupMembers')}
+                    onPressLeft={() => navigation.navigate('Group')}
+                    onPressMiddle={() => navigation.navigate('GroupSessions')}
+                    onPressRight={() => navigation.navigate('GroupMembers')}
                 />
             </View>
             <Text>Group Sessions</Text>
