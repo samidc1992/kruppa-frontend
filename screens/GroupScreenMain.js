@@ -55,10 +55,11 @@ export default function GroupScreenMain({ navigation }) {
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
             .then(data => {
-                if (!data.result) {
-                    setJoined(true);
-                } else {
+                console.log('charge', data)
+                if (data.result) {
                     setJoined(false);
+                } else {
+                    setJoined(true);
                 }
             })
         } 
@@ -74,10 +75,9 @@ export default function GroupScreenMain({ navigation }) {
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
                 .then(data => {
+                    console.log('join', data)
                     if (data.result) {
                         setJoined(true);
-                    } else {
-                        setJoined(false);
                     }
                 })
         } else {
@@ -95,6 +95,7 @@ export default function GroupScreenMain({ navigation }) {
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
                 .then(data => {
+                    console.log('leave', data)
                     if (data.result) {
                         setJoined(false);
                     } else {

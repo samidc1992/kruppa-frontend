@@ -129,8 +129,8 @@ export default function SearchScreen({ navigation }) {
             setSearchRegionView({
                 latitude: locationFound.latitude,
                 longitude: locationFound.longitude,
-                latitudeDelta: 0.09,
-                longitudeDelta: 0.04,
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.02,
             })
 
             // display name of the location found in search input
