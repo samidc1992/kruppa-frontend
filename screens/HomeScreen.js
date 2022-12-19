@@ -1,21 +1,85 @@
-import { TouchableOpacity, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton'
+import { useSelector, useDispatch } from 'react-redux';
+import GroupCard from '../components/GroupCard';
+import { useEffect, useState } from 'react';
+import { storeGroupId } from '../reducers/group';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function HomeScreen({ navigation }) {
+    const dispatch = useDispatch()
+
+    const [groups, setGroups] = useState([])
+
+    // get info of user logged in
+    const username = useSelector((state) => state.user.value.username);
+    const token = useSelector((state) => state.user.value.token);
+    console.log('user signed in :' + token)
+
+    // get groups from user
+    useEffect(() => {
+
+        fetch(`${BACKEND_ADDRESS}/users/groups`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify({ token: token }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', JSON.stringify(data));
+                setGroups(data.userGroups)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+    }, []);
+
+
+    console.log(groups)
+    //display groups on page
+    const groupsElements = groups.map((e, i) => {
+        return (
+            <GroupCard
+                key={i}
+                image='./assets/tennis.jpg'
+                name={e.group.name}
+                sport={e.group.sport.label}
+                membersNum={3}
+                maxMembers={e.group.maxMembers}
+                handlePress={() => {
+                    dispatch(storeGroupId(e.group._id))
+                    navigation.navigate('Group')
+                }
+                }
+            />
+        )
+    })
+
+
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.mygroup}>Elise's Groups</Text>
-            <View>
-                <PrimaryButton
-                    text='Create new group'
-                    onPress={() => navigation.navigate('GroupCreation')}
-                />
-            </View>
-            <Text style={styles.baseText}>
+            <View style={styles.contentContainer}>
 
-                My groups
-            </Text>
+                <Text style={styles.title}>{username}'s Groups</Text>
+                <View style={{ width: '100%', alignItems: 'center', marginTop: 20, marginBottom: 20 }}>
+                    <PrimaryButton
+                        text='Create new group'
+                        onPress={() => navigation.navigate('GroupCreation')}
+                    />
+                </View>
+                <Text style={styles.sectionTitle}>
+                    My groups
+                </Text>
+                <View style={styles.groupsContainer}>
+                    <ScrollView>
+                        {groupsElements}
+                    </ScrollView>
+                </View>
+            </View>
         </SafeAreaView>)
 }
 
@@ -23,19 +87,33 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         backgroundColor: '#374146',
     },
+    contentContainer: {
+        width: '100%',
+        height: '100%',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+    },
 
-    mygroup: {
-        fontWeight: 'bold',
+    title: {
+        // fontWeight: 'bold',
         fontSize: 40,
         color: '#ffffff',
+        textAlign: 'left',
+        alignSelf: 'center',
+        width: '85%',
+        marginTop: 20, marginBottom: 10
     },
-    baseText: {
-        fontSize: 30,
+    sectionTitle: {
+        fontSize: 18,
         fontWeight: 'bold',
-        color: '#ffffff'
+        color: '#ffffff',
+        textAlign: 'left',
+        alignSelf: 'center',
+        width: '85%',
+        margin: 10
 
     }
 })

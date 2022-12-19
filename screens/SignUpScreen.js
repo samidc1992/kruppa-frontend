@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View, SafeAreaView, Image, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
 import { useDispatch, useSelector } from 'react-redux';
-import {login} from '../reducers/user';
+import { login } from '../reducers/user';
 import user from '../reducers/user';
 //import { BACKEND_ADDRESS } from '../backendAdress';
 import { BACKEND_ADDRESS } from '../backendAdress';
@@ -25,36 +24,35 @@ export default function SignUpScreen({ navigation }) {
     const handlePasswordInputChange = value => setPassword(value);
     const user = useSelector((state) => state.user.value);
     const dispatch = useDispatch();
-    
+
 
     const handlePressPrimaryButton = () => {
 
-          const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
-        
+        // const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
+
         fetch(`${BACKEND_ADDRESS}/users/signup`, {
-            method : 'POST',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              username : username, 
-              email : email , 
-              password : password,
-             }),
-             })
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+            }),
+        })
             .then(response => response.json())
-            .then (data => {               
-              if (data.result && EMAIL_REGEX.test(email)) {  
-                dispatch(login({
-                      token: data.token
-                }));      
-                 navigation.navigate('SignUpProfile');              
-                 } else {          
-                setUsername('');
-                setEmail('');
-                setPassword('');               
-                setFieldError(true);
-              } 
-            });  
-        navigation.navigate('SignUpProfile');
+            .then(data => {
+                if (data.result && EMAIL_REGEX.test(email)) {
+                    dispatch(login({
+                        token: data.token
+                    }));
+                    navigation.navigate('Home');
+                } else {
+                    setUsername('');
+                    setEmail('');
+                    setPassword('');
+                    setFieldError(true);
+                }
+            });
     }
 
     return (
@@ -62,7 +60,7 @@ export default function SignUpScreen({ navigation }) {
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.inputContainer}>
 
-            <Text style={styles.header}>Welcome to Kruppa</Text>
+                <Text style={styles.header}>Welcome to Kruppa</Text>
                 <StandardFormInput
                     inputLabel="Username"
                     placeholder="your username"
@@ -86,14 +84,14 @@ export default function SignUpScreen({ navigation }) {
                     value={password}
                     handleChange={handlePasswordInputChange}
                 />
-                 {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
-               </View> 
-                 
-                <PrimaryButton                    
-                    text='Sign Up'
-                    onPress={() => handlePressPrimaryButton()}
-                />       
-              
+                {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
+            </View>
+
+            <PrimaryButton
+                text='Sign Up'
+                onPress={() => handlePressPrimaryButton()}
+            />
+
         </KeyboardAvoidingView>
     )
 }
@@ -136,10 +134,10 @@ const styles = StyleSheet.create({
     },
 
     error: {
-        marginTop : 15,
-        fontSize : '15',
+        marginTop: 15,
+        fontSize: '15',
         fontWeight: 'bold',
-        color : 'red',
+        color: 'red',
     },
 
     /*  bottomContainer: {        

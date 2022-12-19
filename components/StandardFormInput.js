@@ -1,85 +1,79 @@
 import React from 'react'
-import { StyleSheet, View, Text  } from 'react-native';
-import { InputOutline } from 'react-native-input-outline'; 
+import { StyleSheet, View, Text } from 'react-native';
+import { InputOutline } from 'react-native-input-outline';
 
 import { useState } from 'react';
 
 
-function StandardFormInput (props) {
-    
-    return (
-      <View style={styles.container}>
-        <InputOutline
-          style={styles.input}
-          onChangeText={value => props.handleChange(value)}
-          value={props.value}
-          placeholder={props.placeholder}
-          placeholderTextColor="#7E8284"
-          activeColor ='#FF6317'    
-          secureTextEntry ={props.secureTextEntry}
-          keyboardType={props.keyboardType}
-          onBlur={() => setInputOutlineIsFocused(false)}
-          onFocus={() => setInputOutlineIsFocused(true)}
-          backgroundColor='#3A474E'
-          assistiveTextFontSize={15}
-          fontSize={15}
-          paddingVertical={17}
-        />
-      </View>
-    )
+function StandardFormInput(props) {
+
+  return (
+    <View style={styles.container}>
+      <InputOutline
+        style={styles.input}
+        onChangeText={value => props.handleChange(value)}
+        value={props.value}
+        placeholder={props.placeholder}
+        placeholderTextColor="#7E8284"
+        activeColor='#FF6317'
+        secureTextEntry={props.secureTextEntry}
+        keyboardType={props.keyboardType}
+        onBlur={() => setInputOutlineIsFocused(false)}
+        onFocus={() => setInputOutlineIsFocused(true)}
+        backgroundColor='#3A474E'
+        assistiveTextFontSize={15}
+        fontSize={15}
+        paddingVertical={17}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> signupscreenprofile
-      container :{
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '85%',
-      },
 
-      inputLabel: {
-        fontSize: 15,
-        color:'white',       
-        alignSelf:'stretch',
-        marginTop: '3%'
-      },
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '85%',
+  },
 
-     input: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#3A474E',
-        height: 50,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        borderBottomColor: '#7E8284',
-        borderBottomWidth: 1,
-        fontSize: 15,
-        color: '#F0F0F0',
-        width:'100%',
-    },
+  inputLabel: {
+    fontSize: 15,
+    color: 'white',
+    alignSelf: 'stretch',
+    marginTop: '3%'
+  },
 
-     inputFocus: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#3A474E',
-        height: 50,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        borderBottomColor: '#FF6317',
-        borderBottomWidth: 2,
-        fontSize: 15,
-        color: '#F0F0F0',
-        width:'100%',
-    },
-    
-  
-<<<<<<< HEAD
-=======
-=======
-  container :{
+  input: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#3A474E',
+    height: 50,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderBottomColor: '#7E8284',
+    borderBottomWidth: 1,
+    fontSize: 15,
+    color: '#F0F0F0',
+    width: '100%',
+  },
+
+  inputFocus: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#3A474E',
+    height: 50,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderBottomColor: '#FF6317',
+    borderBottomWidth: 2,
+    fontSize: 15,
+    color: '#F0F0F0',
+    width: '100%',
+  },
+
+
+  container: {
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -88,8 +82,6 @@ const styles = StyleSheet.create({
     height: 55,
     marginTop: 10
   },
->>>>>>> e13bd5a02bf1463890f7ffd4ad8a87254f9b5af9
->>>>>>> signupscreenprofile
 })
 
 export default StandardFormInput
