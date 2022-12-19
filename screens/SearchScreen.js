@@ -6,11 +6,16 @@ import { useState, useEffect } from 'react';
 import SearchInput from '../components/SearchInput'
 import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
+import { useDispatch } from 'react-redux';
+import { storeGroupId } from '../reducers/group';
+import { BACKEND_ADDRESS } from '../backendAdress';
+
 
 
 export default function SearchScreen({ navigation }) {
 
-    const BACKEND_ADRESS = 'http://192.168.10.128:3000'
+    // const BACKEND_ADRESS = 'http://192.168.10.154:3000';
+    const dispatch = useDispatch();
 
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
@@ -22,6 +27,8 @@ export default function SearchScreen({ navigation }) {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     })
+
+    const [searchResultView, setSearchRegionView] = useState(null)
 
     //search input setup
     const [searchInputValue, setSearchInputValue] = useState('')
@@ -41,7 +48,7 @@ export default function SearchScreen({ navigation }) {
     //fetch sports in DB for the dropdown list
     const [sports, setSports] = useState([])
     useEffect(() => {
-        fetch(`${BACKEND_ADRESS}/sports`)
+        fetch(`${BACKEND_ADDRESS}/sports`)
             .then(response => response.json())
             .then(data => {
                 //format sports for the dropdown list
@@ -119,11 +126,11 @@ export default function SearchScreen({ navigation }) {
             urlParams.longitude = locationFound.longitude
 
             //center map on research
-            setRegionView({
+            setSearchRegionView({
                 latitude: locationFound.latitude,
                 longitude: locationFound.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitudeDelta: 0.09,
+                longitudeDelta: 0.04,
             })
 
             // display name of the location found in search input
@@ -148,7 +155,7 @@ export default function SearchScreen({ navigation }) {
 
         //building query URL for fetching route search
         const url = (
-            `${BACKEND_ADRESS}/groups/search?sport${urlParams.sport && '=' + urlParams.sport}&latitude${urlParams.latitude && '=' + urlParams.latitude}&longitude${urlParams.longitude && '=' + urlParams.longitude}`
+            `${BACKEND_ADDRESS}/groups/search?sport${urlParams.sport && '=' + urlParams.sport}&latitude${urlParams.latitude && '=' + urlParams.latitude}&longitude${urlParams.longitude && '=' + urlParams.longitude}`
         );
 
         //fetch route search
@@ -164,18 +171,27 @@ export default function SearchScreen({ navigation }) {
         else {
             setErrorMessage('No groups found.')
         }
-
         //clean screen
         Keyboard.dismiss()
     }
 
     //get markers from search result and display on Map
     const markers = searchResults.map((data, i) => {
-        return <Marker key={i} coordinate={{ latitude: data.workout_location.location.coordinates[1], longitude: data.workout_location.location.coordinates[0] }} title={data.name} />;
+        return <Marker
+            key={i}
+            coordinate={{
+                latitude: data.workout_location.location.coordinates[1],
+                longitude: data.workout_location.location.coordinates[0]
+            }}
+            title={data.name}
+            description={data.description}
+            onPress={() => dispatch(storeGroupId(data._id))}
+            onCalloutPress={() => navigation.navigate('Group')}
+            pinColor='green'
+        />;
     });
 
 
-    console.log(regionView)
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -183,7 +199,7 @@ export default function SearchScreen({ navigation }) {
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <MapView
-                    region={regionView}
+                    region={searchResultView ? searchResultView : regionView}
                     style={styles.mapContainer}
                 >
                     {markers}
@@ -196,18 +212,21 @@ export default function SearchScreen({ navigation }) {
             </TouchableWithoutFeedback>
 
             <View style={styles.contentContainer}>
-                <DropDownPicker
-                    style={dropdownStyles.header}
-                    textStyle={dropdownStyles.text}
-                    containerStyle={dropdownStyles.container}
-                    multiple={false}
-                    open={open}
-                    value={sportValue}
-                    items={sports}
-                    setOpen={setOpen}
-                    setValue={setSportValue}
-                    setItems={setSports}
-                />
+
+                <View style={{ width: '85%', marginBottom: 5, marginLeft: '15%', marginRight: '15%' }}>
+                    <DropDownPicker
+                        style={dropdownStyles.header}
+                        textStyle={dropdownStyles.text}
+                        containerStyle={dropdownStyles.container}
+                        multiple={false}
+                        open={open}
+                        value={sportValue}
+                        items={sports}
+                        setOpen={setOpen}
+                        setValue={setSportValue}
+                        setItems={setSports}
+                    />
+                </View>
                 <SearchInput
                     placeholder="Where ?"
                     value={searchInputValue}

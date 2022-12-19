@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView,Image, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Image, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {login} from '../reducers/user';
 import user from '../reducers/user';
 //import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAdress';
+
 
 export default function SignUpScreen({ navigation }) {
 
@@ -16,9 +18,9 @@ export default function SignUpScreen({ navigation }) {
 
     const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    
+
     const handleUsernameInputChange = value => setUsername(value);
-    const handleEmailInputChange = value => setEmail(value);     
+    const handleEmailInputChange = value => setEmail(value);
     const handlePasswordInputChange = value => setPassword(value);
     const user = useSelector((state) => state.user.value);
     const dispatch = useDispatch();
@@ -53,32 +55,32 @@ export default function SignUpScreen({ navigation }) {
             });    
     }
 
-    return (     
-            
+    return (
+
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.inputContainer}>
 
             <Text style={styles.header}>Welcome to Kruppa</Text>
                 <StandardFormInput
-                    inputLabel= "Username"
-                    placeholder="your username"        
+                    inputLabel="Username"
+                    placeholder="your username"
                     value={username}
                     handleChange={handleUsernameInputChange}
                 />
 
                 <StandardFormInput
-                    inputLabel= "Email"
-                    placeholder="your email"        
-                   keyboardType="email-address"
+                    inputLabel="Email"
+                    placeholder="your email"
+                    keyboardType="email-address"
                     value={email}
                     handleChange={handleEmailInputChange}
                 />
 
-                
+
                 <StandardFormInput
-                    inputLabel= "Password"                        
-                    placeholder="your password"   
-                    secureTextEntry ='true'     
+                    inputLabel="Password"
+                    placeholder="your password"
+                    secureTextEntry='true'
                     value={password}
                     handleChange={handlePasswordInputChange}
                 />
@@ -96,20 +98,20 @@ export default function SignUpScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,     
-        alignItems: 'center',   
-        backgroundColor: '#251E1E',      
-          
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#251E1E',
+
     },
 
     inputContainer: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center', 
+        justifyContent: 'center',
         height: '100%',
-        width: '100%', 
+        width: '100%',
         paddingTop: '5%',
-        paddingBottom : '40%',      
+        paddingBottom: '40%',
     },
 
 
@@ -118,17 +120,17 @@ const styles = StyleSheet.create({
         marginTop: '35%',
         fontSize: 30,
         fontWeight: "bold",
-        color: '#F0F0F0',       
-        marginBottom: '10%',      
+        color: '#F0F0F0',
+        marginBottom: '10%',
 
     },
 
     fieldName: {
-        color :"white",
-        marginTop:'4%',       
-        fontSize: 15,  
+        color: "white",
+        marginTop: '4%',
+        fontSize: 15,
         alignSelf: 'stretch',
-        marginLeft: '8%',       
+        marginLeft: '8%',
     },
 
     error: {
@@ -138,11 +140,11 @@ const styles = StyleSheet.create({
         color : 'red',
     },
 
-   /*  bottomContainer: {        
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 100,
-    }, */
+    /*  bottomContainer: {        
+         alignItems: 'center',
+         position: 'absolute',
+         bottom: 100,
+     }, */
 
     input: {
         alignItems: 'center',
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#fff',
     },
-    
+
     inputFocus: {
         alignItems: 'center',
         justifyContent: 'center',

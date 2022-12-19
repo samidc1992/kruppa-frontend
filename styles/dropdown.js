@@ -61,17 +61,17 @@ export const dropdownStyles = StyleSheet.create({
         fontSize: 15,
         color: '#7E8284',
     },
-    
+
     closedDropContainer: {
         width: '85%',
         margin: 10,
-        zIndex :1,
+        zIndex: 1,
     },
 
     openDropContainer: {
         width: '85%',
         margin: 10,
-        zIndex :999,
+        zIndex: 999,
     },
 
 
