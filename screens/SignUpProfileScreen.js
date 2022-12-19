@@ -1,13 +1,14 @@
 
-import { View, Text, StyleSheet, SafeAreaView,TouchableHighlight, ScrollView, KeyboardAvoidingView} from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, TouchableHighlight, ScrollView, KeyboardAvoidingView } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
-import { dropdownStyles } from '../styles/dropdown'; 
+import { dropdownStyles } from '../styles/dropdown';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import DatePicker from  "react-native-datepicker";
+// import DatePicker from "react-native-datepicker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { BACKEND_ADDRESS } from "../backendAdress";
 
 const myTheme = require('../styles/darkDropdownTheme');
@@ -41,7 +42,7 @@ export default function SignUpProfileScreen({ navigation }) {
     ]);
 
     //Outline setup
-    const [dateValue, setDateValue] = useState('');
+    const [dateValue, setDateValue] = useState(new Date());
     const [userAge, setUserAge] = useState(null);
     const [descriptionValue, setDescriptionValue] = useState('');
 
@@ -53,6 +54,8 @@ export default function SignUpProfileScreen({ navigation }) {
 
     const [fieldError, setFieldError] = useState('');
     const user = useSelector((state) => state.user.value);
+
+    console.log(dateValue)
 
     //Handle inputChange functions
     const handleDescriptionInputChange = value => setDescriptionValue(value);
@@ -111,14 +114,14 @@ export default function SignUpProfileScreen({ navigation }) {
                 token: user.token,
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.result) {
-                navigation.navigate('TabNavigator', { screen: 'Profile' });
-            } else {
-                setFieldError(true);
-            }
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.result) {
+                    navigation.navigate('TabNavigator', { screen: 'Profile' });
+                } else {
+                    setFieldError(true);
+                }
+            });
     }
 
     return (
@@ -151,13 +154,16 @@ export default function SignUpProfileScreen({ navigation }) {
                         setItems={setGenderItems}
                     />
                     <Text style={styles.fieldName}>Birthday</Text>
-                    <DatePicker
+                    {/* <DateTimePicker
                         style={styles.datePickerStyle}
                         date={dateValue}
                         mode="date"
+                        // textColor="#000000"
+                        // useNativeDriver={true}
+                        theme="dark"
                         placeholder="YYYY-MM-DD"
                         format="YYYY-MM-DD"
-                        minDate={1960-12-31}
+                        minDate={'1960-12-31'}
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
                         customStyles={styles.customDatePickerStyles}
@@ -165,7 +171,21 @@ export default function SignUpProfileScreen({ navigation }) {
                             setDateValue(date);
                             calculateAge(date);
                         }}
+                    /> */}
+
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={dateValue}
+                        mode="date"
+                        is24Hour={true}
+                        display='default'
+                        onChange={(value) => {
+                            setDateValue(new Date(value.nativeEvent.timestamp));
+                            calculateAge(value);
+                        }}
                     />
+
+
                     <Text style={styles.fieldName}>My favorite sports</Text>
                     <DropDownPicker
                         placeholder='Sport'
@@ -278,6 +298,7 @@ const styles = StyleSheet.create({
         borderRightWidth: 0,
         borderBottomColor: '#7E8284',
         borderBottomWidth: 1,
+        color: 'black'
     },
     customDatePickerStyles: {
         dateIcon: {
