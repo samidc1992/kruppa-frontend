@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton'
-import SearchInput from '../components/SearchInput'
+// import SearchInput from '../components/SearchInput'
+import StandardFormInput from '../components/StandardFormInput';
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -50,14 +51,19 @@ export default function SignInScreen({ navigation }) {
         <SafeAreaView style={styles.container}>
             <Text style={styles.header}>Welcome back to Kruppa</Text>
             <View style={styles.content}>
-                <SearchInput
-                    placeholder="Email"
-                    value={email}
-                    handleChange={handleSearchInputChangeMail} />
-                <SearchInput
-                    placeholder="Password"
-                    value={password}
-                    handleChange={handleSearchInputChangePassword} />
+                <View style={{ width: '100%', marginLeft: '15%' }}>
+
+                    <StandardFormInput
+                        placeholder="Email"
+                        value={email}
+                        handleChange={handleSearchInputChangeMail} />
+                    <StandardFormInput
+                        placeholder="Password"
+                        value={password}
+                        handleChange={handleSearchInputChangePassword}
+                        secureTextEntry='true'
+                    />
+                </View>
                 {fieldError && <Text style={styles.error}>Invalid email or password.</Text>}
                 <Text style={styles.signupOption}>
                     Do not have an account yet? Sign up
