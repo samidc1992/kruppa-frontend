@@ -18,7 +18,6 @@ export const userSlice = createSlice({
         login: (state, action) => {
             state.value.token = action.payload.token;
             state.value.username = action.payload.username;
-            state.value.userAge = action.payload.userAge;
             state.value.description = action.payload.description;
         },
         logout: (state) => {
@@ -29,15 +28,18 @@ export const userSlice = createSlice({
           state.value.favoriteSports = action.payload;
         },
 
+        updateDate : (state, action) => {
+            state.value.userAge = action.payload.userAge;
+        },
+
         removeSport: (state, action) => {
-            
-             state.value.favoriteSports = state.value.favoriteSports.filter(e => {
+            /*  state.value.favoriteSports = state.value.favoriteSports.filter(e => {
                 e.sport !== action.payload.sport && e.level !== action.payload.level
-            })
+            }) */
           },
     
     },
 });
 
-export const { login, logout, removeSport, addFavoriteSports } = userSlice.actions;
+export const { login, logout, updateDate, addFavoriteSports } = userSlice.actions;
 export default userSlice.reducer;

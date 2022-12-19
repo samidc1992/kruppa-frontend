@@ -3,6 +3,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
+import { useDispatch, useSelector } from 'react-redux';
+import {login} from '../reducers/user';
+import user from '../reducers/user';
+//import { BACKEND_ADDRESS } from '../backendAdress';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 
@@ -57,16 +61,14 @@ export default function SignUpScreen({ navigation }) {
 
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.inputContainer}>
-                <Text style={styles.header}>Welcome to Kruppa</Text>
 
-
+            <Text style={styles.header}>Welcome to Kruppa</Text>
                 <StandardFormInput
                     inputLabel="Username"
                     placeholder="your username"
                     value={username}
                     handleChange={handleUsernameInputChange}
                 />
-
 
                 <StandardFormInput
                     inputLabel="Email"
@@ -84,13 +86,14 @@ export default function SignUpScreen({ navigation }) {
                     value={password}
                     handleChange={handlePasswordInputChange}
                 />
-                {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
-            </View>
-
-            <PrimaryButton
-                text='Sign Up'
-                onPress={() => handlePressPrimaryButton()}
-            />
+                 {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
+               </View> 
+                 
+                <PrimaryButton                    
+                    text='Sign Up'
+                    onPress={() => handlePressPrimaryButton()}
+                />       
+              
         </KeyboardAvoidingView>
     )
 }
@@ -112,6 +115,7 @@ const styles = StyleSheet.create({
         paddingTop: '5%',
         paddingBottom: '40%',
     },
+
 
     header: {
         alignSelf: 'center',

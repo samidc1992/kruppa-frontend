@@ -30,6 +30,10 @@ function StandardFormInput (props) {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> signupscreenprofile
       container :{
         alignItems: 'center',
         justifyContent: 'center',
@@ -69,10 +73,23 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#F0F0F0',
         width:'100%',
-
     },
     
   
+<<<<<<< HEAD
+=======
+=======
+  container :{
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    width: '85%',
+    height: 55,
+    marginTop: 10
+  },
+>>>>>>> e13bd5a02bf1463890f7ffd4ad8a87254f9b5af9
+>>>>>>> signupscreenprofile
 })
 
 export default StandardFormInput
