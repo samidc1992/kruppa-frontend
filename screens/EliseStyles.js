@@ -2,6 +2,7 @@ import { TouchableHighlight, TouchableOpacity, StyleSheet, Text, View, TextInput
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import MemberCard from '../components/MemberCard';
 
 export default function EliseStylesScreen({ navigation }) {
     // const [image, setImage] = useState(null);
@@ -69,7 +70,29 @@ export default function EliseStylesScreen({ navigation }) {
     return (
 
         <View style={styles.container}>
-            <View styles={styles.headerContainer}>
+
+            <MemberCard
+                username='@johndoe'
+                age={30}
+                level='intermediate'
+            />
+            <MemberCard
+                username='@johndoe'
+                age={30}
+                level='intermediate'
+            />
+            <MemberCard
+                username='@johndoe'
+                age={30}
+                level='intermediate'
+            />
+            <MemberCard
+                username='@johndoe'
+                age={30}
+                level='intermediate'
+            />
+
+            {/* <View styles={styles.headerContainer}>
                 {image && <Image source={{ uri: image }} style={{
                     width: 100, height: 100, borderRadius: 100, justifyContent: 'center', alignSelf: 'center', marginTop: '2%'
                 }}
@@ -80,7 +103,7 @@ export default function EliseStylesScreen({ navigation }) {
                     <FontAwesome name='upload' onPress={() => pickImage()} size={18} color='#979797' />
                 </View>
 
-            </View>
+            </View> */}
 
         </View>
     );
