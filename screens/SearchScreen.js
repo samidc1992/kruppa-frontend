@@ -213,11 +213,11 @@ export default function SearchScreen({ navigation }) {
 
             <View style={styles.contentContainer}>
 
-                <View style={{ width: '85%', marginBottom: 5, marginLeft: '15%', marginRight: '15%' }}>
+                <View style={{ width: '100%', marginBottom: 5, alignItems: 'center' }}>
                     <DropDownPicker
                         style={dropdownStyles.header}
                         textStyle={dropdownStyles.text}
-                        containerStyle={dropdownStyles.container}
+                        containerStyle={open ? dropdownStyles.openDropContainer : dropdownStyles.closedDropContainer}
                         multiple={false}
                         open={open}
                         value={sportValue}
