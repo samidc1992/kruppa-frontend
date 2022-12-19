@@ -5,7 +5,6 @@ import StandardFormInput from '../components/StandardFormInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../reducers/user';
 import user from '../reducers/user';
-//import { BACKEND_ADDRESS } from '../backendAdress';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 
@@ -15,21 +14,14 @@ export default function SignUpScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fieldError, setFieldError] = useState('');
-
     const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-
     const handleUsernameInputChange = value => setUsername(value);
     const handleEmailInputChange = value => setEmail(value);
     const handlePasswordInputChange = value => setPassword(value);
     const user = useSelector((state) => state.user.value);
     const dispatch = useDispatch();
 
-
     const handlePressPrimaryButton = () => {
-
-        // const BACKEND_ADDRESS = 'http://192.168.0.30:3000';
-
         fetch(`${BACKEND_ADDRESS}/users/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -39,58 +31,60 @@ export default function SignUpScreen({ navigation }) {
                 password: password,
             }),
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.result && EMAIL_REGEX.test(email)) {
-                    dispatch(login({
-                        token: data.token
-                    }));
-                    navigation.navigate('Home');
-                } else {
-                    setUsername('');
-                    setEmail('');
-                    setPassword('');
-                    setFieldError(true);
-                }
-            });
+        .then(response => response.json())
+        .then(data => {
+            if (data.result && EMAIL_REGEX.test(email)) {
+                dispatch(login({
+                    token: data.token
+                }));
+                navigation.navigate('Home');
+            } else {
+                setUsername('');
+                setEmail('');
+                setPassword('');
+                setFieldError(true);
+            }
+        });
     }
 
     return (
-
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.inputContainer}>
-
-                <Text style={styles.header}>Welcome to Kruppa</Text>
+            <View style={styles.contentContainer}>
+            <Text style={styles.header}>Welcome to Kruppa</Text>
                 <StandardFormInput
-                    inputLabel="Username"
-                    placeholder="your username"
+                    placeholder="Username"
                     value={username}
                     handleChange={handleUsernameInputChange}
                 />
-
                 <StandardFormInput
-                    inputLabel="Email"
-                    placeholder="your email"
+                    placeholder="Email"
                     keyboardType="email-address"
                     value={email}
                     handleChange={handleEmailInputChange}
                 />
-
-
                 <StandardFormInput
-                    inputLabel="Password"
-                    placeholder="your password"
+                    placeholder="Password"
                     secureTextEntry='true'
                     value={password}
                     handleChange={handlePasswordInputChange}
                 />
-                {fieldError && <Text style={styles.error}>Oops! Invalid information! Please try again.. </Text>}
+                {fieldError && <Text style={styles.error}>Missing or empty fields.</Text>}
+                <Text style={styles.signinOption}>
+                    Already have an account? Sign in
+                    <Text> </Text>
+                    <Text
+                        style={styles.signinLink}
+                        onPress={() => navigation.navigate('SignIn')}
+                    >here</Text>
+                    .
+                </Text>
             </View>
-
-            <PrimaryButton
-                text='Sign Up'
-                onPress={() => handlePressPrimaryButton()}
-            />
+            <View style={styles.buttonContainer}>
+                <PrimaryButton
+                    text='Sign Up'
+                    onPress={() => handlePressPrimaryButton()}
+                />
+            </View>
 
         </KeyboardAvoidingView>
     )
@@ -100,83 +94,41 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#251E1E',
-
+        backgroundColor: '#3A474E',
     },
-
-    inputContainer: {
+    header: {
+        color: 'white',
+        width: '85%',
+        fontSize: 34,
+        fontWeight: '600',
+        //fontFamily: 'Inter',
+        // position: 'absolute',
+        // top: 60,
+        marginBottom: 30,
+        textAlign: 'center'
+    },
+    contentContainer: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        width: '100%',
-        paddingTop: '5%',
-        paddingBottom: '40%',
+        justifyContent: 'center'
     },
-
-
-    header: {
-        alignSelf: 'center',
-        marginTop: '35%',
-        fontSize: 30,
-        fontWeight: "bold",
-        color: '#F0F0F0',
-        marginBottom: '10%',
-
-    },
-
-    fieldName: {
-        color: "white",
-        marginTop: '4%',
-        fontSize: 15,
-        alignSelf: 'stretch',
-        marginLeft: '8%',
-    },
-
     error: {
         marginTop: 15,
         fontSize: '15',
         fontWeight: 'bold',
         color: 'red',
     },
-
-    /*  bottomContainer: {        
-         alignItems: 'center',
-         position: 'absolute',
-         bottom: 100,
-     }, */
-
-    input: {
+    buttonContainer: {
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#3A474E',
-        width: '80%',
-        height: 50,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        margin: 5,
-        borderBottomColor: '#545A5E',
-        borderBottomWidth: 1,
-        paddingLeft: 10,
-        fontSize: 20,
-        color: '#fff',
+        bottom: 40
     },
-
-    inputFocus: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#545A5E',
-        width: '80%',
-        height: 50,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        margin: 5,
-        borderBottomColor: '#ec6e5b',
-        borderBottomWidth: 2,
-        paddingLeft: 10,
-        fontSize: 20,
-        color: '#fff',
-
+    signinOption: {
+        color: 'white',
+        marginTop: 5,
+    },
+    signinLink: {
+        textDecorationLine: 1,
+        color: 'lightblue'
     }
-
 })
