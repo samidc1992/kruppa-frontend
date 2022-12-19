@@ -3,46 +3,47 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SecondaryButton from '../components/SecondaryButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { login, logout } from '../reducers/user';
+import { logout } from '../reducers/user';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function ProfileScreen({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
+  const [userInfo, setUserInfo] = useState({})
 
   // Get user's profile information 
   useEffect(() => {
     fetch(`${BACKEND_ADDRESS}/users/groups`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: user.token,
-      })
+      body: JSON.stringify({token: user.token,})
     })
-      .then(response => response.json())
-      .then(data => {
-      
-        if (data.result) {
-          dispatch(login({
-            token: user.token,
-            username: data.userData.username,
-            description: data.userData.description,
-          }
-          ));
-        };
-      })
+    .then(response => response.json())
+    .then(data => {
+      if(data.result) {
+        let { username, birthDate, registrations } = data.userData;
+        let age = Math.floor((new Date() - new Date(birthDate))/31556952000);
+        console.log(registrations);
+        
+        setUserInfo({
+          username,
+          age,
+
+        })
+      }
+    })
   }, []);
 
   // Get user's favorite sports list
-  const selectedSportsList = user.favoriteSports.map((data, i) => {
-    return (
-      <View style={styles.sportsListDisplay}>
-        <Text key={i} style={styles.boldTextStyle}>{data.sport} </Text>
-        <Text key={i} style={styles.textItalicStyle}>({data.level}) </Text>
-      </View>
-    )
-  })
+  // const selectedSportsList = user.favoriteSports.map((data, i) => {
+  //   return (
+  //     <View style={styles.sportsListDisplay}>
+  //       <Text key={i} style={styles.boldTextStyle}>{data.sport} </Text>
+  //       <Text key={i} style={styles.textItalicStyle}>({data.level}) </Text>
+  //     </View>
+  //   )
+  // })
 
   return (
 
@@ -63,8 +64,8 @@ export default function ProfileScreen({ navigation }) {
           <Text></Text>
         </TouchableHighlight>
         <View style={styles.userInformation}>
-          <Text style={styles.userText}>@ {user.username}</Text>
-          <Text style={styles.userText}>{user.userAge} years old</Text>
+          <Text style={styles.userText}>{user.username}</Text>
+          <Text style={styles.userText}>{userInfo.age} years old</Text>
         </View>
       </View>
 
@@ -72,7 +73,7 @@ export default function ProfileScreen({ navigation }) {
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.sportsContainer}>
             <Text style={styles.subTitle}>Favorite Sports</Text>
-            {selectedSportsList}
+            {/* {selectedSportsList} */}
           </View>
 
           <View style={styles.descriptionContainer}>
