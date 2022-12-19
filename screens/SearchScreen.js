@@ -28,6 +28,8 @@ export default function SearchScreen({ navigation }) {
         longitudeDelta: 0.0421,
     })
 
+    const [searchResultView, setSearchRegionView] = useState(null)
+
     //search input setup
     const [searchInputValue, setSearchInputValue] = useState('')
     const handleSearchInputChange = value => setSearchInputValue(value)
@@ -124,11 +126,11 @@ export default function SearchScreen({ navigation }) {
             urlParams.longitude = locationFound.longitude
 
             //center map on research
-            setRegionView({
+            setSearchRegionView({
                 latitude: locationFound.latitude,
                 longitude: locationFound.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitudeDelta: 0.09,
+                longitudeDelta: 0.04,
             })
 
             // display name of the location found in search input
@@ -185,6 +187,7 @@ export default function SearchScreen({ navigation }) {
             description={data.description}
             onPress={() => dispatch(storeGroupId(data._id))}
             onCalloutPress={() => navigation.navigate('Group')}
+            pinColor='green'
         />;
     });
 
@@ -196,7 +199,7 @@ export default function SearchScreen({ navigation }) {
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <MapView
-                    region={regionView}
+                    region={searchResultView ? searchResultView : regionView}
                     style={styles.mapContainer}
                 >
                     {markers}
