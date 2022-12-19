@@ -129,8 +129,8 @@ export default function SearchScreen({ navigation }) {
             setSearchRegionView({
                 latitude: locationFound.latitude,
                 longitude: locationFound.longitude,
-                latitudeDelta: 0.09,
-                longitudeDelta: 0.04,
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.02,
             })
 
             // display name of the location found in search input
@@ -213,11 +213,11 @@ export default function SearchScreen({ navigation }) {
 
             <View style={styles.contentContainer}>
 
-                <View style={{ width: '85%', marginBottom: 5, marginLeft: '15%', marginRight: '15%' }}>
+                <View style={{ width: '100%', marginBottom: 5, alignItems: 'center' }}>
                     <DropDownPicker
                         style={dropdownStyles.header}
                         textStyle={dropdownStyles.text}
-                        containerStyle={dropdownStyles.container}
+                        containerStyle={open ? dropdownStyles.openDropContainer : dropdownStyles.closedDropContainer}
                         multiple={false}
                         open={open}
                         value={sportValue}

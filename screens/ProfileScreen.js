@@ -3,49 +3,50 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SecondaryButton from '../components/SecondaryButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { login, logout } from '../reducers/user';
+import { logout } from '../reducers/user';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function ProfileScreen({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
+  const [userInfo, setUserInfo] = useState({});
+  const [sports, setSports] = useState([])
+
 
   // Get user's profile information 
   useEffect(() => {
     fetch(`${BACKEND_ADDRESS}/users/groups`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: user.token,
-      })
+      body: JSON.stringify({token: user.token,})
     })
-      .then(response => response.json())
-      .then(data => {
-      
-        if (data.result) {
-          dispatch(login({
-            token: user.token,
-            username: data.userData.username,
-            description: data.userData.description,
-          }
-          ));
-        };
-      })
+    .then(response => response.json())
+    .then(data => {
+      if(data.result) {
+        let { username, birthDate, favoriteSports, description } = data.userData;
+        let age = Math.floor((new Date() - new Date(birthDate))/31556952000);
+        setUserInfo({
+          username,
+          age,
+          description,
+        });
+        setSports(favoriteSports);
+      }
+    })
   }, []);
 
   // Get user's favorite sports list
-  const selectedSportsList = user.favoriteSports.map((data, i) => {
+  const sportsToDisplay = sports.map((data, i) => {
     return (
-      <View style={styles.sportsListDisplay}>
-        <Text key={i} style={styles.boldTextStyle}>{data.sport} </Text>
-        <Text key={i} style={styles.textItalicStyle}>({data.level}) </Text>
+      <View key={i} style={styles.sportsListDisplay}>
+        <Text style={styles.boldTextStyle}>{data.sport} </Text>
+        <Text style={styles.textItalicStyle}>({data.level}) </Text>
       </View>
     )
   })
 
   return (
-
     <SafeAreaView style={styles.screenContainer}>
       <FontAwesome
         name='sign-out'
@@ -63,30 +64,25 @@ export default function ProfileScreen({ navigation }) {
           <Text></Text>
         </TouchableHighlight>
         <View style={styles.userInformation}>
-          <Text style={styles.userText}>@ {user.username}</Text>
-          <Text style={styles.userText}>{user.userAge} years old</Text>
+          <Text style={styles.body}>{user.username}</Text>
+          <Text style={styles.body}>{userInfo.age} years old</Text>
         </View>
       </View>
-
       <View style={styles.bodyContainer}>
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.sportsContainer}>
             <Text style={styles.subTitle}>Favorite Sports</Text>
-            {selectedSportsList}
+            {sportsToDisplay}
           </View>
-
           <View style={styles.descriptionContainer}>
             <Text style={styles.subTitle}>Description</Text>
-            <Text style={styles.textStyle}>{user.description}</Text>
+            <Text style={styles.body}>{userInfo.description}</Text>
           </View>
         </ScrollView>
       </View>
-
-      <View style={styles.bottomContainer}>
+      <View style={styles.buttonContainer}>
         <SecondaryButton
           text='Edit profile'
-          disabled={false}
-          activeOpacity={0.8}
           onPress={() => handleEditButton()}
         />
       </View>
@@ -98,7 +94,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#272D31',
   },
-
   signOutStyle: {
     alignSelf: 'flex-end',
     marginTop: '1%',
@@ -106,17 +101,15 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     height: 180,
+    flexDirection: 'row',
     alignItems: 'center',
   },
-
   userText: {
     fontSize: 15,
     color: 'white',
-    marginLeft: 50,
+    marginLeft: 10,
     marginBottom: 1,
   },
-
-
   profilePicture: {
     borderRadius: 130,
     width: 130,
@@ -126,13 +119,6 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginLeft: 20
   },
-
-  userInformation: {
-    alignSelf: 'center',
-    marginLeft: 10,
-    marginTop: '-20%',
-  },
-
   bodyContainer: {
     height: 300,
     justifyContent: 'space-around',
@@ -143,19 +129,15 @@ const styles = StyleSheet.create({
   scrollView: {
     height: '100%',
     width: '100%',
-
     justifyContent: 'space-around',
   },
-
   sportsContainer: {
     flexDirection: 'column',
     height: '50%',
   },
-
   descriptionContainer: {
     height: '50%',
   },
-
   subTitle: {
     fontSize: 20,
     fontWeight: '600',
@@ -163,12 +145,9 @@ const styles = StyleSheet.create({
     width: '85%',
     marginBottom: 1,
   },
-
   sportsListDisplay: {
     flexDirection: 'row',
-
   },
-
   boldTextStyle: {
     fontSize: 15,
     color: '#F0F0F1',
@@ -176,28 +155,22 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 5,
   },
-
   textItalicStyle: {
     fontSize: 15,
     color: '#F0F0F0',
     fontStyle: 'italic',
     marginTop: 5,
   },
-
-  textStyle: {
+  body: {
     fontSize: 15,
     color: '#F0F0F0',
     marginTop: 5,
     marginLeft: 10,
   },
-
-
-  bottomContainer: {
-    width: '100%',
-    height: '100%',
+  buttonContainer: {
     alignItems: 'center',
     position: 'absolute',
-    bottom: '-85%',
+    width: '100%',
+    bottom: 40,
   },
-
 })

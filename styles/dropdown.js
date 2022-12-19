@@ -58,7 +58,7 @@ export const dropdownStyles = StyleSheet.create({
         paddingLeft: 10,
     },
     text: {
-        fontSize: 15,
+        fontSize: 20,
         color: '#7E8284',
     },
 

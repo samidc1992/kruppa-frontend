@@ -190,13 +190,16 @@ export default function CreateGroupScreen({ navigation }) {
                                 </View>
 
                             </View>
+                            <View style={{ width: '100%', marginLeft: '15%' }}>
 
-                            <StandardFormInput
-                                inputLabel='Group Name'
-                                placeholder="Group name"
-                                value={name}
-                                handleChange={(value) => setName(value)}
-                            />
+
+                                <StandardFormInput
+                                    inputLabel='Group Name'
+                                    placeholder="Group name"
+                                    value={name}
+                                    handleChange={(value) => setName(value)}
+                                />
+                            </View>
 
                             <Text style={styles.fieldName}>Sport</Text>
                             <DropDownPicker
@@ -314,12 +317,15 @@ export default function CreateGroupScreen({ navigation }) {
 
                             {workoutLocationSelected.label === null && <Text style={styles.rightUnderlineText} onPress={() => handleMapClick()}>Pick your location on the Map...</Text>}
 
-                            <StandardFormInput
-                                inputLabel='Description'
-                                placeholder="Group description"
-                                value={description}
-                                handleChange={(value) => setDescription(value)}
-                            />
+                            <View style={{ width: '100%', marginLeft: '15%' }}>
+
+                                <StandardFormInput
+                                    inputLabel='Description'
+                                    placeholder="Group description"
+                                    value={description}
+                                    handleChange={(value) => setDescription(value)}
+                                />
+                            </View>
                             {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
 
                             <PrimaryButton
@@ -340,15 +346,16 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#272D31',
+        // backgroundColor: 'green',
         justifyContent: 'center',
     },
 
     contentContainer: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         height: '100%',
         width: '100%',
+        // borderWidth: 2
     },
 
     profilePicture: {
