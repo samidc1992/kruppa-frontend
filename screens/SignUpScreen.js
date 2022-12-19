@@ -33,7 +33,8 @@ export default function SignUpScreen({ navigation }) {
             .then(data => {
                 if (data.result && EMAIL_REGEX.test(email)) {
                     dispatch(login({
-                        token: data.token
+                        token: data.token,
+                        username,
                     }));
                     navigation.navigate('SignUpProfile');
                 } else {

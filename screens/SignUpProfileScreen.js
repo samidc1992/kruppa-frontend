@@ -55,8 +55,6 @@ export default function SignUpProfileScreen({ navigation }) {
     const [fieldError, setFieldError] = useState('');
     const user = useSelector((state) => state.user.value);
 
-    console.log(dateValue)
-
     //Handle inputChange functions
     const handleDescriptionInputChange = value => setDescriptionValue(value);
 

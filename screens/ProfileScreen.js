@@ -10,7 +10,9 @@ export default function ProfileScreen({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
-  const [userInfo, setUserInfo] = useState({})
+  const [userInfo, setUserInfo] = useState({});
+  const [sports, setSports] = useState([])
+
 
   // Get user's profile information 
   useEffect(() => {
@@ -28,14 +30,14 @@ export default function ProfileScreen({ navigation }) {
           username,
           age,
           description,
-          favoriteSports,
-        })
+        });
+        setSports(favoriteSports);
       }
     })
   }, []);
 
   // Get user's favorite sports list
-  const sports = userInfo.favoriteSports.map((data, i) => {
+  const sportsToDisplay = sports.map((data, i) => {
     return (
       <View key={i} style={styles.sportsListDisplay}>
         <Text style={styles.boldTextStyle}>{data.sport} </Text>
@@ -70,7 +72,7 @@ export default function ProfileScreen({ navigation }) {
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.sportsContainer}>
             <Text style={styles.subTitle}>Favorite Sports</Text>
-            {sports}
+            {sportsToDisplay}
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.subTitle}>Description</Text>
