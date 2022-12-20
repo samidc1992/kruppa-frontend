@@ -192,9 +192,8 @@ export default function SearchScreen({ navigation }) {
 
     const groups = searchResults.map((data, i) => {
         let { sport, name, maxMembers, _id } = data
-        return <View style={styles.group}>
+        return <View style={styles.group} key={i}>
             <GroupCard
-                key={i}
                 sport={sport.label}
                 name={name}
                 membersNum={3}
