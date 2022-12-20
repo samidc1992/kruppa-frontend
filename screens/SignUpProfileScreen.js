@@ -104,7 +104,7 @@ export default function SignUpProfileScreen({ navigation }) {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.result && group === null) {
+                if (data.result && group.group_id === null) {
                     navigation.navigate('TabNavigator', { screen: 'Profile' });
                 } else {
                     setFieldError(true);
