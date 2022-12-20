@@ -8,7 +8,7 @@ import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
 import { useDispatch, useSelector } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
-import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
+import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import DoubleTab from '../components/DoubleTab'
 import GroupCard from '../components/GroupCard'
@@ -213,7 +213,7 @@ export default function SearchScreen({ navigation }) {
                 }}
             />
         </View>
-        
+
     })
 
     const map = (<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -231,47 +231,26 @@ export default function SearchScreen({ navigation }) {
     </TouchableWithoutFeedback>)
 
     const list = (
-    <ScrollView styles={styles.scrollView}>
-        <View style={styles.groupsListContainer}>
-            {groups}
-        </View>
-    </ScrollView>
+        <ScrollView styles={styles.scrollView}>
+            <View style={styles.groupsListContainer}>
+                {groups}
+            </View>
+        </ScrollView>
     )
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}>
-<<<<<<< HEAD
-
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
-                <MapView
-                    // provider={PROVIDER_GOOGLE}
-                    region={searchResultView ? searchResultView : regionView}
-                    style={styles.mapContainer}
-
-                >
-                    {markers}
-                    {currentPosition && <Marker
-                        coordinate={currentPosition}
-                        title="My position"
-                        pinColor="#FF6317"
-                    />}
-                </MapView>
-            </TouchableWithoutFeedback>
-
-=======
-                { displayMap ? map : list }
->>>>>>> 4860dd4a792a91112f002c0c8adbcd258b3aeabe
+            {displayMap ? map : list}
             <View style={styles.contentContainer}>
                 <View style={styles.tabContainer}>
-                <DoubleTab
-                    textTabLeft="Map"
-                    textTabRight="List"
-                    onPressLeft={()=> setDisplayMap(true)}
-                    onPressRight={()=> setDisplayMap(false)}
-                />
+                    <DoubleTab
+                        textTabLeft="Map"
+                        textTabRight="List"
+                        onPressLeft={() => setDisplayMap(true)}
+                        onPressRight={() => setDisplayMap(false)}
+                    />
                 </View>
                 <View style={{ width: '100%', marginBottom: 5, alignItems: 'center', zIndex: 999 }}>
                     <DropDownPicker
@@ -293,10 +272,10 @@ export default function SearchScreen({ navigation }) {
                     handleChange={handleSearchInputChange}
                 />
                 {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
-                    <PrimaryButton
-                        text='Search'
-                        onPress={() => launchSearch()}
-                    />
+                <PrimaryButton
+                    text='Search'
+                    onPress={() => launchSearch()}
+                />
             </View>
         </KeyboardAvoidingView>
     )
@@ -331,6 +310,7 @@ const styles = StyleSheet.create({
         width: '85%',
         fontSize: 16,
     },
+
     tabContainer: {
         height: 40,
         width: '100%',
