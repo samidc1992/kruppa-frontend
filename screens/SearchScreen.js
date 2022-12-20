@@ -1,24 +1,27 @@
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Keyboard, Text, TouchableWithoutFeedback, Platform, StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { Keyboard, Text, TouchableWithoutFeedback, Platform, StyleSheet, View, KeyboardAvoidingView, ScrollView, SafeAreaView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { dropdownStyles } from '../styles/dropdown';
 import { useState, useEffect } from 'react';
 import SearchInput from '../components/SearchInput'
 import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
+import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import { BACKEND_ADDRESS } from '../backendAdress';
-
-
+import DoubleTab from '../components/DoubleTab'
+import GroupCard from '../components/GroupCard'
 
 export default function SearchScreen({ navigation }) {
 
-    // const BACKEND_ADRESS = 'http://192.168.10.154:3000';
     const dispatch = useDispatch();
+
+    const [displayMap, setDisplayMap] = useState(true)
 
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
+    const tab = useSelector((state) => state.tab.value);
 
     //region view on map
     const [regionView, setRegionView] = useState({
@@ -153,12 +156,10 @@ export default function SearchScreen({ navigation }) {
                 longitudeDelta: 0.0421,
             })
         }
-
         //building query URL for fetching route search
         const url = (
             `${BACKEND_ADDRESS}/groups/search?sport${urlParams.sport && '=' + urlParams.sport}&latitude${urlParams.latitude && '=' + urlParams.latitude}&longitude${urlParams.longitude && '=' + urlParams.longitude}`
         );
-
         //fetch route search
         const groupsResponse = await fetch(url)
         const groupsData = await groupsResponse.json()
@@ -187,17 +188,61 @@ export default function SearchScreen({ navigation }) {
             }}
             title={data.name}
             description={data.description}
-            onPress={() => dispatch(storeGroupId(data._id))}
+            onPress={() => {
+                dispatch(storeGroupId(data._id))
+                /* dispatch(handleLeftTabFocused (true)); 
+                dispatch(handleMiddleTabFocused(false)); 
+                dispatch(handleRightTabFocused(false)) */
+            }}
             onCalloutPress={() => navigation.navigate('Group')}
             pinColor='green'
         />;
     });
 
+    const groups = searchResults.map((data, i) => {
+        let { sport, name, maxMembers, _id } = data
+        return <View style={styles.group} key={i}>
+            <GroupCard
+                sport={sport.label}
+                name={name}
+                membersNum={3}
+                maxMembers={maxMembers}
+                handlePress={() => {
+                    dispatch(storeGroupId(_id))
+                    navigation.navigate('Group')
+                }}
+            />
+        </View>
+        
+    })
+
+    const map = (<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <MapView
+            region={searchResultView ? searchResultView : regionView}
+            style={styles.mapContainer}
+        >
+            {markers}
+            {currentPosition && <Marker
+                coordinate={currentPosition}
+                title="My position"
+                pinColor="#FF6317"
+            />}
+        </MapView>
+    </TouchableWithoutFeedback>)
+
+    const list = (
+    <ScrollView styles={styles.scrollView}>
+        <View style={styles.groupsListContainer}>
+            {groups}
+        </View>
+    </ScrollView>
+    )
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}>
+<<<<<<< HEAD
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
@@ -216,8 +261,18 @@ export default function SearchScreen({ navigation }) {
                 </MapView>
             </TouchableWithoutFeedback>
 
+=======
+                { displayMap ? map : list }
+>>>>>>> 4860dd4a792a91112f002c0c8adbcd258b3aeabe
             <View style={styles.contentContainer}>
-
+                <View style={styles.tabContainer}>
+                <DoubleTab
+                    textTabLeft="Map"
+                    textTabRight="List"
+                    onPressLeft={()=> setDisplayMap(true)}
+                    onPressRight={()=> setDisplayMap(false)}
+                />
+                </View>
                 <View style={{ width: '100%', marginBottom: 5, alignItems: 'center', zIndex: 999 }}>
                     <DropDownPicker
                         style={dropdownStyles.header}
@@ -233,15 +288,15 @@ export default function SearchScreen({ navigation }) {
                     />
                 </View>
                 <SearchInput
-                    placeholder="Where ?"
+                    placeholder="Where?"
                     value={searchInputValue}
                     handleChange={handleSearchInputChange}
                 />
                 {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
-                <PrimaryButton
-                    text='Search'
-                    onPress={() => launchSearch()}
-                />
+                    <PrimaryButton
+                        text='Search'
+                        onPress={() => launchSearch()}
+                    />
             </View>
         </KeyboardAvoidingView>
     )
@@ -266,11 +321,23 @@ const styles = StyleSheet.create({
         height: '60%',
         width: '100%',
     },
+    groupsListContainer: {
+        alignItems: 'center',
+        paddingTop: '10%'
+    },
     error: {
         color: 'red',
         textAlign: 'left',
         width: '85%',
         fontSize: 16,
-    }
-
+    },
+    tabContainer: {
+        height: 40,
+        width: '100%',
+        top: -25,
+    },
+    group: {
+        width: '96%',
+        alignItems: 'center'
+    },
 })

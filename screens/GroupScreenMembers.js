@@ -5,21 +5,24 @@ import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
+import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenMembers({ navigation }) {
 
     const group_id = useSelector((state) => state.group.value);
     const user = useSelector((state) => state.user.value);
+    const tab = useSelector((state) => state.tab.value);
 
 
     const dispatch = useDispatch ();
 
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
+    const [groupMembers, setGroupMembers] = useState([]);
     
-    useEffect(() => {
-        
+     useEffect(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
             method: 'POST',
             headers: {
@@ -49,13 +52,51 @@ export default function GroupScreenMembers({ navigation }) {
                     })
                 }
             })
-    }, [])
+    }, []) 
+
+     //updating members when screen is focused
+     useFocusEffect(
+        React.useCallback(() => {
+            fetch(`${BACKEND_ADDRESS}/groups/members`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ group_id }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setGroupMembers(data.userData)
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }, [])
+    );
+
+     const members = groupMembers.map((e, i) => {
+        return (
+            <MemberCard
+              
+            />
+        )
+    }) 
+
+
+
+
 
 
     return(
         <SafeAreaView style={styles.screenContainer}>
             <TopBar
-                onPress={() => navigation.goBack()}
+                onPress={() => {
+                    dispatch(handleLeftTabFocused (true)); 
+                    dispatch(handleMiddleTabFocused(false)); 
+                    dispatch(handleRightTabFocused(false)); 
+                    navigation.navigate('Group')
+                }}
+                
             />
              <Text style={styles.header}>{groupDataToDisplay.name}</Text>
             <View style={styles.tabContainer}>

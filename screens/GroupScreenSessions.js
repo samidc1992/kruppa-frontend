@@ -6,11 +6,13 @@ import SecondaryButton from '../components/SecondaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
+import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenSessions({ navigation }) {
 
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
+    const tab = useSelector((state) => state.tab.value);
     const group_id = useSelector((state) => state.group.value);
 
     const dispatch = useDispatch();
@@ -52,7 +54,12 @@ export default function GroupScreenSessions({ navigation }) {
     return(
         <SafeAreaView style={styles.screenContainer}>
              <TopBar
-                onPress={() => navigation.goBack()}
+                onPress={() => {
+                    dispatch(handleLeftTabFocused (true)); 
+                    dispatch(handleMiddleTabFocused(false)); 
+                    dispatch(handleRightTabFocused(false)); 
+                    navigation.navigate('Group')
+            }}
              />
              <Text style={styles.header}>{groupDataToDisplay.name}</Text>
              <View style={styles.tabContainer}>
