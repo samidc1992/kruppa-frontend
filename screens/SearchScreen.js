@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import SearchInput from '../components/SearchInput'
 import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import DoubleTab from '../components/DoubleTab'

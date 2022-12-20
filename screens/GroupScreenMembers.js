@@ -7,7 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
-import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
+import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenMembers({ navigation }) {
@@ -96,7 +96,6 @@ export default function GroupScreenMembers({ navigation }) {
                     dispatch(handleRightTabFocused(false)); 
                     navigation.navigate('Group')
                 }}
-                
             />
              <Text style={styles.header}>{groupDataToDisplay.name}</Text>
             <View style={styles.tabContainer}>

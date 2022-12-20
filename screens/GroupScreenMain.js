@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import TrippleTab from '../components/TrippleTab';
 import TopBar from '../components/TopBar';
 import PrimaryButton from '../components/PrimaryButton';
@@ -6,17 +6,17 @@ import SecondaryButton from '../components/SecondaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-
 import { BACKEND_ADDRESS } from '../backendAdress';
+import { storeGroupName } from  '../reducers/group';
+import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 
 export default function GroupScreenMain({ navigation }) {
 
-    const group_id = useSelector((state) => state.group.value);
+    const group = useSelector((state) => state.group.value);
+    let { group_id } = group;
     const user = useSelector((state) => state.user.value);
-    const tab = useSelector((state) => state.tab.value);
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [joined, setJoined] = useState(false);
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -34,7 +34,6 @@ export default function GroupScreenMain({ navigation }) {
                         return level[0].toUpperCase() + level.slice(1).toLowerCase()
                     });
                     let level = formattedLevels.join(' | ');
-
                     setGroupDataToDisplay({
                         name,
                         description,
@@ -45,9 +44,13 @@ export default function GroupScreenMain({ navigation }) {
                         location: workout_location.label,
                         photo
                     })
+                    dispatch(storeGroupName(name));
+                    dispatch(handleLeftTabFocused(true)); 
+                    dispatch(handleMiddleTabFocused(false)); 
+                    dispatch(handleRightTabFocused(false)); 
                 }
             })
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (user.token) {
@@ -83,7 +86,7 @@ export default function GroupScreenMain({ navigation }) {
         } else {
             navigation.navigate('SignIn')
         }
-    }
+    };
 
     function handleLeaveGroup() {
         if (user.token) {
