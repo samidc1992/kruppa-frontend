@@ -8,7 +8,6 @@ import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
 import { useDispatch, useSelector } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
-import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import DoubleTab from '../components/DoubleTab'
 import GroupCard from '../components/GroupCard'
@@ -16,12 +15,10 @@ import GroupCard from '../components/GroupCard'
 export default function SearchScreen({ navigation }) {
 
     const dispatch = useDispatch();
-
     const [displayMap, setDisplayMap] = useState(true)
 
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
-    const tab = useSelector((state) => state.tab.value);
 
     //region view on map
     const [regionView, setRegionView] = useState({
@@ -31,6 +28,7 @@ export default function SearchScreen({ navigation }) {
         longitudeDelta: 0.0421,
     })
 
+    //state to center the map on search results
     const [searchResultView, setSearchRegionView] = useState(null)
 
     //search input setup
@@ -176,6 +174,7 @@ export default function SearchScreen({ navigation }) {
         Keyboard.dismiss()
     }
 
+
     //get markers from search result and display on Map
     const markers = searchResults.map((data, i) => {
         return <Marker
@@ -188,12 +187,10 @@ export default function SearchScreen({ navigation }) {
             description={data.description}
             onPress={() => {
                 dispatch(storeGroupId(data._id))
-                /* dispatch(handleLeftTabFocused (true)); 
-                dispatch(handleMiddleTabFocused(false)); 
-                dispatch(handleRightTabFocused(false)) */
             }}
             onCalloutPress={() => navigation.navigate('Group')}
             pinColor='green'
+            image={require('../assets/marker.png')}
         />;
     });
 
@@ -211,7 +208,7 @@ export default function SearchScreen({ navigation }) {
                 }}
             />
         </View>
-        
+
     })
 
     const map = (<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -229,26 +226,26 @@ export default function SearchScreen({ navigation }) {
     </TouchableWithoutFeedback>)
 
     const list = (
-    <ScrollView styles={styles.scrollView}>
-        <View style={styles.groupsListContainer}>
-            {groups}
-        </View>
-    </ScrollView>
+        <ScrollView styles={styles.scrollView}>
+            <View style={styles.groupsListContainer}>
+                {groups}
+            </View>
+        </ScrollView>
     )
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}>
-                { displayMap ? map : list }
+            {displayMap ? map : list}
             <View style={styles.contentContainer}>
                 <View style={styles.tabContainer}>
-                <DoubleTab
-                    textTabLeft="Map"
-                    textTabRight="List"
-                    onPressLeft={()=> setDisplayMap(true)}
-                    onPressRight={()=> setDisplayMap(false)}
-                />
+                    <DoubleTab
+                        textTabLeft="Map"
+                        textTabRight="List"
+                        onPressLeft={() => setDisplayMap(true)}
+                        onPressRight={() => setDisplayMap(false)}
+                    />
                 </View>
                 <View style={{ width: '100%', marginBottom: 5, alignItems: 'center', zIndex: 999 }}>
                     <DropDownPicker
@@ -270,10 +267,10 @@ export default function SearchScreen({ navigation }) {
                     handleChange={handleSearchInputChange}
                 />
                 {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
-                    <PrimaryButton
-                        text='Search'
-                        onPress={() => launchSearch()}
-                    />
+                <PrimaryButton
+                    text='Search'
+                    onPress={() => launchSearch()}
+                />
             </View>
         </KeyboardAvoidingView>
     )
@@ -308,6 +305,7 @@ const styles = StyleSheet.create({
         width: '85%',
         fontSize: 16,
     },
+
     tabContainer: {
         height: 40,
         width: '100%',

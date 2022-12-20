@@ -122,62 +122,59 @@ export default function GroupScreenMain({ navigation }) {
                     onPressRight={() => navigation.navigate('GroupMembers')} 
                 />
             </View>
-            <Image
-                style={styles.image}
-                source={require('../assets/yoga-2.jpg')}
-            />
-            <ScrollView >
-                <Text style={styles.subHeader}>{groupDataToDisplay.sport}</Text>
-                <View style={styles.groupInformationContainer}>
-                    <View style={styles.infoIconsContainer}>
-                        <FontAwesome
-                            name="level-up"
-                            color="white"
-                            size={14}
-                        />
-                        <FontAwesome
-                            name="group"
-                            color="white"
-                            size={14}
-                        />
-                        <FontAwesome
-                            name="map-pin"
-                            color="white"
-                            size={14}
-                        />
-                        <FontAwesome
-                            name="user"
-                            color="white"
-                            size={14}
-                        />
-                    </View>
-                    <View style={styles.infoTextContainer}>
-                        <Text style={styles.body}>{groupDataToDisplay.level}</Text>
-                        <Text style={styles.body}> [Hardcoded] 3/5 members</Text>
-                        <Text style={styles.body}>Gather at
-                            <Text> </Text>
-                            <Text
-                                style={styles.location}
-                                onPress={() => navigation.goBack()}
-                            >
-                                {groupDataToDisplay.location}
-                            </Text>
-                        </Text>
-                        <Text style={styles.body}>Created by
-                            <Text> </Text>
-                            <Text
-                                style={styles.admin}
-                                onPress={() => navigation.navigate('Profile')}
-                            >
-                                {groupDataToDisplay.username}
-                            </Text>
-                        </Text>
-                    </View>
+                <Image
+                    style={styles.image}
+                    source={require('../assets/yoga-2.jpg')}
+                />
+            <Text style={styles.subHeader}>{groupDataToDisplay.sport}</Text>
+            <View style={styles.groupInformationContainer}>
+                <View style={styles.infoIconsContainer}>
+                    <FontAwesome
+                        name="level-up"
+                        color="white"
+                        size={14}
+                    />
+                    <FontAwesome
+                        name="group"
+                        color="white"
+                        size={14}
+                    />
+                    <FontAwesome
+                        name="map-pin"
+                        color="white"
+                        size={14}
+                    />
+                    <FontAwesome
+                        name="user"
+                        color="white"
+                        size={14}
+                    />
                 </View>
-                <Text style={styles.subHeader}>Description</Text>
-                <Text style={styles.description}>{groupDataToDisplay.description}</Text>
-            </ScrollView>
-
+                <View style={styles.infoTextContainer}>
+                    <Text style={styles.body}>{groupDataToDisplay.level}</Text>
+                    <Text style={styles.body}> [Hardcoded] 3/5 members</Text>
+                    <Text style={styles.body}>Gather at
+                        <Text> </Text>
+                        <Text
+                            style={styles.location}
+                            onPress={() => navigation.goBack()}
+                        >
+                            {groupDataToDisplay.location}
+                        </Text>
+                    </Text>
+                    <Text style={styles.body}>Created by
+                        <Text> </Text>
+                        <Text
+                            style={styles.admin}
+                            onPress={() => navigation.navigate('Profile')}
+                        >
+                            {groupDataToDisplay.username}
+                        </Text>
+                    </Text>
+                </View>
+            </View>
+            <Text style={styles.subHeader}>Description</Text>
+            <Text style={styles.description}>{groupDataToDisplay.description}</Text>
             <View style={styles.buttonContainer}>
                 {
                     joined ?
@@ -201,10 +198,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#272D31',
-    },
-    scrollView: {
-        marginTop: 10,
-        height: '100%',
     },
     header: {
         fontSize: 24,
@@ -239,7 +232,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         marginLeft: 5,
-     
     },
     description: {
         color: 'white',
@@ -249,14 +241,15 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     buttonContainer: {
-      /*   position: 'absolute',
-        bottom: 40, */
+        position: 'absolute',
+        bottom: 40,
         width: '100%',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     infoIconsContainer: {
         height: 80,
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        alignItems: 'center'
     },
     infoTextContainer: {
         height: 80,
@@ -269,5 +262,6 @@ const styles = StyleSheet.create({
     admin: {
         textDecorationLine: 1,
         color: 'lightblue'
-    }
+    }, 
+
 })

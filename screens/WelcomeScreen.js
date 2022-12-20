@@ -50,7 +50,7 @@ export default function WelcomeScreen({ navigation }) {
                 onPress={() => navigation.navigate('SignUpProfile')}/> */}
                 {/* <PrimaryButtonSmall
                     text='Elise tests'
-                    onPress={() => navigation.navigate('Elise')} /> */}
+                    onPress={() => navigation.navigate('SearchWorkoutLocation')} /> */}
                 {/* <PrimaryButtonSmall
                     text='Create group'
                     onPress={() => navigation.navigate('GroupCreation')} /> */}
