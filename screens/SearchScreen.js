@@ -28,6 +28,7 @@ export default function SearchScreen({ navigation }) {
         longitudeDelta: 0.0421,
     })
 
+    //state to center the map on search results
     const [searchResultView, setSearchRegionView] = useState(null)
 
     //search input setup
@@ -175,6 +176,7 @@ export default function SearchScreen({ navigation }) {
         Keyboard.dismiss()
     }
 
+
     //get markers from search result and display on Map
     const markers = searchResults.map((data, i) => {
         return <Marker
@@ -198,11 +200,12 @@ export default function SearchScreen({ navigation }) {
             style={styles.container}>
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
                 <MapView
                     // provider={PROVIDER_GOOGLE}
-
                     region={searchResultView ? searchResultView : regionView}
                     style={styles.mapContainer}
+
                 >
                     {markers}
                     {currentPosition && <Marker

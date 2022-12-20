@@ -1,5 +1,5 @@
 import MapView, { Marker } from 'react-native-maps';
-import { Keyboard, Text, TouchableWithoutFeedback, Platform, StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import { Keyboard, Text, TouchableWithoutFeedback, Platform, StyleSheet, View, KeyboardAvoidingView, Modal, TextInput, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import SearchInput from '../components/SearchInput'
 import PrimaryButton from '../components/PrimaryButton'
@@ -30,12 +30,17 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
         longitudeDelta: 0.0421,
     })
 
+    // manage adding a custom location
+    const [modalVisible, setModalVisible] = useState(false);
+    const [customLocationName, setCustomLocationName] = useState('')
+
     //search input setup
     const [searchInputValue, setSearchInputValue] = useState('')
     const handleSearchInputChange = value => setSearchInputValue(value)
 
     //manage error messages
     const [errorMessage, setErrorMessage] = useState('')
+    const [modalErrorMessage, setModalErrorMessage] = useState('')
 
     // get user permission and current location
     useEffect(() => {
@@ -111,12 +116,47 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
         Keyboard.dismiss()
     }
 
+    console.log(location)
+
+    //open modal on long press
+    const handleLongPress = (e) => {
+        setLocation({ label: 'my custom workout location', ...e.nativeEvent.coordinate });
+        setModalVisible(true);
+    };
+
+    // close modal
+    const handleClose = () => {
+        setModalVisible(false);
+        setCustomLocationName('');
+        setLocation({ label: '', latitude: 0, longitude: 0 });
+
+        setModalErrorMessage('')
+    };
+
+    const handlecustomLocationName = () => {
+        if (!customLocationName.length) {
+            setModalErrorMessage('Please add a name to your custom localisation.')
+        }
+        else {
+            setModalVisible(false);
+            setSearchInputValue(customLocationName)
+            setLocation(prev => { return { ...prev, label: customLocationName } })
+        }
+    }
+
     //display marker on the map
-    const marker = (<Marker coordinate={{ latitude: location.latitude, longitude: location.longitude }} title={location.label} />);
+    const marker = (<Marker coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+        title={location.label ? location.label : customLocationName}
+    />);
 
     //save location in reducer and go back to create group screen
     const handleSaveLocation = () => {
         //dispatch workoutLocation in reducer
+
+        // //if custom location is filled
+        // if(customLocationName) {
+        //     dispatch()
+        // }
         dispatch(saveWorkoutLocation(location))
         //go back to screen
         navigation.navigate('GroupCreation')
@@ -127,14 +167,32 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}>
 
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <MapView
-                    region={regionView}
-                    style={styles.mapContainer}
-                >
-                    {marker}
-                </MapView>
-            </TouchableWithoutFeedback>
+
+            {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+            {/* <View style={styles.centeredView}> */}
+            <Modal visible={modalVisible} animationType="fade" transparent>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <TextInput placeholderTextColor={'grey'} placeholder="Add a name ..." onChangeText={(value) => setCustomLocationName(value)} value={customLocationName} style={styles.input} />
+                        {modalErrorMessage.length > 0 && <Text style={styles.modalerror}>{modalErrorMessage}</Text>}
+                        <TouchableOpacity onPress={() => handlecustomLocationName()} style={styles.button} activeOpacity={0.8}>
+                            <Text style={styles.textButton}>Use this location</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleClose()} style={styles.button} activeOpacity={0.8}>
+                            <Text style={styles.textButton}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            <MapView
+                region={regionView}
+                style={styles.mapContainer}
+                onLongPress={(e) => handleLongPress(e)}
+            >
+                {marker}
+            </MapView>
+            {/* </View> */}
+            {/* </TouchableWithoutFeedback> */}
 
             <SearchInput
                 placeholder="Where ?"
@@ -173,10 +231,56 @@ const styles = StyleSheet.create({
         height: '60%',
         width: '100%',
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalView: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 30,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    input: {
+        width: 150,
+        borderBottomColor: '#ec6e5b',
+        borderBottomWidth: 1,
+        fontSize: 16,
+    },
+    button: {
+        width: 150,
+        alignItems: 'center',
+        marginTop: 20,
+        paddingTop: 8,
+        backgroundColor: '#ec6e5b',
+        borderRadius: 10,
+    },
+    textButton: {
+        color: '#ffffff',
+        height: 24,
+        fontWeight: '600',
+        fontSize: 15,
+    },
     error: {
         color: 'red',
         textAlign: 'left',
         width: '85%',
+        fontSize: 16,
+
+    },
+    modalerror: {
+        width: 150,
+        color: 'red',
+        textAlign: 'left',
         fontSize: 16,
     }
 
