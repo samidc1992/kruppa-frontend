@@ -1,4 +1,4 @@
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Keyboard, Text, TouchableWithoutFeedback, Platform, StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { dropdownStyles } from '../styles/dropdown';
@@ -199,6 +199,8 @@ export default function SearchScreen({ navigation }) {
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <MapView
+                    // provider={PROVIDER_GOOGLE}
+
                     region={searchResultView ? searchResultView : regionView}
                     style={styles.mapContainer}
                 >
