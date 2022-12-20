@@ -8,7 +8,6 @@ import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
 import { useDispatch, useSelector } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
-import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import DoubleTab from '../components/DoubleTab'
 import GroupCard from '../components/GroupCard'
@@ -16,12 +15,10 @@ import GroupCard from '../components/GroupCard'
 export default function SearchScreen({ navigation }) {
 
     const dispatch = useDispatch();
-
     const [displayMap, setDisplayMap] = useState(true)
 
     //state for user current position
     const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
-    const tab = useSelector((state) => state.tab.value);
 
     //region view on map
     const [regionView, setRegionView] = useState({
@@ -190,12 +187,10 @@ export default function SearchScreen({ navigation }) {
             description={data.description}
             onPress={() => {
                 dispatch(storeGroupId(data._id))
-                /* dispatch(handleLeftTabFocused (true)); 
-                dispatch(handleMiddleTabFocused(false)); 
-                dispatch(handleRightTabFocused(false)) */
             }}
             onCalloutPress={() => navigation.navigate('Group')}
             pinColor='green'
+            image={require('../assets/marker.png')}
         />;
     });
 
