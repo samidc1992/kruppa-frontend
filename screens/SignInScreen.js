@@ -4,7 +4,7 @@ import PrimaryButton from '../components/PrimaryButton'
 import StandardFormInput from '../components/StandardFormInput';
 import React from 'react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../reducers/user';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
@@ -12,7 +12,7 @@ import { BACKEND_ADDRESS } from '../backendAdress';
 export default function SignInScreen({ navigation }) {
 
     // const BACKEND_ADDRESS = 'http://192.168.1.87:3000'
-
+    const group = useSelector(state => state.group.value);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fieldError, setFieldError] = useState('');
@@ -38,7 +38,7 @@ export default function SignInScreen({ navigation }) {
                     setEmail('');
                     setPassword('');
                     setFieldError(false);
-                    navigation.navigate('TabNavigator');
+                    group === null ? navigation.navigate('TabNavigator') : navigation.navigate('Group');
                 } else {
                     //setEmail('');
                     setPassword('');

@@ -47,27 +47,24 @@ export default function GroupScreenMain({ navigation }) {
                     })
                 }
             })
-    }, [joined])
+    }, [])
 
     useEffect(() => {
         if (user.token) {
-            fetch(`${BACKEND_ADDRESS}/users/join-group`, {
-                method: 'PUT',
+            fetch(`${BACKEND_ADDRESS}/users/join-status`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
             .then(data => {
-                console.log('charge', data)
-                if (data.result) {
-                    setJoined(false);
-                } else {
+                if (!data.result) {
                     setJoined(true);
-                }
-            })
+                } 
+            });
         } 
-    }, [])
+    }, []);
 
     function handleJoinGroup() {
         if (user.token) {
@@ -79,7 +76,6 @@ export default function GroupScreenMain({ navigation }) {
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
                 .then(data => {
-                    console.log('join', data)
                     if (data.result) {
                         setJoined(true);
                     }
@@ -99,7 +95,6 @@ export default function GroupScreenMain({ navigation }) {
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
                 .then(data => {
-                    console.log('leave', data)
                     if (data.result) {
                         setJoined(false);
                     } else {

@@ -54,7 +54,7 @@ export default function ProfileScreen({ navigation }) {
         size={25}
         color='#F0F0F0'
         onPress={() => {
-          dispatch(logout);
+          dispatch(logout());
           navigation.navigate('Welcome');
         }}
       />

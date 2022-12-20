@@ -5,6 +5,8 @@ import GroupCard from '../components/GroupCard';
 import { useEffect, useState } from 'react';
 import { storeGroupId } from '../reducers/group';
 import { BACKEND_ADDRESS } from '../backendAdress';
+import { useFocusEffect } from '@react-navigation/native';
+import React from 'react';
 
 export default function HomeScreen({ navigation }) {
     const dispatch = useDispatch()
@@ -14,29 +16,27 @@ export default function HomeScreen({ navigation }) {
     // get info of user logged in
     const username = useSelector((state) => state.user.value.username);
     const token = useSelector((state) => state.user.value.token);
-    console.log('user signed in :' + token)
 
-    // get groups from user
-    useEffect(() => {
+    //updating groups when screen is focused
+    useFocusEffect(
+        React.useCallback(() => {
+            fetch(`${BACKEND_ADDRESS}/users/groups`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
 
-        fetch(`${BACKEND_ADDRESS}/users/groups`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-
-            },
-            body: JSON.stringify({ token: token }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', JSON.stringify(data));
-                setGroups(data.userGroups)
+                },
+                body: JSON.stringify({ token: token }),
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
-    }, []);
+                .then((response) => response.json())
+                .then((data) => {
+                    setGroups(data.userGroups)
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }, [])
+    );
 
 
     console.log(groups)
@@ -118,5 +118,6 @@ const styles = StyleSheet.create({
     groupsContainer: {
         alignSelf: 'center',
         width: '85%',
+        // height: '50%'
     }
 })

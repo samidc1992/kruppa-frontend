@@ -49,9 +49,9 @@ export default function WelcomeScreen({ navigation }) {
                 text='Profile Signup' 
                 onPress={() => navigation.navigate('SignUpProfile')}/> */}
                 {/* <PrimaryButtonSmall
-                    text='Test upload'
-                    onPress={() => navigation.navigate('Elise')} />
-                <PrimaryButtonSmall
+                    text='Elise tests'
+                    onPress={() => navigation.navigate('Elise')} /> */}
+                {/* <PrimaryButtonSmall
                     text='Create group'
                     onPress={() => navigation.navigate('GroupCreation')} /> */}
                 <View style={styles.smallBtnsContainer}>
