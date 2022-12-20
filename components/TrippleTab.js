@@ -1,56 +1,62 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 
 function TrippleTab(props) {
-    const [isTabLeftFocused, setIsTabLeftFocused] = useState(true);
+/*     const [isTabLeftFocused, setIsTabLeftFocused] = useState(true);
     const [isTabMiddleFocused, setIsTabMiddleFocused] = useState(false);
-    const [isTabRightFocused, setIsTabRightFocused] = useState(false);
+    const [isTabRightFocused, setIsTabRightFocused] = useState(false);  */
+    const tab = useSelector((state) => state.tab.value);
+    const dispatch = useDispatch();
 
     function handleClickTabLeft() {
-        setIsTabLeftFocused(true);
-        setIsTabMiddleFocused(false);
-        setIsTabRightFocused(false);
+        dispatch(handleLeftTabFocused (true)); 
+        dispatch(handleMiddleTabFocused(false)); 
+        dispatch(handleRightTabFocused(false));
         props.onPressLeft();
+      
     };
     function handleClickTabMiddle() {
-        setIsTabLeftFocused(false);
-        setIsTabMiddleFocused(true);
-        setIsTabRightFocused(false);
+        dispatch(handleLeftTabFocused (false)); 
+        dispatch(handleMiddleTabFocused(true)); 
+        dispatch(handleRightTabFocused(false));
         props.onPressMiddle();
+  
     };
     function handleClickTabRight() {
-        setIsTabLeftFocused(false);
-        setIsTabMiddleFocused(false);
-        setIsTabRightFocused(true);
+        dispatch(handleLeftTabFocused (false)); 
+        dispatch(handleMiddleTabFocused(false)); 
+        dispatch(handleRightTabFocused(true));
         props.onPressRight();
     };
     return (
         <View style={styles.container}>
-            <View style={ isTabLeftFocused ? styles.tabFocus : styles.tab }>
+            <View style={tab.leftTabFocused? styles.tabFocus : styles.tab }>
                 <Text 
-                    style={ isTabLeftFocused ? styles.tabTextFocus : styles.tabText }
+                    style={ tab.leftTabFocused? styles.tabTextFocus : styles.tabText }
                     onPress={() => handleClickTabLeft()}
                 >
                     {props.textTabLeft}
                 </Text>
             </View>
-            <View style={ isTabMiddleFocused ? styles.tabFocus : styles.tab }>
+            <View style={ tab.middleTabFocused ? styles.tabFocus : styles.tab }>
                 <Text 
-                    style={ isTabMiddleFocused ? styles.tabTextFocus : styles.tabText }
+                    style={ tab.middleTabFocused? styles.tabTextFocus : styles.tabText }
                     onPress={() => handleClickTabMiddle()}
                 >
                     {props.textTabMiddle}
                 </Text>
             </View>
-            <View style={ isTabRightFocused ? styles.tabFocus : styles.tab }>
+            <View style={ tab.rightTabFocused ? styles.tabFocus : styles.tab }>
                 <Text 
-                    style={ isTabRightFocused ? styles.tabTextFocus : styles.tabText }
+                    style={ tab.rightTabFocused ? styles.tabTextFocus : styles.tabText }
                     onPress={() => handleClickTabRight()}
                 >
                     {props.textTabRight}
                 </Text>
-            </View>
+            </View> 
         </View>
     );
 };

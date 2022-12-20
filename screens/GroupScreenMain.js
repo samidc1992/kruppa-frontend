@@ -4,16 +4,20 @@ import TopBar from '../components/TopBar';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
+
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenMain({ navigation }) {
 
     const group_id = useSelector((state) => state.group.value);
     const user = useSelector((state) => state.user.value);
+    const tab = useSelector((state) => state.tab.value);
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [joined, setJoined] = useState(false);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
@@ -120,7 +124,7 @@ export default function GroupScreenMain({ navigation }) {
                     textTabRight="members"
                     onPressLeft={() => navigation.navigate('Group')}
                     onPressMiddle={() => navigation.navigate('GroupSessions')}
-                    onPressRight={() => navigation.navigate('GroupMembers')}
+                    onPressRight={() => navigation.navigate('GroupMembers')} 
                 />
             </View>
             <Image

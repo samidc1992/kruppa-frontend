@@ -20,12 +20,13 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
 import group from './reducers/group';
+import tab from './reducers/tab'
 import workoutLocation from './reducers/workoutLocation';
 import CreateGroupScreen from './screens/CreateGroupScreen';
 import SearchWorkoutLocationScreen from './screens/SearchWorkoutLocationScreen';
 
 const store = configureStore({
-  reducer: { user, group, workoutLocation },
+  reducer: { user, group, workoutLocation,tab },
 });
 
 const Stack = createNativeStackNavigator();
