@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { storeGroupId } from '../reducers/group';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import { useFocusEffect } from '@react-navigation/native';
+import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import React from 'react';
 
 export default function HomeScreen({ navigation }) {
@@ -16,6 +17,7 @@ export default function HomeScreen({ navigation }) {
     // get info of user logged in
     const username = useSelector((state) => state.user.value.username);
     const token = useSelector((state) => state.user.value.token);
+    const tab = useSelector((state) => state.tab.value);
 
     //updating groups when screen is focused
     useFocusEffect(
@@ -51,8 +53,11 @@ export default function HomeScreen({ navigation }) {
                 membersNum={3}
                 maxMembers={e.group.maxMembers}
                 handlePress={() => {
-                    dispatch(storeGroupId(e.group._id))
-                    navigation.navigate('Group')
+                    dispatch(storeGroupId(e.group._id));
+                    dispatch(handleLeftTabFocused (true)); 
+                    dispatch(handleMiddleTabFocused(false)); 
+                    dispatch(handleRightTabFocused(false)); 
+                    navigation.navigate('Group');
                 }
                 }
             />
