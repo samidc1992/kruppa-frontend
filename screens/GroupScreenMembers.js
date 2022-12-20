@@ -8,19 +8,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
+import MemberCard from '../components/MemberCard';
+import React, { Component } from "react";
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenMembers({ navigation }) {
 
     const group_id = useSelector((state) => state.group.value);
-    const user = useSelector((state) => state.user.value);
-    const tab = useSelector((state) => state.tab.value);
-
-
+  
     const dispatch = useDispatch ();
 
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [groupMembers, setGroupMembers] = useState([]);
+  
+    
     
      useEffect(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
@@ -32,12 +33,11 @@ export default function GroupScreenMembers({ navigation }) {
         }).then(response => response.json())
             .then(data => {
                 if (data.result) {
-                    let { name, description, genders, levels, sport, admin, workout_location, photo, ageMin, ageMax } = data.groupData;
+                    let { name, genders, levels, sport, admin, workout_location, photo, ageMin, ageMax } = data.groupData;
                     let formattedLevels = levels.map(level => {
                         return level[0].toUpperCase() + level.slice(1).toLowerCase()
                     });
                     let level = formattedLevels.join(' | ');
-
                     setGroupDataToDisplay({
                         name,
                         description,
@@ -65,8 +65,8 @@ export default function GroupScreenMembers({ navigation }) {
                 body: JSON.stringify({ group_id }),
             })
                 .then((response) => response.json())
-                .then((data) => {
-                    setGroupMembers(data.userData)
+                .then((data) => {    
+                 setGroupMembers(data.userdata)
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -74,17 +74,22 @@ export default function GroupScreenMembers({ navigation }) {
         }, [])
     );
 
-     const members = groupMembers.map((e, i) => {
+      const members = groupMembers.map((e, i) => {
+      
+         let age = Math.floor((new Date() - new Date(e.birthDate))/31556952000);
         return (
             <MemberCard
-              
+                key={i}
+                // image='../assets/tennis.jpg'
+                memberAge={age}
+                memeberGender= {e.genders}
+                handlePress={() => {
+                    navigation.navigate('Profile');
+                }
+                }
             />
         )
-    }) 
-
-
-
-
+    })  
 
 
     return(
@@ -120,19 +125,14 @@ export default function GroupScreenMembers({ navigation }) {
                         </View> 
                     </View>
 
-                <View style={styles.userInfoContainer}>
-                  <ScrollView contentContainerStyle={styles.scrollView}>
                    <Text style={styles.subTitle} > Other members information are hidden until you join the group </Text>
-                    <TouchableHighlight
-                      style = {styles.profilePicture} >
-                       <Text></Text>
-                     </TouchableHighlight> 
-                     <View style={styles.userInfoList}>
-                     </View>
-                  </ScrollView>
-               </View>
-            
-
+              
+                  <View style={styles.userInfoContainer}>
+                    <ScrollView>
+                        {members}
+                    </ScrollView>
+                  </View>
+                
             <View style={styles.bottomContainer}>
             <PrimaryButton  
                     text='Join a group'
@@ -171,16 +171,16 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     
-    image: {
-        width: 360,
-        height: 200,
-        borderRadius: 10,
+    bodyContainer: {
+
     },
     userInfoContainer: {
-        height :'50%',
-        marginTop: 15,
-   
+        marginTop : 15,
+        alignSelf: 'center',
+        width: '85%',
+        height: '20%',
     },
+
     scrollView: {
         marginTop: 10,
         height: '100%',
@@ -205,9 +205,9 @@ const styles = StyleSheet.create({
     },
     
     subTitle: {
-        fontSize: 18,
+        fontSize: 17,
         color: 'white',
-        fontWeight: '400',
+        fontWeight: '500',
         width: '85%',
         marginTop: 10,
         marginLeft: 10,
@@ -219,12 +219,10 @@ const styles = StyleSheet.create({
         width: '85%',
         marginLeft: 20,
         marginTop: 5,
-        
     },
     
     bottomContainer: {
       alignItems: 'center',
-    
     },
     
 })

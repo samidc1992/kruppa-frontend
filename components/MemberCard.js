@@ -11,13 +11,16 @@ function MemberCard(props) {
             />
             <View style={styles.content}>
                 <Text style={styles.title}>
-                    {props.username}
+                    {props.memberUsername}
                 </Text>
                 <Text style={styles.text}>
-                    {props.age} years old
+                    {props.memberAge} years old
                 </Text>
                 <Text style={styles.text}>
-                    {props.level}
+                    {props.memberGender}
+                </Text>
+                <Text style={styles.text}>
+                    {props.memberLevel}
                 </Text>
                 <Text style={styles.link} onPress={() => { props.handlePress() }}>
                     see profile
