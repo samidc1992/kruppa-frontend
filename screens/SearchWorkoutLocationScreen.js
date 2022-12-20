@@ -7,6 +7,8 @@ import SecondaryButton from '../components/SecondaryButton'
 import * as Location from 'expo-location';
 import { saveWorkoutLocation, removeWorkoutLocation } from '../reducers/workoutLocation'
 import { useDispatch } from 'react-redux';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 
 export default function SearchWorkoutLocationScreen({ navigation }) {
@@ -116,8 +118,6 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
         Keyboard.dismiss()
     }
 
-    console.log(location)
-
     //open modal on long press
     const handleLongPress = (e) => {
         setLocation({ label: 'my custom workout location', ...e.nativeEvent.coordinate });
@@ -129,7 +129,6 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
         setModalVisible(false);
         setCustomLocationName('');
         setLocation({ label: '', latitude: 0, longitude: 0 });
-
         setModalErrorMessage('')
     };
 
@@ -168,46 +167,59 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
             style={styles.container}>
 
 
-            {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-            {/* <View style={styles.centeredView}> */}
             <Modal visible={modalVisible} animationType="fade" transparent>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <TextInput placeholderTextColor={'grey'} placeholder="Add a name ..." onChangeText={(value) => setCustomLocationName(value)} value={customLocationName} style={styles.input} />
-                        {modalErrorMessage.length > 0 && <Text style={styles.modalerror}>{modalErrorMessage}</Text>}
-                        <TouchableOpacity onPress={() => handlecustomLocationName()} style={styles.button} activeOpacity={0.8}>
-                            <Text style={styles.textButton}>Use this location</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleClose()} style={styles.button} activeOpacity={0.8}>
-                            <Text style={styles.textButton}>Cancel</Text>
-                        </TouchableOpacity>
+                        <FontAwesome
+                            name='times'
+                            size={25}
+                            color='#F0F0F0'
+                            onPress={handlecustomLocationName}
+                            style={{ alignSelf: 'flex-end', margin: '5%' }}
+                        />
+                        <SearchInput
+                            value={customLocationName}
+                            placeholder="Add a name ..."
+                            handleChange={(value) => setCustomLocationName(value)}
+                        />
+                        <PrimaryButton
+                            text='Use this location'
+                            onPress={handlecustomLocationName}
+                        />
+
+
                     </View>
                 </View>
             </Modal>
-            <MapView
-                region={regionView}
-                style={styles.mapContainer}
-                onLongPress={(e) => handleLongPress(e)}
-            >
-                {marker}
-            </MapView>
-            {/* </View> */}
-            {/* </TouchableWithoutFeedback> */}
 
-            <SearchInput
-                placeholder="Where ?"
-                value={searchInputValue}
-                handleChange={handleSearchInputChange}
-            />
-            {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
-            <PrimaryButton
-                text='Search'
-                onPress={() => launchSearch()}
-            />
-            <SecondaryButton
-                text='Save location'
-                onPress={() => handleSaveLocation()}
-            />
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <MapView
+                    region={regionView}
+                    style={modalVisible ? styles.mapContainerFullScreen : styles.mapContainer}
+                    onLongPress={(e) => handleLongPress(e)}
+                >
+                    {marker}
+                </MapView>
+            </TouchableWithoutFeedback>
+
+            <View style={modalVisible ? { display: 'none' } : styles.contentContainer}>
+
+
+                <SearchInput
+                    placeholder="Where ?"
+                    value={searchInputValue}
+                    handleChange={handleSearchInputChange}
+                />
+                {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
+                <PrimaryButton
+                    text='Search'
+                    onPress={() => launchSearch()}
+                />
+                <SecondaryButton
+                    text='Save location'
+                    onPress={() => handleSaveLocation()}
+                />
+            </View>
         </KeyboardAvoidingView >
     )
 }
@@ -231,45 +243,24 @@ const styles = StyleSheet.create({
         height: '60%',
         width: '100%',
     },
+    mapContainerFullScreen: {
+        height: '100%',
+        width: '100%',
+
+    },
     centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
     modalView: {
-        backgroundColor: 'white',
+        backgroundColor: '#272D31',
         borderRadius: 20,
-        padding: 30,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
+        width: '80%',
+        height: '35%',
     },
-    input: {
-        width: 150,
-        borderBottomColor: '#ec6e5b',
-        borderBottomWidth: 1,
-        fontSize: 16,
-    },
-    button: {
-        width: 150,
-        alignItems: 'center',
-        marginTop: 20,
-        paddingTop: 8,
-        backgroundColor: '#ec6e5b',
-        borderRadius: 10,
-    },
-    textButton: {
-        color: '#ffffff',
-        height: 24,
-        fontWeight: '600',
-        fontSize: 15,
-    },
+
     error: {
         color: 'red',
         textAlign: 'left',
