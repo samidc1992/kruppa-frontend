@@ -5,7 +5,7 @@ import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
+import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenSessionsBeta({ navigation }) {
@@ -26,12 +26,12 @@ export default function GroupScreenSessionsBeta({ navigation }) {
                 },
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
-            .then(data => {
-                if (!data.result) {
-                    setJoined(true);
-                } 
-            });
-        } 
+                .then(data => {
+                    if (!data.result) {
+                        setJoined(true);
+                    }
+                });
+        }
     }, []);
 
     function handleJoinGroup() {
@@ -78,9 +78,9 @@ export default function GroupScreenSessionsBeta({ navigation }) {
         <View style={styles.container}>
             <TopBar
                 onPress={() => {
-                    dispatch(handleLeftTabFocused (true)); 
-                    dispatch(handleMiddleTabFocused(false)); 
-                    dispatch(handleRightTabFocused(false)); 
+                    dispatch(handleLeftTabFocused(true));
+                    dispatch(handleMiddleTabFocused(false));
+                    dispatch(handleRightTabFocused(false));
                     navigation.navigate('Group')
                 }}
             />
@@ -92,10 +92,83 @@ export default function GroupScreenSessionsBeta({ navigation }) {
                     textTabRight="members"
                     onPressLeft={() => navigation.navigate('Group')}
                     onPressMiddle={() => navigation.navigate('GroupSessions')}
-                    onPressRight={() => navigation.navigate('GroupMembers')} 
+                    onPressRight={() => navigation.navigate('GroupMembers')}
                 />
             </View>
-             
+
+
+
+            <Text style={styles.sectionTitle}>
+                Next sessions
+            </Text>
+            <ScrollView>
+
+                <View style={styles.sessionsContainer}>
+                    <View style={styles.content}>
+                        <Text style={styles.text}>
+                            December 27th
+                        </Text>
+                        <Text style={styles.title}>
+                            6:30 pm - 8 pm
+                        </Text>
+                        <Text style={styles.text}>
+                            5/10 members
+                        </Text>
+                        <Text style={styles.link} >
+                            join session
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.sessionsContainer}>
+                    <View style={styles.content}>
+                        <Text style={styles.text}>
+                            December 29th
+                        </Text>
+                        <Text style={styles.title}>
+                            6:30 pm - 8 pm
+                        </Text>
+                        <Text style={styles.text}>
+                            1/10 members
+                        </Text>
+                        <Text style={styles.link} >
+                            join session
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.sessionsContainer}>
+                    <View style={styles.content}>
+                        <Text style={styles.text}>
+                            January 3rd
+                        </Text>
+                        <Text style={styles.title}>
+                            6:30 pm - 8 pm
+                        </Text>
+                        <Text style={styles.text}>
+                            2/10 members
+                        </Text>
+                        <Text style={styles.link} >
+                            join session
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.sessionsContainer}>
+                    <View style={styles.content}>
+                        <Text style={styles.text}>
+                            January 6th
+                        </Text>
+                        <Text style={styles.title}>
+                            6:30 pm - 8 pm
+                        </Text>
+                        <Text style={styles.text}>
+                            0/10 members
+                        </Text>
+                        <Text style={styles.link} >
+                            join session
+                        </Text>
+                    </View>
+                </View>
+            </ScrollView>
+
             <View style={styles.buttonContainer}>
                 {
                     joined ?
@@ -143,6 +216,15 @@ const styles = StyleSheet.create({
         width: '85%',
         marginTop: 10,
     },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        textAlign: 'left',
+        alignSelf: 'center',
+        width: '85%',
+        margin: 10
+    },
     groupInformationContainer: {
         width: '85%',
         marginTop: 5,
@@ -183,6 +265,46 @@ const styles = StyleSheet.create({
     admin: {
         textDecorationLine: 1,
         color: 'lightblue'
-    }, 
+    },
+    sessionsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderRadius: 10,
+        margin: 3,
+        borderColor: '#3A474E',
+        backgroundColor: '#3A474E'
+    },
+
+    content: {
+        width: '90%',
+        padding: '5%',
+        // marginTop: '3%',
+
+    },
+    link: {
+        // alignSelf: 'flex-end',
+        // borderWidth: 1,
+        textAlign: 'right',
+        alignSelf: 'flex-end',
+        // fontWeight: 'bold',
+        color: '#FF6317'
+
+    },
+    text: {
+        color: '#979797',
+        fontSize: 16,
+        paddingRight: 3,
+        // borderWidth: 1,
+        width: '95%'
+
+
+    },
+    title: {
+        color: '#fff',
+        fontSize: 17,
+        fontWeight: 'bold',
+    }
 
 })

@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         fontSize: 20,
         color: '#fff',
+        zIndex: 1
     },
     inputFocus: {
         alignItems: 'center',

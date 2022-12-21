@@ -86,7 +86,7 @@ export default function HomeScreen({ navigation }) {
                     />
                 </View>
                 <Text style={styles.sectionTitle}>
-                    My groups
+                    Next sessions
                 </Text>
                 <View style={styles.groupsContainer}>
                     <ScrollView>
