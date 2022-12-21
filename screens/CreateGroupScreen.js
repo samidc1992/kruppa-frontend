@@ -192,11 +192,13 @@ export default function CreateGroupScreen({ navigation }) {
 
                             </View>
                             <Text style={styles.fieldName}>Group name</Text>
-                            <View style={{ width: '100%', marginLeft: '15%' }}>
+                            <View style={{ width: '100%' }}>
                                 <SearchInput
                                     placeholder="Group name"
                                     value={name}
                                     handleChange={(value) => setName(value)}
+                                    handleDelete={() => setName('')}
+
                                 />
                             </View>
 
@@ -321,12 +323,13 @@ export default function CreateGroupScreen({ navigation }) {
                             {workoutLocationSelected.label === null && <Text style={styles.rightUnderlineText} onPress={() => handleMapClick()}>Click here to choose your workout location on the map...</Text>}
 
                             <Text style={styles.fieldName}>Description</Text>
-                            <View style={{ width: '100%', marginLeft: '15%' }}>
+                            <View style={{ width: '100%' }}>
 
                                 <SearchInput
                                     placeholder="Group description"
                                     value={description}
                                     handleChange={(value) => setDescription(value)}
+                                    handleDelete={() => setDescription('')}
                                 />
                             </View>
                             {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}

@@ -18,17 +18,17 @@ function DoubleTab(props) {
     };
     return (
         <View style={styles.container}>
-            <View style={ isTabLeftFocused ? styles.tabFocus : styles.tab }>
-                <Text 
-                    style={ isTabLeftFocused ? styles.tabTextFocus : styles.tabText }
+            <View style={isTabLeftFocused ? styles.tabFocus : styles.tab}>
+                <Text
+                    style={isTabLeftFocused ? styles.tabTextFocus : styles.tabText}
                     onPress={() => handleClickTabLeft()}
                 >
                     {props.textTabLeft}
                 </Text>
             </View>
-            <View style={ isTabRightFocused ? styles.tabFocus : styles.tab }>
-                <Text 
-                    style={ isTabRightFocused ? styles.tabTextFocus : styles.tabText }
+            <View style={isTabRightFocused ? styles.tabFocus : styles.tab}>
+                <Text
+                    style={isTabRightFocused ? styles.tabTextFocus : styles.tabText}
                     onPress={() => handleClickTabRight()}
                 >
                     {props.textTabRight}

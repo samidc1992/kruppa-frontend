@@ -8,6 +8,7 @@ import * as Location from 'expo-location';
 import { saveWorkoutLocation, removeWorkoutLocation } from '../reducers/workoutLocation'
 import { useDispatch } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { set } from 'react-native-reanimated';
 
 
 
@@ -181,6 +182,7 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
                             value={customLocationName}
                             placeholder="Add a name ..."
                             handleChange={(value) => setCustomLocationName(value)}
+                            handleDelete={() => setCustomLocationName('')}
                         />
                         <PrimaryButton
                             text='Use this location'
@@ -209,6 +211,7 @@ export default function SearchWorkoutLocationScreen({ navigation }) {
                     placeholder="Where ?"
                     value={searchInputValue}
                     handleChange={handleSearchInputChange}
+                    handleDelete={() => setSearchInputValue('')}
                 />
                 {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
                 <PrimaryButton
