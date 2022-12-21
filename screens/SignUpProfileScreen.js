@@ -1,14 +1,15 @@
 
-import { View, Text, StyleSheet, SafeAreaView, TouchableHighlight, ScrollView, KeyboardAvoidingView } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, TouchableHighlight, ScrollView, KeyboardAvoidingView, FlatList } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import PrimaryButton from '../components/PrimaryButton';
-import StandardFormInput from '../components/StandardFormInput';
+import SearchInput from '../components/SearchInput';
 import { dropdownStyles } from '../styles/dropdown';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BACKEND_ADDRESS } from "../backendAdress";
+import { LogBox } from 'react-native';
 
 const myTheme = require('../styles/darkDropdownTheme');
 
@@ -69,6 +70,10 @@ export default function SignUpProfileScreen({ navigation }) {
             });
     }, []);
 
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
+      }, []);
+
     // Add selected sports to user's profile  
     const handleAddPress = () => {
         if (selectedSportsandLevels.length === 0) {
@@ -81,7 +86,7 @@ export default function SignUpProfileScreen({ navigation }) {
         if (selectedSportsandLevels.length > 0) {
             return (
                 <View style={styles.sportsListContainer} key={i}>
-                    <Text style={styles.resultAddText}>{data.sport} ({data.level})</Text>
+                    <Text style={styles.sports}>{data.sport} ({data.level})</Text>
                     <FontAwesome name='trash-o'
                         //onPress={() => handleRemoveSport()}
                         size={15} color='#F0F0F0' />
@@ -103,20 +108,20 @@ export default function SignUpProfileScreen({ navigation }) {
                 token: user.token,
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.result && group_id === null) {
-                    navigation.navigate('TabNavigator', { screen: 'Profile' });
-                } else {
-                    setFieldError(true);
-                    navigation.navigate('Group');
-                }
-            });
+        .then(response => response.json())
+        .then(data => {
+            if (data.result && group_id === null) {
+                navigation.navigate('TabNavigator', { screen: 'Profile' });
+            } else {
+                setFieldError(true);
+                navigation.navigate('Group');
+            }
+        });
     }
 
     return (
-        <KeyboardAvoidingView style={styles.screenContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View styles={styles.headerContainer}>
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.profilePictureContainer}>
                 <TouchableHighlight
                     style={styles.profilePicture} >
                     <Text></Text>
@@ -126,7 +131,6 @@ export default function SignUpProfileScreen({ navigation }) {
                     <FontAwesome name='upload' onPress={() => handleUpload()} size={18} color='#979797' />
                 </View>
             </View>
-            {fieldError && <Text style={styles.error}>Oops! Something went wrong... Please try again! </Text>}
             <ScrollView contentContainerStyle={styles.scrollView}>
                 <View style={styles.inputContainer}>
                     <Text style={styles.fieldName}>Gender</Text>
@@ -144,26 +148,8 @@ export default function SignUpProfileScreen({ navigation }) {
                         setItems={setGenderItems}
                     />
                     <Text style={styles.fieldName}>Birthday</Text>
-                    {/* <DateTimePicker
-                        style={styles.datePickerStyle}
-                        date={dateValue}
-                        mode="date"
-                        // textColor="#000000"
-                        // useNativeDriver={true}
-                        theme="dark"
-                        placeholder="YYYY-MM-DD"
-                        format="YYYY-MM-DD"
-                        minDate={'1960-12-31'}
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        customStyles={styles.customDatePickerStyles}
-                        onDateChange={(date) => {
-                            setDateValue(date);
-                            calculateAge(date);
-                        }}
-                    /> */}
-
                     <DateTimePicker
+                        style={styles.datePickerStyle}
                         testID="dateTimePicker"
                         value={dateValue}
                         mode="date"
@@ -173,8 +159,6 @@ export default function SignUpProfileScreen({ navigation }) {
                             setDateValue(new Date(value.nativeEvent.timestamp));
                         }}
                     />
-
-
                     <Text style={styles.fieldName}>My favorite sports</Text>
                     <DropDownPicker
                         placeholder='Sport'
@@ -208,52 +192,50 @@ export default function SignUpProfileScreen({ navigation }) {
                             setSelectedLevel(value);
                         }}
                     />
-                    <Text style={styles.addSportsText} onPress={() => handleAddPress()}>+ add sport</Text>
+                    <Text style={styles.addSport} onPress={() => handleAddPress()}>+ add sport</Text>
                     {selectedSportsList}
-                    <StandardFormInput
+                </View>
+                <View style={styles.descriptionContainer}>
+                    <SearchInput
+                        style={styles.descriptionInput}
                         placeholder="Profile Description"
-                        style={styles.textInputStyles}
                         value={descriptionValue}
                         handleChange={handleDescriptionInputChange}
                     />
                 </View>
+                {fieldError && <Text style={styles.error}>Empty or missing fileds.</Text>}
             </ScrollView>
-
-            <View style={styles.buttonContainer}>
-                <PrimaryButton
-                    text='Create profile'
-                    disabled={false}
-                    activeOpacity={0}
-                    onPress={() => handleSignup()}
-                />
-            </View>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton
+                        text='Create profile'
+                        disabled={false}
+                        activeOpacity={0}
+                        onPress={() => handleSignup()}
+                    />
+                </View>
         </KeyboardAvoidingView>
     )
 }
 
 const styles = StyleSheet.create({
-    screenContainer: {
+    container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: '#272D31',
-    },
-    scrollView: {
-        height: '100%',
-        width: '100%',
-        paddingBottom: 20,
     },
     inputContainer: {
         flex: 1,
         alignItems: 'center',
-        height: '100%',
         width: '100%',
     },
     error: {
-        marginTop: 15,
         fontSize: '15',
         fontWeight: 'bold',
         color: 'red',
+        marginLeft: '8%',
+    },
+    profilePictureContainer: {
+        alignItems: 'center',
+        height: '25%'
     },
     profilePicture: {
         borderRadius: 100,
@@ -276,56 +258,17 @@ const styles = StyleSheet.create({
     },
     datePickerStyle: {
         width: 355,
-        height: 50,
+        height: 45,
         backgroundColor: '#3A474E',
         marginTop: '2%',
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-        borderTopWidth: 0,
-        borderRightWidth: 0,
-        borderBottomColor: '#7E8284',
-        borderBottomWidth: 1,
-        color: 'black'
-    },
-    customDatePickerStyles: {
-        dateIcon: {
-            position: 'absolute',
-            right: 0,
-            top: 4,
-            marginLeft: 0,
-        },
-        dateInput: {
-            borderWidth: 0,
-            bborderRadius: 5,
-        },
-        dateText: {
-            color: '#F0F0F0',
-            alignSelf: '',
-            marginLeft: 10,
-        },
-        btnTextConfirm: {
-            color: '#FF6317',
-            fontWeight: '600',
-        },
-        btnTextCancel: {
-            color: '#7E8284',
-            fontWeight: '600',
-        },
-        placeholderText: {
-            fontSize: 15,
-            color: '#7E8284',
-            alignSelf: '',
-            marginLeft: 10,
-        },
+        color: 'white'
     },
     sportsListContainer: {
+        marginLeft: '4%',
         flexDirection: 'row',
-        width: '100%',
         alignSelf: 'flex-start',
     },
-    resultAddText: {
+    sports: {
         fontSize: 14,
         color: '#F0F0F0',
         alignSelf: 'stretch',
@@ -334,24 +277,29 @@ const styles = StyleSheet.create({
         paddingRight: '2%',
     },
     fieldName: {
-        color: "white",
+        color: 'white',
         marginTop: '4%',
         fontSize: 15,
         alignSelf: 'stretch',
-        marginLeft: '2%',
+        marginLeft: '6%',
         marginBottom: '-2%',
     },
-    addSportsText: {
+    addSport: {
         fontSize: 16,
         color: '#FF6317',
         alignSelf: 'flex-end',
-        margin: '1%',
+        marginRight: '5%',
+        marginBottom: '3%'
     },
     buttonContainer: {
         width: '100%',
         alignItems: 'center',
-        bottom: 40
+        marginBottom: 40
     },
+    descriptionContainer: {
+        alignItems: 'center',
+        width: '100%',
+    }
 })
 
 
