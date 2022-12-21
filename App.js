@@ -77,9 +77,6 @@ export default function App() {
           <Stack.Screen name="Group" component={GroupScreenMain} />
           <Stack.Screen name="GroupMembers" component={GroupScreenMembers} />
           <Stack.Screen name="GroupSessions" component={GroupScreenSessions} />
-          <Stack.Screen name="Elise" component={EliseStylesScreen} />
-          <Stack.Screen name="Nawel" component={NawelStylesScreen} />
-          <Stack.Screen name="Sami" component={SamiStylesScreen} />
           <Stack.Screen name="SignUpProfile" component={SignUpProfileScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Search" component={SearchScreen} />

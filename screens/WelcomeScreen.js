@@ -45,15 +45,6 @@ export default function WelcomeScreen({ navigation }) {
             />
             <Text style={styles.header}>Welcome to Kruppa</Text>
             <View style={styles.buttonsContainer}>
-                {/* <PrimaryButtonSmall 
-                text='Profile Signup' 
-                onPress={() => navigation.navigate('SignUpProfile')}/> */}
-                {/* <PrimaryButtonSmall
-                    text='Elise tests'
-                    onPress={() => navigation.navigate('SearchWorkoutLocation')} /> */}
-                {/* <PrimaryButtonSmall
-                    text='Create group'
-                    onPress={() => navigation.navigate('GroupCreation')} /> */}
                 <View style={styles.smallBtnsContainer}>
                     <PrimaryButtonSmall
                         text='Join Now'
@@ -64,7 +55,7 @@ export default function WelcomeScreen({ navigation }) {
                 </View>
                 <PrimaryButton
                     text='Explore'
-                    onPress={() => navigation.navigate('TabNavigator', { screen: 'Search' })} />
+                    onPress={() => navigation.navigate('Search')} />
             </View>
         </View>
     )
