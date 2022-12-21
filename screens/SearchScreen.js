@@ -259,12 +259,14 @@ export default function SearchScreen({ navigation }) {
                         setOpen={setOpen}
                         setValue={setSportValue}
                         setItems={setSports}
+                        placeholder="Select a sport"
                     />
                 </View>
                 <SearchInput
                     placeholder="Where?"
                     value={searchInputValue}
                     handleChange={handleSearchInputChange}
+                    handleDelete={() => setSearchInputValue('')}
                 />
                 {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
                 <PrimaryButton

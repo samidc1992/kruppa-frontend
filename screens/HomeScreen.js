@@ -6,13 +6,17 @@ import { useEffect, useState } from 'react';
 import { storeGroupId } from '../reducers/group';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import { useFocusEffect } from '@react-navigation/native';
-import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
+import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import React from 'react';
 
 export default function HomeScreen({ navigation }) {
     const dispatch = useDispatch()
 
+    //user's groups fetched from backend
     const [groups, setGroups] = useState([])
+
+    //manage messages
+    const [message, setMessage] = useState('')
 
     // get info of user logged in
     const username = useSelector((state) => state.user.value.username);
@@ -22,6 +26,7 @@ export default function HomeScreen({ navigation }) {
     //updating groups when screen is focused
     useFocusEffect(
         React.useCallback(() => {
+
             fetch(`${BACKEND_ADDRESS}/users/groups`, {
                 method: 'POST',
                 headers: {
@@ -32,7 +37,12 @@ export default function HomeScreen({ navigation }) {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    setGroups(data.userGroups)
+                    if (!data.userGroups.length) {
+                        setMessage('No groups yet. Search workout groups around you !')
+                    }
+                    else {
+                        setGroups(data.userGroups)
+                    }
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -54,16 +64,15 @@ export default function HomeScreen({ navigation }) {
                 maxMembers={e.group.maxMembers}
                 handlePress={() => {
                     dispatch(storeGroupId(e.group._id));
-                    dispatch(handleLeftTabFocused (true)); 
-                    dispatch(handleMiddleTabFocused(false)); 
-                    dispatch(handleRightTabFocused(false)); 
+                    dispatch(handleLeftTabFocused(true));
+                    dispatch(handleMiddleTabFocused(false));
+                    dispatch(handleRightTabFocused(false));
                     navigation.navigate('Group');
                 }
                 }
             />
         )
     })
-
 
     return (
         <SafeAreaView style={styles.container}>
@@ -81,7 +90,15 @@ export default function HomeScreen({ navigation }) {
                 </Text>
                 <View style={styles.groupsContainer}>
                     <ScrollView>
-                        {groupsElements}
+                        {groups.length ? groupsElements : <Text
+                            onPress={() => navigation.navigate('Search')}
+                            style={{
+                                textDecorationLine: 1,
+                                color: 'lightblue'
+                            }}
+                        >
+                            {message}
+                        </Text>}
                     </ScrollView>
                 </View>
             </View>
@@ -93,7 +110,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#374146',
+        backgroundColor: '#272D31',
     },
     contentContainer: {
         width: '100%',
@@ -123,6 +140,6 @@ const styles = StyleSheet.create({
     groupsContainer: {
         alignSelf: 'center',
         width: '85%',
-        // height: '50%'
+        height: '60%'
     }
 })

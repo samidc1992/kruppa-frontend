@@ -64,13 +64,13 @@ export const dropdownStyles = StyleSheet.create({
 
     closedDropContainer: {
         width: '85%',
-        margin: 10,
+        margin: 5,
         zIndex: 1,
     },
 
     openDropContainer: {
         width: '85%',
-        margin: 10,
+        margin: 5,
         zIndex: 999,
     },
 
