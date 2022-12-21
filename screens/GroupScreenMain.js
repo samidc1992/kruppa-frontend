@@ -29,33 +29,33 @@ export default function GroupScreenMain({ navigation }) {
             },
             body: JSON.stringify({ group_id }),
         }).then(response => response.json())
-            .then(data => {
-                if (data.result) {
-                    let { name, description, genders, levels, sport, admin, workout_location, photo } = data.groupData;
-                    let formattedLevels = levels.map(level => {
-                        return level[0].toUpperCase() + level.slice(1).toLowerCase()
-                    });
-                    let level = formattedLevels.join(' | ');
-                    setGroupDataToDisplay({
-                        name,
-                        description,
-                        genders,
-                        level,
-                        sport: sport.label,
-                        username: admin.username[0].toUpperCase() + admin.username.slice(1).toLowerCase(),
-                        location: workout_location.label,
-                        photo
-                    })
-                    dispatch(storeGroupName(name));
-                    dispatch(handleLeftTabFocused(true)); 
-                    dispatch(handleMiddleTabFocused(false)); 
-                    dispatch(handleRightTabFocused(false)); 
-                }
-            })
+        .then(data => {
+            if (data.result) {
+                let { name, description, genders, levels, sport, admin, workout_location, photo, maxMembers } = data.groupData;
+                let formattedLevels = levels.map(level => {
+                    return level[0].toUpperCase() + level.slice(1).toLowerCase()
+                });
+                let level = formattedLevels.join(' | ');
+                setGroupDataToDisplay({
+                    name,
+                    description,
+                    genders,
+                    level,
+                    sport: sport.label,
+                    username: admin.username[0].toUpperCase() + admin.username.slice(1).toLowerCase(),
+                    location: workout_location.label,
+                    photo,
+                    maxMembers
+                })
+                dispatch(storeGroupName(name));
+                dispatch(handleLeftTabFocused(true)); 
+                dispatch(handleMiddleTabFocused(false)); 
+                dispatch(handleRightTabFocused(false)); 
+            }
+        })
     }, [])
     )
 
-      
     useFocusEffect(
         useCallback(() => {
         if (user.token) {
@@ -68,11 +68,12 @@ export default function GroupScreenMain({ navigation }) {
             }).then(response => response.json())
             .then(data => {
                 if (!data.result) {
-                    //setJoined(true);
                     dispatch(storeJoinStatus(true));
-                } 
+                } else {
+                    dispatch(storeJoinStatus(false));
+                }
             });
-        } 
+        } else { dispatch(storeJoinStatus(false)) }
     }, [])
     ) 
 
@@ -87,7 +88,6 @@ export default function GroupScreenMain({ navigation }) {
             }).then(response => response.json())
                 .then(data => {
                     if (data.result) {
-                        //setJoined(true);
                         dispatch(storeJoinStatus(true));
                     }
                 })
@@ -96,7 +96,7 @@ export default function GroupScreenMain({ navigation }) {
         }
     };
 
-//handle leaving the current group
+    //handle leaving the current group
     function handleLeaveGroup() {
         if (user.token) {
             fetch(`${BACKEND_ADDRESS}/users/leave-group`, {
@@ -107,12 +107,9 @@ export default function GroupScreenMain({ navigation }) {
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     if (data.result) {
-                        //setJoined(false);
                         dispatch(storeJoinStatus(false));
                     } else {
-                        //setJoined(true);
                         dispatch(storeJoinStatus(true));
                     }
                 })
@@ -167,7 +164,7 @@ export default function GroupScreenMain({ navigation }) {
                 </View>
                 <View style={styles.infoTextContainer}>
                     <Text style={styles.body}>{groupDataToDisplay.level}</Text>
-                    <Text style={styles.body}> [Hardcoded] 3/5 members</Text>
+                    <Text style={styles.body}> 3/{groupDataToDisplay.maxMembers} members</Text>
                     <Text style={styles.body}>Gather at
                         <Text> </Text>
                         <Text

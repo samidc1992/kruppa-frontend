@@ -307,7 +307,6 @@ const styles = StyleSheet.create({
         width: '85%',
         fontSize: 16,
     },
-
     tabContainer: {
         height: 40,
         width: '100%',

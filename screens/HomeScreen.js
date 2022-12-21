@@ -50,8 +50,6 @@ export default function HomeScreen({ navigation }) {
         }, [])
     );
 
-
-    console.log(groups)
     //display groups on page
     const groupsElements = groups.map((e, i) => {
         return (

@@ -167,7 +167,6 @@ export default function CreateGroupScreen({ navigation }) {
                     cleanScreen()
                     navigation.goBack(null)
                 }}
-                text='Back'
             />
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -191,7 +190,7 @@ export default function CreateGroupScreen({ navigation }) {
                                 </View>
 
                             </View>
-                            <Text style={styles.fieldName}>Group name</Text>
+                            <Text style={styles.fieldName1}>Group name</Text>
                             <View style={{ width: '100%' }}>
                                 <SearchInput
                                     placeholder="Group name"
@@ -256,7 +255,7 @@ export default function CreateGroupScreen({ navigation }) {
                                 />
                             </View>
 
-                            <Text style={styles.fieldName}>This group is made up of ...</Text>
+                            <Text style={styles.fieldName}>This group is made up of...</Text>
                             <DropDownPicker
                                 placeholder='Select genders'
                                 style={dropdownStyles.header}
@@ -273,7 +272,6 @@ export default function CreateGroupScreen({ navigation }) {
 
                             <Text style={styles.fieldName}>Minimum age</Text>
                             <View style={{ width: '85%' }}>
-
                                 <NumericInput type='up-down'
                                     onChange={value => setAgeMin(value)}
                                     totalWidth={150}
@@ -322,7 +320,7 @@ export default function CreateGroupScreen({ navigation }) {
 
                             {workoutLocationSelected.label === null && <Text style={styles.rightUnderlineText} onPress={() => handleMapClick()}>Click here to choose your workout location on the map...</Text>}
 
-                            <Text style={styles.fieldName}>Description</Text>
+                            <Text style={styles.fieldName1}>Description</Text>
                             <View style={{ width: '100%' }}>
 
                                 <SearchInput
@@ -349,7 +347,6 @@ export default function CreateGroupScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
     pageContainer: {
         flex: 1,
         alignItems: 'center',
@@ -357,21 +354,17 @@ const styles = StyleSheet.create({
         // backgroundColor: 'green',
         justifyContent: 'center',
     },
-
     contentContainer: {
         flex: 1,
         alignItems: 'center',
         height: '100%',
         width: '100%',
-
     },
     pictureUploadContainer: {
         margin: 10,
         alignItems: 'center',
         justifyContent: 'center',
-
     },
-
     uploadPictureText: {
         flexDirection: 'row',
         marginTop: '2%',
@@ -381,14 +374,19 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignSelf: 'center'
     },
-
     underlineText: {
         color: '#979797',
         width: '85%',
         fontSize: 15
-
     },
-
+    fieldName1: {
+        color: "white",
+        marginTop: '2%',
+        fontSize: 15,
+        alignSelf: 'stretch',
+        marginLeft: '8%',
+        marginBottom: '1.5%',
+    },
     fieldName: {
         color: "white",
         marginTop: '2%',
@@ -396,9 +394,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         marginLeft: '8%',
         // marginBottom: '1%',
-        // // display: 'none'
     },
-
     error: {
         color: 'red',
         textAlign: 'left',
@@ -407,14 +403,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 5
     },
-
     buttonsContainer: {
         width: '100%',
         alignItems: 'center',
         position: 'absolute',
         bottom: 40
     },
-
     rightUnderlineText: {
         fontSize: 15,
         color: '#FF6317',
@@ -422,9 +416,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 15,
         width: '85%'
-
     },
-
     bottomContainer: {
         width: '100%',
         alignItems: 'center',
@@ -438,18 +430,13 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         fontSize: 14,
         borderWidth: 0,
-
-
     },
-
     location: {
         color: '#979797',
-        // fontWeight: 'bold',
         textAlign: 'left',
         paddingTop: 10,
         fontSize: 16,
         width: '85%',
         textDecorationLine: 'underline'
     }
-
 })

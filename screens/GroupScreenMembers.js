@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableHighlight, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import TrippleTab from '../components/TrippleTab';
 import TopBar from '../components/TopBar';
 import PrimaryButton from '../components/PrimaryButton';
@@ -6,7 +6,6 @@ import SecondaryButton from '../components/SecondaryButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { useState, useCallback} from 'react';
-import { useIsFocused } from '@react-navigation/native';
 import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import MemberCard from '../components/MemberCard';
 import { storeJoinStatus } from  '../reducers/group';
@@ -14,16 +13,14 @@ import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenMembers({ navigation }) {
 
-    const user = useSelector((state) => state.user.value);
     const group = useSelector((state) => state.group.value);
-    let { group_id, joined } = group; 
-    
+    let { group_id, joined } = group;
+    const user = useSelector((state) => state.user.value);
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [groupMembers, setGroupMembers] = useState([]);
 
-    const isFocused = useIsFocused();
-    const dispatch = useDispatch ();
-  
+    const dispatch = useDispatch();
+
     useFocusEffect(
         useCallback(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
@@ -32,32 +29,30 @@ export default function GroupScreenMembers({ navigation }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ group_id }),
-          })
-            .then(response => response.json())
+        }).then(response => response.json())
             .then(data => {
                 if (data.result) {
-                    let { name, description, genders, levels, sport, admin, workout_location, photo, ageMax, ageMin } = data.groupData;
+                    let { name, genders, levels, sport, ageMax, ageMin } = data.groupData;
                     let formattedLevels = levels.map(level => {
                         return level[0].toUpperCase() + level.slice(1).toLowerCase()
                     });
                     let level = formattedLevels.join(' | ');
                     setGroupDataToDisplay({
                         name,
-                        description,
                         genders,
                         level,
                         sport: sport.label,
-                        username: admin.username[0].toUpperCase() + admin.username.slice(1).toLowerCase(),
-                        location: workout_location.label,
-                        photo,
                         ageMax,
                         ageMin
                     })
+                    dispatch(handleLeftTabFocused(false)); 
+                    dispatch(handleMiddleTabFocused(false)); 
+                    dispatch(handleRightTabFocused(true)); 
                 }
             })
-    }, []))
-    
-    //updating members when screen is focused
+    }, [])
+    );
+
     useFocusEffect(
         useCallback(() => {
             fetch(`${BACKEND_ADDRESS}/groups/members`, {
@@ -74,10 +69,30 @@ export default function GroupScreenMembers({ navigation }) {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-        }, [])
+        }, [joined])
     );
+      
+    useFocusEffect(
+        useCallback(() => {
+            if (user.token) {
+                fetch(`${BACKEND_ADDRESS}/users/join-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ group_id, token: user.token }),
+                }).then(response => response.json())
+                .then(data => {
+                    if (!data.result) {
+                        dispatch(storeJoinStatus(true));
+                    } else {
+                        dispatch(storeJoinStatus(false));
+                    }
+                });
+            } else { dispatch(storeJoinStatus(false)) }
+        }, [])
+    ); 
 
-   //handle joining a group
     function handleJoinGroup() {
         if (user.token) {
             fetch(`${BACKEND_ADDRESS}/users/join-group`, {
@@ -89,7 +104,6 @@ export default function GroupScreenMembers({ navigation }) {
             }).then(response => response.json())
                 .then(data => {
                     if (data.result) {
-                        //setJoined(true);
                         dispatch(storeJoinStatus(true));
                     }
                 })
@@ -97,8 +111,8 @@ export default function GroupScreenMembers({ navigation }) {
             navigation.navigate('SignIn')
         }
     };
-  
-    //handle leaving the current group
+
+//handle leaving the current group
     function handleLeaveGroup() {
         if (user.token) {
             fetch(`${BACKEND_ADDRESS}/users/leave-group`, {
@@ -110,10 +124,8 @@ export default function GroupScreenMembers({ navigation }) {
             }).then(response => response.json())
                 .then(data => {
                     if (data.result) {
-                        //setJoined(false);
                         dispatch(storeJoinStatus(false));
                     } else {
-                        //setJoined(true);
                         dispatch(storeJoinStatus(true));
                     }
                 })
@@ -121,50 +133,36 @@ export default function GroupScreenMembers({ navigation }) {
             navigation.navigate('SignIn')
         }
     }
-  
-     //Render a group's members card
-    const members = groupMembers.map((e, i) => {
-         let age = Math.floor((new Date() - new Date(e.birthDate))/31556952000);  
-         let level;
-         e.favoriteSports.forEach((element) => { 
-            if(element.sport === groupDataToDisplay.sport) {
-               level= element.level;
-            }})
-            if (!joined ) {     
-                return (
-                    <MemberCard
-                        key={i}
-                        memberAge={age}
-                        memeberGender={e.gender}
-                        memberLevel={level}
-                        handlePress={() => {
-                            navigation.navigate('Profile');
-                        }}
-                    />
-                )
-            } else {
-                return (
-                    <MemberCard
-                        key={i}
-                        memberUsername={e.username}
-                        memberAge={age}
-                        memeberGender={e.gender}
-                        memberLevel={level}
-                        handlePress={() => {
-                            navigation.navigate('Profile');
-                        }
-                        }
-                    />
-                )
-            }
-        })  
 
-    if (!isFocused) {
-        return <View />;
-    }
+     //Render a group's members card
+     const members = groupMembers.map((e, i) => {
+        let age = Math.floor((new Date() - new Date(e.birthDate))/31556952000);  
+        let level;
+        e.favoriteSports.forEach(sport => {
+            if(sport.sport === groupDataToDisplay.sport) {
+                level = sport.level;
+            }
+        })
+        return (
+            <View 
+                key={i}
+                style={styles.memberContainer}
+            >
+                <MemberCard
+                    memberUsername={joined ? e.username : null}
+                    memberAge={age}
+                    memeberGender={e.gender}
+                    memberLevel={level}
+                    handlePress={() => {
+                        navigation.navigate('Profile');
+                    }}
+                />
+            </View>
+        )
+       })  
 
     return (
-        <View style={styles.screenContainer}>
+        <View style={styles.container}>
             <TopBar
                 onPress={() => {
                     dispatch(handleLeftTabFocused (true)); 
@@ -184,21 +182,21 @@ export default function GroupScreenMembers({ navigation }) {
                     onPressRight={() => navigation.navigate('GroupMembers')} 
                 />
             </View>
-                    <View style={styles.bodyContainer}>
-                        <Text style={styles.subHeader} > Group profile </Text>
-                        <Text style={styles.listStyle} > Gender(s): {groupDataToDisplay.genders} </Text>
-                        <Text style={styles.listStyle} > Level(s): {groupDataToDisplay.level} </Text>
-                        <Text style={styles.listStyle} > Age: {groupDataToDisplay.ageMin} - {groupDataToDisplay.ageMax}</Text>
-                    </View>
-
-                   <Text style={styles.subHeader} > Other members information are hidden until you join the group </Text>
-              
-                  <View style={styles.userInfoContainer}>
-                    <ScrollView>
-                        {members}
-                    </ScrollView>
-                  </View>
-                
+            <Text style={styles.subHeader}>Members' Information</Text>
+            <View style={styles.groupInformationContainer}>
+                <View style={styles.infoTextContainer}>
+                    <Text style={styles.body}>Gender(s): {groupDataToDisplay.genders}</Text>
+                    <Text style={styles.body}>Level(s): {groupDataToDisplay.level}</Text>
+                    <Text style={styles.body}>Age: {groupDataToDisplay.ageMin} - {groupDataToDisplay.ageMax}</Text>
+                </View>
+            </View>
+            <Text style={styles.subHeader}>Members</Text>
+            <View style={styles.bodyContainer}>
+                <Text style={styles.body}>Other members information are hidden until you join the group.</Text>
+            </View>
+            <ScrollView style={styles.scrollView}>
+                {members}
+            </ScrollView>
             <View style={styles.buttonContainer}>
                 {
                     joined ?
@@ -218,13 +216,10 @@ export default function GroupScreenMembers({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    screenContainer: {
+    container: {
         flex: 1,
+        alignItems: 'center',
         backgroundColor: '#272D31',
-    },
-    tabContainer: {
-        height: 90,
-        width: '100%',
     },
     header: {
         fontSize: 24,
@@ -232,39 +227,40 @@ const styles = StyleSheet.create({
         color: 'white',
         width: '85%',
         marginTop: 20,
-        marginLeft: 20,
     },
-    userInfoContainer: {
-        marginTop : 15,
-        alignSelf: 'center',
-        width: '85%',
-        height: '20%',
-    },
-    scrollView: {
-        marginTop: 10,
-        height: '100%',
-    },
-    tabTextFocus: {
-        color: "#FF6317",
-        fontSize: 14,
-        height: '100%',
+    tabContainer: {
+        height: 90,
         width: '100%',
-        textAlign: 'center',
-        textTransform: 'capitalize'
+    },
+    image: {
+        width: 360,
+        height: '25%',
+        borderRadius: 10,
     },
     subHeader: {
-        fontSize: 17,
+        fontSize: 20,
+        fontWeight: '600',
         color: 'white',
-        fontWeight: '500',
         width: '85%',
-        marginLeft: 10,
+        marginTop: -10,
     },
-    listStyle: {
-        fontSize: 15,
-        color: 'white',
+    groupInformationContainer: {
         width: '85%',
-        marginLeft: 20,
         marginTop: 5,
+        flexDirection: 'row',
+        height: 100,
+    },
+    body: {
+        color: 'white',
+        fontSize: 16,
+        marginLeft: 5,
+    },
+    description: {
+        color: 'white',
+        fontSize: 16,
+        width: '85%',
+        fontWeight: '400',
+        marginTop: 5
     },
     buttonContainer: {
         position: 'absolute',
@@ -272,8 +268,20 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center'
     },
-    tabContainer: {
-        height: 90,
-        width: '100%',
+    infoTextContainer: {
+        height: 80,
+        justifyContent: 'space-around'
+    },
+    memberContainer: {
+        marginTop: 3,
+        alignItems: 'center',
+    },
+    scrollView: {
+        width: '85%',
+        marginTop: 10
+    },
+    bodyContainer: {
+        width: '85%',
+        marginTop: 5,
     },
 })
