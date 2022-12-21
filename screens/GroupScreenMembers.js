@@ -5,10 +5,11 @@ import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
-import group from '../reducers/group';
 import MemberCard from '../components/MemberCard';
+
 import React, { Component } from "react";
 import { BACKEND_ADDRESS } from '../backendAdress';
 
@@ -20,12 +21,14 @@ export default function GroupScreenMembers({ navigation }) {
     
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [groupMembers, setGroupMembers] = useState([]);
-    
+
     const [joined, setJoined] = useState(false);
+    const isFocused = useIsFocused();
     const dispatch = useDispatch ();
   
 
-    useEffect(() => {
+    useFocusEffect(
+        React.useCallback(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
             method: 'POST',
             headers: {
@@ -35,7 +38,6 @@ export default function GroupScreenMembers({ navigation }) {
           })
             .then(response => response.json())
             .then(data => {
-                console.log('group data', data) 
                 if (data.result) {
                     let { name, description, genders, levels, sport, admin, workout_location, photo, ageMax, ageMin } = data.groupData;
                     let formattedLevels = levels.map(level => {
@@ -56,8 +58,8 @@ export default function GroupScreenMembers({ navigation }) {
                     })
                 }
             })
-    }, []);
-
+    }, [])
+    )
     
      //updating members when screen is focused
      useFocusEffect(
@@ -79,15 +81,59 @@ export default function GroupScreenMembers({ navigation }) {
         }, [])
     );
 
+   //handle joining a group
+    function handleJoinGroup() {
+        console.log('user token', user)
+        if (user.token) {
+            fetch(`${BACKEND_ADDRESS}/users/join-group`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ group_id, token: user.token }),
+            }).then(response => response.json())
+                .then(data => {
+                    console.log('handleJoinGroup => ',data)
+                    if (data.result) {
+                        setJoined(true);
+                    }
+                })
+        } else {
+            navigation.navigate('SignIn')
+        }
+    };
   
-      const members = groupMembers.map((e, i) => {
+     //handle leaving the current group
+
+    function handleLeaveGroup() {
+        if (user.token) {
+            fetch(`${BACKEND_ADDRESS}/users/leave-group`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ group_id, token: user.token }),
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.result) {
+                        setJoined(false);
+                    } else {
+                        setJoined(true);
+                    }
+                })
+        } else {
+            navigation.navigate('SignIn')
+        }
+    }
+  
+     //Render a group's members card
+    const members = groupMembers.map((e, i) => {
          let age = Math.floor((new Date() - new Date(e.birthDate))/31556952000);  
          let level;
          e.favoriteSports.forEach((element) => { 
             if(element.sport === groupDataToDisplay.sport) {
                level= element.level;
             }})
-
             if (!joined ) {     
                 return (
                     <MemberCard
@@ -97,8 +143,7 @@ export default function GroupScreenMembers({ navigation }) {
                         memberLevel={level}
                         handlePress={() => {
                             navigation.navigate('Profile');
-                        }
-                        }
+                        }}
                     />
                 )
             } else {
@@ -115,49 +160,12 @@ export default function GroupScreenMembers({ navigation }) {
                         }
                     />
                 )
-              }
-           })  
-
-
-        function handleJoinGroup() {
-            if (user.token) {
-                fetch(`${BACKEND_ADDRESS}/users/join-group`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ group_id, token: user.token }),
-                }).then(response => response.json())
-                    .then(data => {
-                        if (data.result) {
-                            setJoined(true);
-                        }
-                    })
-            } else {
-                navigation.navigate('SignIn')
             }
-        };
+        })  
 
-        function handleLeaveGroup() {
-            if (user.token) {
-                fetch(`${BACKEND_ADDRESS}/users/leave-group`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ group_id, token: user.token }),
-                }).then(response => response.json())
-                    .then(data => {
-                        if (data.result) {
-                            setJoined(false);
-                        } else {
-                            setJoined(true);
-                        }
-                    })
-            } else {
-                navigation.navigate('SignIn')
-            }
-        }
+    if (!isFocused) {
+        return <View />;
+    }
 
     return(
         <SafeAreaView style={styles.screenContainer}>
@@ -241,6 +249,7 @@ const styles = StyleSheet.create({
         height: 90,
         width: '100%',
     },
+
     header: {
         fontSize: 24,
         fontWeight: '600',
@@ -249,10 +258,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginLeft: 20,
     },
-    
-    bodyContainer: {
-
-    },
+   
     userInfoContainer: {
         marginTop : 15,
         alignSelf: 'center',
@@ -303,7 +309,4 @@ const styles = StyleSheet.create({
     bottomContainer: {
       alignItems: 'center',
     },
-
- 
-    
 })
