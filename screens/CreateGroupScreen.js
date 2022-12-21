@@ -183,7 +183,7 @@ export default function CreateGroupScreen({ navigation }) {
                             <View styles={styles.pictureUploadContainer}>
                                 <Image
                                     source={require('../assets/group-placeholder.jpg')}
-                                    style={{ width: 250, height: 150, margin: 10 }} />
+                                    style={{ width: 250, height: 150, margin: 10, borderRadius: 5 }} />
 
                                 <View style={styles.uploadPictureText}>
                                     <Text style={styles.underlineText}>Upload Group Picture</Text>
@@ -191,6 +191,7 @@ export default function CreateGroupScreen({ navigation }) {
                                 </View>
 
                             </View>
+                            <Text style={styles.fieldName}>Group name</Text>
                             <View style={{ width: '100%', marginLeft: '15%' }}>
                                 <SearchInput
                                     placeholder="Group name"
@@ -319,6 +320,7 @@ export default function CreateGroupScreen({ navigation }) {
 
                             {workoutLocationSelected.label === null && <Text style={styles.rightUnderlineText} onPress={() => handleMapClick()}>Click here to choose your workout location on the map...</Text>}
 
+                            <Text style={styles.fieldName}>Description</Text>
                             <View style={{ width: '100%', marginLeft: '15%' }}>
 
                                 <SearchInput
@@ -386,11 +388,12 @@ const styles = StyleSheet.create({
 
     fieldName: {
         color: "white",
-        marginTop: '4%',
+        marginTop: '2%',
         fontSize: 15,
         alignSelf: 'stretch',
         marginLeft: '8%',
-        marginBottom: '-2%',
+        // marginBottom: '1%',
+        // // display: 'none'
     },
 
     error: {
@@ -413,8 +416,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#FF6317',
         alignSelf: 'center',
-        marginBottom: 5,
-        marginTop: 10,
+        marginTop: 5,
+        marginBottom: 15,
         width: '85%'
 
     },
