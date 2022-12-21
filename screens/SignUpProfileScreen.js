@@ -206,6 +206,7 @@ export default function SignUpProfileScreen({ navigation }) {
                         placeholder="Profile Description"
                         value={descriptionValue}
                         handleChange={handleDescriptionInputChange}
+                        handleDelete={() => setDescriptionValue('')}
                     />
                 </View>
                 {fieldError && <Text style={styles.error}>Empty or missing fileds.</Text>}
