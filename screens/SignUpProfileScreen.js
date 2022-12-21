@@ -123,14 +123,10 @@ export default function SignUpProfileScreen({ navigation }) {
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <ScrollView contentContainerStyle={styles.scrollView}>
             <View style={styles.profilePictureContainer}>
-                <TouchableHighlight
-                    style={styles.profilePicture} >
-                    <Text></Text>
-                </TouchableHighlight> */}
-                 <Image
-               source={require('../assets/profilepic.jpg')}
-                style={styles.image}
-            />
+                <Image
+                    source={require('../assets/profilepic.jpg')}
+                    style={styles.image}
+                />
                 <View style={styles.uploadPicture}>
                     <Text style={styles.underlineText}>Upload Profile Picture</Text>
                     <FontAwesome name='upload' onPress={() => handleUpload()} size={18} color='#979797' />
