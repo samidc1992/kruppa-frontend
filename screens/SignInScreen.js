@@ -11,8 +11,8 @@ import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function SignInScreen({ navigation }) {
 
-    // const BACKEND_ADDRESS = 'http://192.168.1.87:3000'
-    const group = useSelector(state => state.group.value);
+    const group = useSelector((state) => state.group.value);
+    let { group_id } = group;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fieldError, setFieldError] = useState('');
@@ -38,7 +38,7 @@ export default function SignInScreen({ navigation }) {
                     setEmail('');
                     setPassword('');
                     setFieldError(false);
-                    group === null ? navigation.navigate('TabNavigator') : navigation.navigate('Group');
+                    group_id === null ? navigation.navigate('TabNavigator') : navigation.navigate('Group');
                 } else {
                     //setEmail('');
                     setPassword('');
