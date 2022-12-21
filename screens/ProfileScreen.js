@@ -1,4 +1,4 @@
-import { TouchableOpacity, StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableHighlight, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SecondaryButton from '../components/SecondaryButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -59,10 +59,14 @@ export default function ProfileScreen({ navigation }) {
         }}
       />
       <View style={styles.headerContainer}>
-        <TouchableHighlight
+       {/*  <TouchableHighlight
           style={styles.profilePicture} >
           <Text></Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
+        <Image
+               source={require('../assets/profilepic.jpg')}
+                style={styles.image}
+            />
         <View style={styles.userInformation}>
           <Text style={styles.body}>{user.username}</Text>
           <Text style={styles.body}>{userInfo.age} years old</Text>
@@ -119,6 +123,17 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginLeft: 20
   },
+
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 150,
+    backgroundColor: '#979797',
+    alignSelf: 'flex-start',
+    marginTop: 25,
+    marginLeft: 20
+  
+},
   bodyContainer: {
     height: 300,
     justifyContent: 'space-around',
@@ -173,4 +188,5 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 40,
   },
+
 })

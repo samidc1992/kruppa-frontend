@@ -1,5 +1,5 @@
 
-import { View, Text, StyleSheet, SafeAreaView, TouchableHighlight, ScrollView, KeyboardAvoidingView } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, TouchableHighlight, ScrollView, KeyboardAvoidingView, Image } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
@@ -116,10 +116,14 @@ export default function SignUpProfileScreen({ navigation }) {
     return (
         <KeyboardAvoidingView style={styles.screenContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View styles={styles.headerContainer}>
-                <TouchableHighlight
+               {/*  <TouchableHighlight
                     style={styles.profilePicture} >
                     <Text></Text>
-                </TouchableHighlight>
+                </TouchableHighlight> */}
+                 <Image
+               source={require('../assets/profilepic.jpg')}
+                style={styles.image}
+            />
                 <View style={styles.uploadPicture}>
                     <Text style={styles.underlineText}>Upload Profile Picture</Text>
                     <FontAwesome name='upload' onPress={() => handleUpload()} size={18} color='#979797' />
@@ -262,6 +266,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         marginTop: '15%',
+    },
+    image: {
+        width: 150,
+        height: 150,
+        borderRadius: 150,
+        marginLeft: '5%',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: '15%',
+      
     },
     uploadPicture: {
         flexDirection: 'row',
