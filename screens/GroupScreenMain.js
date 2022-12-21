@@ -5,9 +5,11 @@ import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import { storeGroupName } from  '../reducers/group';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { Component } from "react";
 import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 
 export default function GroupScreenMain({ navigation }) {
@@ -17,9 +19,11 @@ export default function GroupScreenMain({ navigation }) {
     const user = useSelector((state) => state.user.value);
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [joined, setJoined] = useState(false);
+
     const dispatch = useDispatch();
 
-    useEffect(() => {
+    useFocusEffect(
+        React.useCallback(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
             method: 'POST',
             headers: {
@@ -50,9 +54,12 @@ export default function GroupScreenMain({ navigation }) {
                     dispatch(handleRightTabFocused(false)); 
                 }
             })
-    }, []);
+    }, [])
+    )
 
-    useEffect(() => {
+      
+    useFocusEffect(
+        React.useCallback(() => {
         if (user.token) {
             fetch(`${BACKEND_ADDRESS}/users/join-status`, {
                 method: 'POST',
@@ -67,7 +74,9 @@ export default function GroupScreenMain({ navigation }) {
                 } 
             });
         } 
-    }, []);
+    }, [])
+    )
+//handle joining a group
 
     function handleJoinGroup() {
         if (user.token) {
@@ -88,6 +97,7 @@ export default function GroupScreenMain({ navigation }) {
         }
     };
 
+//handle leaving the current group
     function handleLeaveGroup() {
         if (user.token) {
             fetch(`${BACKEND_ADDRESS}/users/leave-group`, {
