@@ -55,7 +55,7 @@ export default function WelcomeScreen({ navigation }) {
                 </View>
                 <PrimaryButton
                     text='Explore'
-                    onPress={() => navigation.navigate('Search')} />
+                    onPress={() => navigation.navigate('TabNavigator', {screen: 'Search'})} />
             </View>
         </View>
     )

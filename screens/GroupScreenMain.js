@@ -5,25 +5,23 @@ import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { BACKEND_ADDRESS } from '../backendAdress';
-import { storeGroupName } from  '../reducers/group';
+import { storeGroupName, storeJoinStatus } from  '../reducers/group';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { Component } from "react";
 import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 
 export default function GroupScreenMain({ navigation }) {
 
     const group = useSelector((state) => state.group.value);
-    let { group_id } = group;
+    let { group_id, joined } = group;
     const user = useSelector((state) => state.user.value);
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
-    const [joined, setJoined] = useState(false);
 
     const dispatch = useDispatch();
 
     useFocusEffect(
-        React.useCallback(() => {
+        useCallback(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
             method: 'POST',
             headers: {
@@ -59,7 +57,7 @@ export default function GroupScreenMain({ navigation }) {
 
       
     useFocusEffect(
-        React.useCallback(() => {
+        useCallback(() => {
         if (user.token) {
             fetch(`${BACKEND_ADDRESS}/users/join-status`, {
                 method: 'POST',
@@ -70,13 +68,13 @@ export default function GroupScreenMain({ navigation }) {
             }).then(response => response.json())
             .then(data => {
                 if (!data.result) {
-                    setJoined(true);
+                    //setJoined(true);
+                    dispatch(storeJoinStatus(true));
                 } 
             });
         } 
     }, [])
-    )
-//handle joining a group
+    ) 
 
     function handleJoinGroup() {
         if (user.token) {
@@ -89,7 +87,8 @@ export default function GroupScreenMain({ navigation }) {
             }).then(response => response.json())
                 .then(data => {
                     if (data.result) {
-                        setJoined(true);
+                        //setJoined(true);
+                        dispatch(storeJoinStatus(true));
                     }
                 })
         } else {
@@ -108,10 +107,13 @@ export default function GroupScreenMain({ navigation }) {
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
                 .then(data => {
+                    console.log(data)
                     if (data.result) {
-                        setJoined(false);
+                        //setJoined(false);
+                        dispatch(storeJoinStatus(false));
                     } else {
-                        setJoined(true);
+                        //setJoined(true);
+                        dispatch(storeJoinStatus(true));
                     }
                 })
         } else {
