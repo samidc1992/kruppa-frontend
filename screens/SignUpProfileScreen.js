@@ -52,6 +52,7 @@ export default function SignUpProfileScreen({ navigation }) {
     const [fieldError, setFieldError] = useState('');
     const user = useSelector(state => state.user.value);
     const group = useSelector(state => state.group.value);
+    let { group_id } = group;
 
     //Handle inputChange functions
     const handleDescriptionInputChange = value => setDescriptionValue(value);
@@ -104,7 +105,7 @@ export default function SignUpProfileScreen({ navigation }) {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.result && group === null) {
+                if (data.result && group_id === null) {
                     navigation.navigate('TabNavigator', { screen: 'Profile' });
                 } else {
                     setFieldError(true);
