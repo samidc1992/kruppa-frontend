@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-around',
-        backgroundColor: '#374146',
+        backgroundColor: '#272D31',
     },
     header: {
         color: 'white',

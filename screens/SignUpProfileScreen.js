@@ -121,6 +121,7 @@ export default function SignUpProfileScreen({ navigation }) {
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <ScrollView contentContainerStyle={styles.scrollView}>
             <View style={styles.profilePictureContainer}>
                 <TouchableHighlight
                     style={styles.profilePicture} >
@@ -131,7 +132,6 @@ export default function SignUpProfileScreen({ navigation }) {
                     <FontAwesome name='upload' onPress={() => handleUpload()} size={18} color='#979797' />
                 </View>
             </View>
-            <ScrollView contentContainerStyle={styles.scrollView}>
                 <View style={styles.inputContainer}>
                     <Text style={styles.fieldName}>Gender</Text>
                     <DropDownPicker
@@ -148,17 +148,22 @@ export default function SignUpProfileScreen({ navigation }) {
                         setItems={setGenderItems}
                     />
                     <Text style={styles.fieldName}>Birthday</Text>
-                    <DateTimePicker
-                        style={styles.datePickerStyle}
-                        testID="dateTimePicker"
-                        value={dateValue}
-                        mode="date"
-                        is24Hour={true}
-                        display='default'
-                        onChange={(value) => {
-                            setDateValue(new Date(value.nativeEvent.timestamp));
-                        }}
-                    />
+                    <View style={styles.birthDate}>
+                        <DateTimePicker
+                            style={styles.datePickerStyle}
+                            testID='dateTimePicker'
+                            value={dateValue}
+                            mode='date'
+                            is24Hour={true}
+                            display='calendar'
+                            onChange={(value) => {
+                                setDateValue(new Date(value.nativeEvent.timestamp));
+                            }}
+                            textColor='white'
+                            themeVariant='dark'
+                            style={{flex: 1, alignItems: 'stretch'}}
+                        />
+                    </View>
                     <Text style={styles.fieldName}>My favorite sports</Text>
                     <DropDownPicker
                         placeholder='Sport'
@@ -201,6 +206,7 @@ export default function SignUpProfileScreen({ navigation }) {
                         placeholder="Profile Description"
                         value={descriptionValue}
                         handleChange={handleDescriptionInputChange}
+                        handleDelete={() => setDescriptionValue('')}
                     />
                 </View>
                 {fieldError && <Text style={styles.error}>Empty or missing fileds.</Text>}
@@ -235,7 +241,6 @@ const styles = StyleSheet.create({
     },
     profilePictureContainer: {
         alignItems: 'center',
-        height: '25%'
     },
     profilePicture: {
         borderRadius: 100,
@@ -282,7 +287,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         alignSelf: 'stretch',
         marginLeft: '6%',
-        marginBottom: '-2%',
     },
     addSport: {
         fontSize: 16,
@@ -299,7 +303,13 @@ const styles = StyleSheet.create({
     descriptionContainer: {
         alignItems: 'center',
         width: '100%',
-    }
+    },
+    birthDate: {
+        height: 55,
+        width: '85%',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start'
+    },
 })
 
 
