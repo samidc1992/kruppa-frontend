@@ -45,9 +45,9 @@ export default function WelcomeScreen({ navigation }) {
             />
             <Text style={styles.header}>Welcome to Kruppa</Text>
             <View style={styles.buttonsContainer}>
-                {/* <PrimaryButtonSmall 
+                <PrimaryButtonSmall 
                 text='Profile Signup' 
-                onPress={() => navigation.navigate('SignUpProfile')}/> */}
+                onPress={() => navigation.navigate('SignUpProfile')}/>
                 {/* <PrimaryButtonSmall
                     text='Elise tests'
                     onPress={() => navigation.navigate('SearchWorkoutLocation')} /> */}
