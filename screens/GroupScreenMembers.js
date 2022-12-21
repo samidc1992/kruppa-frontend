@@ -3,37 +3,41 @@ import TrippleTab from '../components/TrippleTab';
 import TopBar from '../components/TopBar';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
+import group from '../reducers/group';
 import MemberCard from '../components/MemberCard';
 import React, { Component } from "react";
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenMembers({ navigation }) {
 
-    const group_id = useSelector((state) => state.group.value);
-  
-    const dispatch = useDispatch ();
-
+    const user = useSelector((state) => state.user.value);
+    const group = useSelector((state) => state.group.value);
+    let { group_id } = group; 
+    
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [groupMembers, setGroupMembers] = useState([]);
+    
+    const [joined, setJoined] = useState(false);
+    const dispatch = useDispatch ();
   
-    
-    
-     useEffect(() => {
+
+    useEffect(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ group_id }),
-        }).then(response => response.json())
+          })
+            .then(response => response.json())
             .then(data => {
+                console.log('group data', data) 
                 if (data.result) {
-                    let { name, genders, levels, sport, admin, workout_location, photo, ageMin, ageMax } = data.groupData;
+                    let { name, description, genders, levels, sport, admin, workout_location, photo, ageMax, ageMin } = data.groupData;
                     let formattedLevels = levels.map(level => {
                         return level[0].toUpperCase() + level.slice(1).toLowerCase()
                     });
@@ -42,18 +46,19 @@ export default function GroupScreenMembers({ navigation }) {
                         name,
                         description,
                         genders,
-                        levels,
+                        level,
                         sport: sport.label,
                         username: admin.username[0].toUpperCase() + admin.username.slice(1).toLowerCase(),
                         location: workout_location.label,
                         photo,
-                        ageMin, 
-                        ageMax
+                        ageMax,
+                        ageMin
                     })
                 }
             })
-    }, []) 
+    }, []);
 
+    
      //updating members when screen is focused
      useFocusEffect(
         React.useCallback(() => {
@@ -65,8 +70,8 @@ export default function GroupScreenMembers({ navigation }) {
                 body: JSON.stringify({ group_id }),
             })
                 .then((response) => response.json())
-                .then((data) => {    
-                 setGroupMembers(data.userdata)
+                .then((data) => {  
+                       setGroupMembers(data.userdata)
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -74,23 +79,85 @@ export default function GroupScreenMembers({ navigation }) {
         }, [])
     );
 
+  
       const members = groupMembers.map((e, i) => {
-      
-         let age = Math.floor((new Date() - new Date(e.birthDate))/31556952000);
-        return (
-            <MemberCard
-                key={i}
-                // image='../assets/tennis.jpg'
-                memberAge={age}
-                memeberGender= {e.genders}
-                handlePress={() => {
-                    navigation.navigate('Profile');
-                }
-                }
-            />
-        )
-    })  
+         let age = Math.floor((new Date() - new Date(e.birthDate))/31556952000);  
+         let level;
+         e.favoriteSports.forEach((element) => { 
+            if(element.sport === groupDataToDisplay.sport) {
+               level= element.level;
+            }})
 
+            if (!joined ) {     
+                return (
+                    <MemberCard
+                        key={i}
+                        memberAge={age}
+                        memeberGender={e.gender}
+                        memberLevel={level}
+                        handlePress={() => {
+                            navigation.navigate('Profile');
+                        }
+                        }
+                    />
+                )
+            } else {
+                return (
+                    <MemberCard
+                        key={i}
+                        memberUsername={e.username}
+                        memberAge={age}
+                        memeberGender={e.gender}
+                        memberLevel={level}
+                        handlePress={() => {
+                            navigation.navigate('Profile');
+                        }
+                        }
+                    />
+                )
+              }
+           })  
+
+
+        function handleJoinGroup() {
+            if (user.token) {
+                fetch(`${BACKEND_ADDRESS}/users/join-group`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ group_id, token: user.token }),
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.result) {
+                            setJoined(true);
+                        }
+                    })
+            } else {
+                navigation.navigate('SignIn')
+            }
+        };
+
+        function handleLeaveGroup() {
+            if (user.token) {
+                fetch(`${BACKEND_ADDRESS}/users/leave-group`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ group_id, token: user.token }),
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.result) {
+                            setJoined(false);
+                        } else {
+                            setJoined(true);
+                        }
+                    })
+            } else {
+                navigation.navigate('SignIn')
+            }
+        }
 
     return(
         <SafeAreaView style={styles.screenContainer}>
@@ -119,7 +186,7 @@ export default function GroupScreenMembers({ navigation }) {
                         <Text style={styles.subTitle} > This group accepts </Text>
                         <View style={styles.groupInfoList}>
                         <Text style={styles.listStyle} > Genders : {groupDataToDisplay.genders} </Text>
-                        <Text style={styles.listStyle} > Levels : {groupDataToDisplay.levels} </Text>
+                        <Text style={styles.listStyle} > Levels : {groupDataToDisplay.level} </Text>
                         <Text style={styles.listStyle} > Age : {groupDataToDisplay.ageMin} - {groupDataToDisplay.ageMax}</Text>
                         </View> 
                     </View>
@@ -133,18 +200,31 @@ export default function GroupScreenMembers({ navigation }) {
                   </View>
                 
             <View style={styles.bottomContainer}>
-            <PrimaryButton  
+            {/* <PrimaryButton  
                     text='Join a group'
                     disabled ={false}
                     activeOpacity={0}
-                    onPress={() => navigation.navigate('SignIn')}
-                />  
+                    onPress={() => navigation.navigate('SignIn')}  // if connected select a group 
+                />   */}
+
+                {
+                    joined ?
+                        (<SecondaryButton
+                            text="leave group"
+                            onPress={() => handleLeaveGroup()}
+                        />)
+                        :
+                        (<PrimaryButton
+                            text="join group"
+                            onPress={() => handleJoinGroup()}
+                        />)
+                }
 
             </View>
            
         </SafeAreaView>
     )
-};
+}
 
 const styles = StyleSheet.create({
     screenContainer: {
@@ -223,5 +303,7 @@ const styles = StyleSheet.create({
     bottomContainer: {
       alignItems: 'center',
     },
+
+ 
     
 })

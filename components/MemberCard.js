@@ -6,7 +6,7 @@ function MemberCard(props) {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../assets/profile1.jpg')}
+               source={require('../assets/profilepic.jpg')}
                 style={styles.image}
             />
             <View style={styles.content}>
@@ -17,7 +17,7 @@ function MemberCard(props) {
                     {props.memberAge} years old
                 </Text>
                 <Text style={styles.text}>
-                    {props.memberGender}
+                    {props.memeberGender}
                 </Text>
                 <Text style={styles.text}>
                     {props.memberLevel}
@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#3A474E'
     },
     image: {
-        width: '20%',
-        height: '60%',
+        width: 80,
+        height: 80,
+        borderRadius: 80,
         marginLeft: '5%',
         // marginTop: '3%'
     },
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
         color: '#979797',
         fontSize: 16,
         paddingRight: 3,
+        marginTop: 5,
         // borderWidth: 1,
         width: '95%'
 

@@ -24,9 +24,7 @@ export const userSlice = createSlice({
           state.value.favoriteSports = action.payload;
         },
         removeSport: (state, action) => {
-            /*  state.value.favoriteSports = state.value.favoriteSports.filter(e => {
-                e.sport !== action.payload.sport && e.level !== action.payload.level
-            }) */
+           
         },
     },
 });
