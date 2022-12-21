@@ -358,17 +358,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '100%',
         width: '100%',
-        // borderWidth: 2
+
     },
     pictureUploadContainer: {
         margin: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        // borderColor: 'green',
-        // borderWidth: 2
+
     },
-
-
 
     uploadPictureText: {
         flexDirection: 'row',
@@ -377,7 +374,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: 200,
         marginBottom: 20,
-        borderWidth: 2,
         alignSelf: 'center'
     },
 
