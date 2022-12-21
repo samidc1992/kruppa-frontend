@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, Image, Dimensions, TouchableHighl
 import DropDownPicker from 'react-native-dropdown-picker';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PrimaryButton from '../components/PrimaryButton';
-import StandardFormInput from '../components/StandardFormInput';
+import SearchInput from '../components/SearchInput'
 import { dropdownStyles } from '../styles/dropdown';
 import NumericInput from 'react-native-numeric-input'
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,10 +11,13 @@ import { storeGroupId } from '../reducers/group';
 import { removeWorkoutLocation } from '../reducers/workoutLocation';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import TopBar from '../components/TopBar';
-
-//exp://pa7kdou.elisemery.19000.exp.direct:80
+import { LogBox } from 'react-native'
 
 export default function CreateGroupScreen({ navigation }) {
+
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
+    }, [])
 
     const dispatch = useDispatch()
 
@@ -23,7 +26,6 @@ export default function CreateGroupScreen({ navigation }) {
 
     //get user connected from reducer
     const userLogged = useSelector((state) => state.user.value)
-    console.log('user logged in : ' + JSON.stringify(userLogged))
 
     //dropdown style
     DropDownPicker.setTheme("DARK");
@@ -178,26 +180,25 @@ export default function CreateGroupScreen({ navigation }) {
                     <ScrollView style={{ width: '100%' }}>
                         <View style={styles.contentContainer}>
 
-                            <View styles={styles.headerContainer}>
-                                <TouchableHighlight
-                                    style={styles.profilePicture} >
-                                    <Text></Text>
-                                </TouchableHighlight>
-                                <View style={styles.uploadPicture}>
+                            <View styles={styles.pictureUploadContainer}>
+                                <Image
+                                    source={require('../assets/group-placeholder.jpg')}
+                                    style={{ width: 250, height: 150, margin: 10, borderRadius: 5 }} />
 
+                                <View style={styles.uploadPictureText}>
                                     <Text style={styles.underlineText}>Upload Group Picture</Text>
                                     <FontAwesome name='upload' onPress={() => handleUpload()} size={18} color='#979797' />
                                 </View>
 
                             </View>
-                            <View style={{ width: '100%', marginLeft: '15%' }}>
-
-
-                                <StandardFormInput
-                                    inputLabel='Group Name'
+                            <Text style={styles.fieldName}>Group name</Text>
+                            <View style={{ width: '100%' }}>
+                                <SearchInput
                                     placeholder="Group name"
                                     value={name}
                                     handleChange={(value) => setName(value)}
+                                    handleDelete={() => setName('')}
+
                                 />
                             </View>
 
@@ -239,7 +240,9 @@ export default function CreateGroupScreen({ navigation }) {
                                     totalWidth={150}
                                     totalHeight={45}
                                     iconSize={25}
+                                    separatorWidth={0}
                                     step={1}
+                                    rounded
                                     valueType='real'
                                     containerStyle={styles.numericInput}
                                     minValue={0}
@@ -277,6 +280,7 @@ export default function CreateGroupScreen({ navigation }) {
                                     totalHeight={45}
                                     iconSize={25}
                                     step={1}
+                                    rounded
                                     value={ageMin}
                                     valueType='real'
                                     containerStyle={styles.numericInput}
@@ -299,6 +303,7 @@ export default function CreateGroupScreen({ navigation }) {
                                     totalHeight={45}
                                     iconSize={25}
                                     step={1}
+                                    rounded
                                     valueType='real'
                                     value={ageMax}
                                     containerStyle={styles.numericInput}
@@ -315,23 +320,26 @@ export default function CreateGroupScreen({ navigation }) {
                             <Text style={styles.fieldName}>Workout location</Text>
                             {workoutLocationSelected.label != null && workoutLocationElement}
 
-                            {workoutLocationSelected.label === null && <Text style={styles.rightUnderlineText} onPress={() => handleMapClick()}>Pick your location on the Map...</Text>}
+                            {workoutLocationSelected.label === null && <Text style={styles.rightUnderlineText} onPress={() => handleMapClick()}>Click here to choose your workout location on the map...</Text>}
 
-                            <View style={{ width: '100%', marginLeft: '15%' }}>
+                            <Text style={styles.fieldName}>Description</Text>
+                            <View style={{ width: '100%' }}>
 
-                                <StandardFormInput
-                                    inputLabel='Description'
+                                <SearchInput
                                     placeholder="Group description"
                                     value={description}
                                     handleChange={(value) => setDescription(value)}
+                                    handleDelete={() => setDescription('')}
                                 />
                             </View>
                             {errorMessage.length > 0 && <Text style={styles.error}>{errorMessage}</Text>}
+                            <View style={{ width: '100%', margin: '5%', alignItems: 'center', justifyContent: 'center' }}>
 
-                            <PrimaryButton
-                                text='Create group'
-                                onPress={() => handleSubmit()}
-                            />
+                                <PrimaryButton
+                                    text='Create group'
+                                    onPress={() => handleSubmit()}
+                                />
+                            </View>
                         </View>
                     </ScrollView>
                 </TouchableWithoutFeedback>
@@ -355,22 +363,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '100%',
         width: '100%',
-        // borderWidth: 2
-    },
 
-    profilePicture: {
-        borderRadius: 100,
-        width: 100,
-        height: 100,
-        backgroundColor: '#979797',
+    },
+    pictureUploadContainer: {
+        margin: 10,
+        alignItems: 'center',
         justifyContent: 'center',
-        alignSelf: 'center',
-        marginTop: '2%',
+
     },
 
-    uploadPicture: {
+    uploadPictureText: {
         flexDirection: 'row',
         marginTop: '2%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 200,
+        marginBottom: 20,
+        alignSelf: 'center'
     },
 
     underlineText: {
@@ -382,11 +391,12 @@ const styles = StyleSheet.create({
 
     fieldName: {
         color: "white",
-        marginTop: '4%',
+        marginTop: '2%',
         fontSize: 15,
         alignSelf: 'stretch',
         marginLeft: '8%',
-        marginBottom: '-2%',
+        // marginBottom: '1%',
+        // // display: 'none'
     },
 
     error: {
@@ -409,8 +419,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#FF6317',
         alignSelf: 'center',
-        marginBottom: 5,
-        marginTop: 10,
+        marginTop: 5,
+        marginBottom: 15,
         width: '85%'
 
     },
@@ -427,6 +437,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
         alignSelf: 'flex-start',
         fontSize: 14,
+        borderWidth: 0,
+
 
     },
 

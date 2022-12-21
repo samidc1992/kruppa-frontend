@@ -52,43 +52,43 @@ export default function SignInScreen({ navigation }) {
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={styles.container}>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={{ flex: 1, width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={styles.header}>Welcome back to Kruppa</Text>
-                        <View style={styles.content}>
-                            <View style={{ width: '100%' }}>
+                {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+                <View style={{ flex: 1, width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={styles.header}>Welcome back to Kruppa</Text>
+                    <View style={styles.content}>
+                        <View style={{ width: '100%' }}>
 
-                                <StandardFormInput
-                                    placeholder="Email"
-                                    value={email}
-                                    handleChange={handleSearchInputChangeMail}
-                                    keyboardType="email-address"
-                                />
-                                <StandardFormInput
-                                    placeholder="Password"
-                                    value={password}
-                                    handleChange={handleSearchInputChangePassword}
-                                    secureTextEntry='true'
-                                />
-                            </View>
-                            {fieldError && <Text style={styles.error}>Invalid email or password.</Text>}
-                            <Text style={styles.signupOption}>
-                                Do not have an account yet? Sign up
-                                <Text> </Text>
-                                <Text
-                                    style={styles.signupLink}
-                                    onPress={() => navigation.navigate('SignUp')}
-                                >here</Text>
-                                .
-                            </Text>
+                            <StandardFormInput
+                                placeholder="Email"
+                                value={email}
+                                handleChange={handleSearchInputChangeMail}
+                                keyboardType="email-address"
+                            />
+                            <StandardFormInput
+                                placeholder="Password"
+                                value={password}
+                                handleChange={handleSearchInputChangePassword}
+                                secureTextEntry='true'
+                            />
                         </View>
-                        <View style={styles.buttonContainer}>
-                            <PrimaryButton
-                                text='Sign In'
-                                onPress={() => handleSignIn()} />
-                        </View>
+                        {fieldError && <Text style={styles.error}>Invalid email or password.</Text>}
+                        <Text style={styles.signupOption}>
+                            Do not have an account yet? Sign up
+                            <Text> </Text>
+                            <Text
+                                style={styles.signupLink}
+                                onPress={() => navigation.navigate('SignUp')}
+                            >here</Text>
+                            .
+                        </Text>
                     </View>
-                </TouchableWithoutFeedback>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton
+                            text='Sign In'
+                            onPress={() => handleSignIn()} />
+                    </View>
+                </View>
+                {/* </TouchableWithoutFeedback> */}
             </KeyboardAvoidingView>
         </SafeAreaView >
     );
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-around',
-        backgroundColor: '#374146',
+        backgroundColor: '#272D31',
     },
     header: {
         color: 'white',
