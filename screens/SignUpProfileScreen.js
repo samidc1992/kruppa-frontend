@@ -150,7 +150,6 @@ export default function SignUpProfileScreen({ navigation }) {
                     <Text style={styles.fieldName}>Birthday</Text>
                     <View style={styles.birthDate}>
                         <DateTimePicker
-                            style={styles.datePickerStyle}
                             testID='dateTimePicker'
                             value={dateValue}
                             mode='date'
@@ -313,6 +312,7 @@ const styles = StyleSheet.create({
     descriptionContainer: {
         alignItems: 'center',
         width: '100%',
+        zIndex: '-1',
     },
     birthDate: {
         height: 55,
@@ -320,6 +320,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start'
     },
+
+   
 })
 
 
