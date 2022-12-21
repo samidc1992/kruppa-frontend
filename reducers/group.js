@@ -17,9 +17,12 @@ export const groupSlice = createSlice({
         },
         storeGroupName: (state, action) => {
             state.value.group_name = action.payload;
+        },
+        storeJoinStatus: (state, action) => {
+            state.value.joined = action.payload;
         }
     },
 });
 
-export const { storeGroupId, storeGroupName } = groupSlice.actions;
+export const { storeGroupId, storeGroupName, storeJoinStatus } = groupSlice.actions;
 export default groupSlice.reducer;

@@ -5,30 +5,27 @@ import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { useState} from 'react';
+import { useState, useCallback} from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import MemberCard from '../components/MemberCard';
-
-import React, { Component } from "react";
+import { storeJoinStatus } from  '../reducers/group';
 import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function GroupScreenMembers({ navigation }) {
 
     const user = useSelector((state) => state.user.value);
     const group = useSelector((state) => state.group.value);
-    let { group_id } = group; 
+    let { group_id, joined } = group; 
     
     const [groupDataToDisplay, setGroupDataToDisplay] = useState({});
     const [groupMembers, setGroupMembers] = useState([]);
 
-    const [joined, setJoined] = useState(false);
     const isFocused = useIsFocused();
     const dispatch = useDispatch ();
   
-
     useFocusEffect(
-        React.useCallback(() => {
+        useCallback(() => {
         fetch(`${BACKEND_ADDRESS}/groups/main`, {
             method: 'POST',
             headers: {
@@ -58,12 +55,11 @@ export default function GroupScreenMembers({ navigation }) {
                     })
                 }
             })
-    }, [])
-    )
+    }, []))
     
-     //updating members when screen is focused
-     useFocusEffect(
-        React.useCallback(() => {
+    //updating members when screen is focused
+    useFocusEffect(
+        useCallback(() => {
             fetch(`${BACKEND_ADDRESS}/groups/members`, {
                 method: 'POST',
                 headers: {
@@ -73,7 +69,7 @@ export default function GroupScreenMembers({ navigation }) {
             })
                 .then((response) => response.json())
                 .then((data) => {  
-                       setGroupMembers(data.userdata)
+                    setGroupMembers(data.userdata)
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -83,7 +79,6 @@ export default function GroupScreenMembers({ navigation }) {
 
    //handle joining a group
     function handleJoinGroup() {
-        console.log('user token', user)
         if (user.token) {
             fetch(`${BACKEND_ADDRESS}/users/join-group`, {
                 method: 'PUT',
@@ -93,9 +88,9 @@ export default function GroupScreenMembers({ navigation }) {
                 body: JSON.stringify({ group_id, token: user.token }),
             }).then(response => response.json())
                 .then(data => {
-                    console.log('handleJoinGroup => ',data)
                     if (data.result) {
-                        setJoined(true);
+                        //setJoined(true);
+                        dispatch(storeJoinStatus(true));
                     }
                 })
         } else {
@@ -103,8 +98,7 @@ export default function GroupScreenMembers({ navigation }) {
         }
     };
   
-     //handle leaving the current group
-
+    //handle leaving the current group
     function handleLeaveGroup() {
         if (user.token) {
             fetch(`${BACKEND_ADDRESS}/users/leave-group`, {
@@ -116,9 +110,11 @@ export default function GroupScreenMembers({ navigation }) {
             }).then(response => response.json())
                 .then(data => {
                     if (data.result) {
-                        setJoined(false);
+                        //setJoined(false);
+                        dispatch(storeJoinStatus(false));
                     } else {
-                        setJoined(true);
+                        //setJoined(true);
+                        dispatch(storeJoinStatus(true));
                     }
                 })
         } else {
@@ -167,8 +163,8 @@ export default function GroupScreenMembers({ navigation }) {
         return <View />;
     }
 
-    return(
-        <SafeAreaView style={styles.screenContainer}>
+    return (
+        <View style={styles.screenContainer}>
             <TopBar
                 onPress={() => {
                     dispatch(handleLeftTabFocused (true)); 
@@ -177,7 +173,7 @@ export default function GroupScreenMembers({ navigation }) {
                     navigation.navigate('Group')
                 }}
             />
-             <Text style={styles.header}>{groupDataToDisplay.name}</Text>
+            <Text style={styles.header}>{groupDataToDisplay.name}</Text>
             <View style={styles.tabContainer}>
                 <TrippleTab
                     textTabLeft="information"
@@ -187,19 +183,15 @@ export default function GroupScreenMembers({ navigation }) {
                     onPressMiddle={() => navigation.navigate('GroupSessions')}
                     onPressRight={() => navigation.navigate('GroupMembers')} 
                 />
-                
             </View>
-    
                     <View style={styles.bodyContainer}>
-                        <Text style={styles.subTitle} > This group accepts </Text>
-                        <View style={styles.groupInfoList}>
-                        <Text style={styles.listStyle} > Genders : {groupDataToDisplay.genders} </Text>
-                        <Text style={styles.listStyle} > Levels : {groupDataToDisplay.level} </Text>
-                        <Text style={styles.listStyle} > Age : {groupDataToDisplay.ageMin} - {groupDataToDisplay.ageMax}</Text>
-                        </View> 
+                        <Text style={styles.subHeader} > Group profile </Text>
+                        <Text style={styles.listStyle} > Gender(s): {groupDataToDisplay.genders} </Text>
+                        <Text style={styles.listStyle} > Level(s): {groupDataToDisplay.level} </Text>
+                        <Text style={styles.listStyle} > Age: {groupDataToDisplay.ageMin} - {groupDataToDisplay.ageMax}</Text>
                     </View>
 
-                   <Text style={styles.subTitle} > Other members information are hidden until you join the group </Text>
+                   <Text style={styles.subHeader} > Other members information are hidden until you join the group </Text>
               
                   <View style={styles.userInfoContainer}>
                     <ScrollView>
@@ -207,14 +199,7 @@ export default function GroupScreenMembers({ navigation }) {
                     </ScrollView>
                   </View>
                 
-            <View style={styles.bottomContainer}>
-            {/* <PrimaryButton  
-                    text='Join a group'
-                    disabled ={false}
-                    activeOpacity={0}
-                    onPress={() => navigation.navigate('SignIn')}  // if connected select a group 
-                />   */}
-
+            <View style={styles.buttonContainer}>
                 {
                     joined ?
                         (<SecondaryButton
@@ -227,10 +212,8 @@ export default function GroupScreenMembers({ navigation }) {
                             onPress={() => handleJoinGroup()}
                         />)
                 }
-
             </View>
-           
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -238,18 +221,11 @@ const styles = StyleSheet.create({
     screenContainer: {
         flex: 1,
         backgroundColor: '#272D31',
-
     },
- /*    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }, */
     tabContainer: {
         height: 90,
         width: '100%',
     },
-
     header: {
         fontSize: 24,
         fontWeight: '600',
@@ -258,19 +234,16 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginLeft: 20,
     },
-   
     userInfoContainer: {
         marginTop : 15,
         alignSelf: 'center',
         width: '85%',
         height: '20%',
     },
-
     scrollView: {
         marginTop: 10,
         height: '100%',
     },
-   
     tabTextFocus: {
         color: "#FF6317",
         fontSize: 14,
@@ -279,25 +252,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textTransform: 'capitalize'
     },
-    tab: {
-        height: 30,
-        width: '30%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderBottomColor: "#7E8284",
-        borderBottomWidth: 1,
-        margin: 1
-    },
-    
-    subTitle: {
+    subHeader: {
         fontSize: 17,
         color: 'white',
         fontWeight: '500',
         width: '85%',
-        marginTop: 10,
         marginLeft: 10,
     },
-    
     listStyle: {
         fontSize: 15,
         color: 'white',
@@ -305,8 +266,14 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginTop: 5,
     },
-    
-    bottomContainer: {
-      alignItems: 'center',
+    buttonContainer: {
+        position: 'absolute',
+        bottom: 40,
+        width: '100%',
+        alignItems: 'center'
+    },
+    tabContainer: {
+        height: 90,
+        width: '100%',
     },
 })
