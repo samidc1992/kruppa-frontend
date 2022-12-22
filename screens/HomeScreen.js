@@ -66,8 +66,8 @@ export default function HomeScreen({ navigation }) {
                     dispatch(handleMiddleTabFocused(false));
                     dispatch(handleRightTabFocused(false));
                     navigation.navigate('Group');
-                }
-                }
+                }}
+                photo={e.group.photo}
             />
         )
     })

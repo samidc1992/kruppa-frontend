@@ -13,7 +13,6 @@ export default function ProfileScreen({ navigation }) {
   const [userInfo, setUserInfo] = useState({});
   const [sports, setSports] = useState([])
 
-
   // Get user's profile information 
   useEffect(() => {
     fetch(`${BACKEND_ADDRESS}/users/groups`, {
@@ -24,12 +23,13 @@ export default function ProfileScreen({ navigation }) {
     .then(response => response.json())
     .then(data => {
       if(data.result) {
-        let { username, birthDate, favoriteSports, description } = data.userData;
+        let { username, birthDate, favoriteSports, description, photo } = data.userData;
         let age = Math.floor((new Date() - new Date(birthDate))/31556952000);
         setUserInfo({
           username,
           age,
           description,
+          photo
         });
         setSports(favoriteSports);
       }
@@ -64,7 +64,7 @@ export default function ProfileScreen({ navigation }) {
           <Text></Text>
         </TouchableHighlight> */}
         <Image
-               source={require('../assets/profilepic.jpg')}
+               source={userInfo.photo ? {uri: userInfo.photo} : require('../assets/profilepic.jpg')}
                 style={styles.image}
             />
         <View style={styles.userInformation}>

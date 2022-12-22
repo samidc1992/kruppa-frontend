@@ -6,7 +6,7 @@ function GroupCard(props) {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../assets/tennis.jpg')}
+                source={ props.photo ? { uri: props.photo } : require('../assets/group-placeholder.jpg') }
                 style={styles.image}
             />
             <View style={styles.content}>
@@ -14,7 +14,7 @@ function GroupCard(props) {
                     {props.sport}
                 </Text>
                 <Text style={styles.title}>
-                    {props.name}
+                    {props.name.length > 25 ? props.name.slice(0,22) + '...' : props.name }
                 </Text>
                 <Text style={styles.text}>
                     {props.membersNum}/{props.maxMembers} members
@@ -49,33 +49,23 @@ const styles = StyleSheet.create({
         width: '75%',
         padding: '5%',
         marginTop: '3%',
-
     },
     link: {
-        // alignSelf: 'flex-end',
-        // borderWidth: 1,
         textAlign: 'right',
         alignSelf: 'flex-end',
-        // fontWeight: 'bold',
         color: '#FF6317'
-
     },
     text: {
         color: '#979797',
         fontSize: 16,
         paddingRight: 3,
-        // borderWidth: 1,
         width: '95%'
-
-
     },
     title: {
         color: '#fff',
         fontSize: 17,
         fontWeight: 'bold',
     }
-
-
 })
 
 export default GroupCard

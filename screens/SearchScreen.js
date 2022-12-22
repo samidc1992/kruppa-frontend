@@ -195,7 +195,7 @@ export default function SearchScreen({ navigation }) {
     });
 
     const groups = searchResults.map((data, i) => {
-        let { sport, name, maxMembers, _id } = data
+        let { sport, name, maxMembers, _id, photo } = data
         return <View style={styles.group} key={i}>
             <GroupCard
                 sport={sport.label}
@@ -206,6 +206,7 @@ export default function SearchScreen({ navigation }) {
                     dispatch(storeGroupId(_id))
                     navigation.navigate('Group')
                 }}
+                photo={photo}
             />
         </View>
 

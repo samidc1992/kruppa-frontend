@@ -156,6 +156,7 @@ export default function GroupScreenMembers({ navigation }) {
                     handlePress={() => {
                         navigation.navigate('Profile');
                     }}
+                    photo={e.photo}
                 />
             </View>
         )

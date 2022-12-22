@@ -136,7 +136,7 @@ export default function GroupScreenMain({ navigation }) {
             </View>
                 <Image
                     style={styles.image}
-                    source={require('../assets/yoga-2.jpg')}
+                    source={groupDataToDisplay.photo ? { uri: groupDataToDisplay.photo } : require('../assets/group-placeholder.jpg') }
                 />
             <Text style={styles.subHeader}>{groupDataToDisplay.sport}</Text>
             <View style={styles.groupInformationContainer}>

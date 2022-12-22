@@ -6,7 +6,7 @@ function MemberCard(props) {
     return (
         <View style={styles.container}>
             <Image
-               source={require('../assets/profilepic.jpg')}
+                source={ props.photo ? { uri: props.photo } : require('../assets/profilepic.jpg') }
                 style={styles.image}
             />
             <View style={styles.content}>
