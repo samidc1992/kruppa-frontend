@@ -45,9 +45,9 @@ export default function WelcomeScreen({ navigation }) {
             />
             <Text style={styles.header}>Welcome to Kruppa</Text>
             <View style={styles.buttonsContainer}>
-                <PrimaryButtonSmall
+                {/* <PrimaryButtonSmall
                     text='Elise tests'
-                    onPress={() => navigation.navigate('Elise')} />
+                    onPress={() => navigation.navigate('Elise')} /> */}
                 <View style={styles.smallBtnsContainer}>
                     <PrimaryButtonSmall
                         text='Join Now'
