@@ -38,7 +38,7 @@ export default function HomeScreen({ navigation }) {
                 .then((response) => response.json())
                 .then((data) => {
                     if (!data.userGroups.length) {
-                        setMessage('No groups yet. Search workout groups around you !')
+                        setMessage('You did not join any groups yet. Click here to search for groups around you.')
                     }
                     else {
                         setGroups(data.userGroups)
@@ -83,9 +83,6 @@ export default function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('GroupCreation')}
                     />
                 </View>
-                <Text style={styles.sectionTitle}>
-                    Next sessions
-                </Text>
                 <View style={styles.groupsContainer}>
                     <ScrollView>
                         {groups.length ? groupsElements : <Text
