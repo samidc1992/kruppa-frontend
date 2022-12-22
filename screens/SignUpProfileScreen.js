@@ -10,10 +10,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BACKEND_ADDRESS } from "../backendAdress";
 import { LogBox } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 const myTheme = require('../styles/darkDropdownTheme');
 
 export default function SignUpProfileScreen({ navigation }) {
+
+    //upload picture variables
+    let image = null
+    const [imageURL, setImageURL] = useState(null)
 
     DropDownPicker.addTheme("darkDropdownTheme", myTheme);
     DropDownPicker.setTheme("darkDropdownTheme");
@@ -72,7 +77,7 @@ export default function SignUpProfileScreen({ navigation }) {
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
-      }, []);
+    }, []);
 
     // Add selected sports to user's profile  
     const handleAddPress = () => {
@@ -95,6 +100,55 @@ export default function SignUpProfileScreen({ navigation }) {
         }
     })
 
+    //manage picture upload
+    //pick image from user's gallery
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            image = result.assets[0].uri;
+
+            //upload photo to backend
+            const formData = new FormData();
+
+            formData.append('profilePicture', {
+                uri: image,
+                name: 'profilePicture.jpg',
+                type: 'image/jpeg',
+            });
+
+            //UPLOAD picture in backend
+            fetch(`${BACKEND_ADDRESS}/users/upload`, {
+                method: 'POST',
+                body: formData,
+            }).then((response) => response.json())
+                .then((data) => {
+                    const userToUpdate = { token: user.token, url: data.url };
+
+                    //update user with photo url
+                    fetch(`${BACKEND_ADDRESS}/users/picture`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userToUpdate),
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log('Success:', data);
+                            setImageURL(data.photo)
+
+                        })
+                });
+        }
+    };
+
     const handleSignup = () => {
         fetch(`${BACKEND_ADDRESS}/users/signup`, {
             method: 'PUT',
@@ -108,30 +162,34 @@ export default function SignUpProfileScreen({ navigation }) {
                 token: user.token,
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.result && group_id === null) {
-                navigation.navigate('TabNavigator', { screen: 'Profile' });
-            } else {
-                setFieldError(true);
-                navigation.navigate('Group');
-            }
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.result && group_id === null) {
+                    navigation.navigate('TabNavigator', { screen: 'Profile' });
+                } else {
+                    setFieldError(true);
+                    navigation.navigate('Group');
+                }
+            });
     }
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <ScrollView contentContainerStyle={styles.scrollView}>
-            <View style={styles.profilePictureContainer}>
-                <Image
-                    source={require('../assets/profilepic.jpg')}
-                    style={styles.image}
-                />
-                <View style={styles.uploadPicture}>
-                    <Text style={styles.underlineText}>Upload Profile Picture</Text>
-                    <FontAwesome name='upload' onPress={() => handleUpload()} size={18} color='#979797' />
+                <View style={styles.profilePictureContainer}>
+                    {!imageURL && <Image
+                        source={require('../assets/profilepic.jpg')}
+                        style={styles.image}
+                    />}
+                    {imageURL && <Image
+                        source={{ uri: imageURL }}
+                        style={styles.image}
+                    />}
+                    <View style={styles.uploadPicture}>
+                        <Text style={styles.underlineText}>Upload Profile Picture</Text>
+                        <FontAwesome name='upload' onPress={() => pickImage()} size={18} color='#979797' />
+                    </View>
                 </View>
-            </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.fieldName}>Gender</Text>
                     <DropDownPicker
@@ -160,7 +218,7 @@ export default function SignUpProfileScreen({ navigation }) {
                             }}
                             textColor='white'
                             themeVariant='dark'
-                            style={{flex: 1, alignItems: 'stretch'}}
+                            style={{ flex: 1, alignItems: 'stretch' }}
                         />
                     </View>
                     <Text style={styles.fieldName}>My favorite sports</Text>
@@ -210,14 +268,14 @@ export default function SignUpProfileScreen({ navigation }) {
                 </View>
                 {fieldError && <Text style={styles.error}>Empty or missing fileds.</Text>}
             </ScrollView>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton
-                        text='Create profile'
-                        disabled={false}
-                        activeOpacity={0}
-                        onPress={() => handleSignup()}
-                    />
-                </View>
+            <View style={styles.buttonContainer}>
+                <PrimaryButton
+                    text='Create profile'
+                    disabled={false}
+                    activeOpacity={0}
+                    onPress={() => handleSignup()}
+                />
+            </View>
         </KeyboardAvoidingView>
     )
 }
@@ -258,7 +316,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         marginTop: '15%',
-      
+
     },
     uploadPicture: {
         flexDirection: 'row',
@@ -321,7 +379,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
 
-   
+
 })
 
 

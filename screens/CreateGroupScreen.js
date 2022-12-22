@@ -12,6 +12,8 @@ import { removeWorkoutLocation } from '../reducers/workoutLocation';
 import { BACKEND_ADDRESS } from '../backendAdress';
 import TopBar from '../components/TopBar';
 import { LogBox } from 'react-native'
+import * as ImagePicker from 'expo-image-picker';
+
 
 export default function CreateGroupScreen({ navigation }) {
 
@@ -26,6 +28,10 @@ export default function CreateGroupScreen({ navigation }) {
 
     //get user connected from reducer
     const userLogged = useSelector((state) => state.user.value)
+
+    //upload picture variables
+    let image = null
+    const [imageURL, setImageURL] = useState(null)
 
     //dropdown style
     DropDownPicker.setTheme("DARK");
@@ -86,6 +92,42 @@ export default function CreateGroupScreen({ navigation }) {
         <Text onPress={() => handleMapClick()} style={styles.location}>{workoutLocationSelected.label}</Text>
     )
 
+    //manage picture upload
+    //pick image from user's gallery
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            image = result.assets[0].uri;
+
+            //upload photo to backend
+            const formData = new FormData();
+
+            formData.append('groupPicture', {
+                uri: image,
+                name: 'groupPicture.jpg',
+                type: 'image/jpeg',
+            });
+
+            //UPLOAD picture in backend
+            fetch(`${BACKEND_ADDRESS}/groups/upload`, {
+                method: 'POST',
+                body: formData,
+            }).then((response) => response.json())
+                .then((data) => {
+                    setImageURL(data.url)
+                });
+        }
+    };
+
+
+
     //redirirection to map for workout location
     const handleMapClick = () => {
         navigation.navigate('SearchWorkoutLocation')
@@ -122,7 +164,7 @@ export default function CreateGroupScreen({ navigation }) {
         //create request body
         const newGroup = {
             token: userLogged.token,
-            photo: '.jpeg',
+            photo: imageURL,
             name: name,
             sport: sportValue,
             maxMembers: maxNumber,
@@ -180,13 +222,17 @@ export default function CreateGroupScreen({ navigation }) {
                         <View style={styles.contentContainer}>
 
                             <View styles={styles.pictureUploadContainer}>
-                                <Image
+                                {!imageURL && <Image
                                     source={require('../assets/group-placeholder.jpg')}
                                     style={{ width: 250, height: 150, margin: 10, borderRadius: 5 }} />
-
+                                }
+                                {imageURL && <Image
+                                    source={{ uri: imageURL }}
+                                    style={{ width: 250, height: 150, margin: 10, borderRadius: 5 }}
+                                />}
                                 <View style={styles.uploadPictureText}>
                                     <Text style={styles.underlineText}>Upload Group Picture</Text>
-                                    <FontAwesome name='upload' onPress={() => handleUpload()} size={18} color='#979797' />
+                                    <FontAwesome name='upload' onPress={() => pickImage()} size={18} color='#979797' />
                                 </View>
 
                             </View>
