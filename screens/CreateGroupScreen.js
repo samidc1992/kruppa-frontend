@@ -207,7 +207,7 @@ export default function CreateGroupScreen({ navigation }) {
             <TopBar
                 onPress={() => {
                     cleanScreen()
-                    navigation.goBack(null)
+                    navigation.navigate('Home')
                 }}
             />
             <KeyboardAvoidingView

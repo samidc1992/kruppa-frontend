@@ -6,11 +6,13 @@ import { BACKEND_ADDRESS } from '../backendAdress';
 
 export default function EliseStylesScreen({ navigation }) {
     // const [image, setImage] = useState(null);
-    let image = null
-    const [imageURL, setImageURL] = useState(null)
+    let imageUser = null
+    let imageGroup = null
+    const [imageUserURL, setimageUserURL] = useState(null)
+    const [imageGroupURL, setimageGroupURL] = useState(null)
 
     //pick image from user's gallery
-    const pickImage = async () => {
+    const pickImageUser = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -20,13 +22,13 @@ export default function EliseStylesScreen({ navigation }) {
         });
 
         if (!result.canceled) {
-            image = result.assets[0].uri;
+            imageUser = result.assets[0].uri;
 
             //upload photo to backend
             const formData = new FormData();
 
             formData.append('profilePicture', {
-                uri: image,
+                uri: imageUser,
                 name: 'profilePicture.jpg',
                 type: 'image/jpeg',
             });
@@ -37,7 +39,7 @@ export default function EliseStylesScreen({ navigation }) {
                 body: formData,
             }).then((response) => response.json())
                 .then((data) => {
-                    const userToUpdate = { token: 'mdxA_-MqJFDOG0SbtDrLdkERdFBD_lqc', url: data.url };
+                    const userToUpdate = { token: 'xtr3wtBGhQv47ejDrv91gOrZ5TUNR73n', url: data.url };
 
                     //update user with photo url
                     fetch(`${BACKEND_ADDRESS}/users/picture`, {
@@ -49,21 +51,53 @@ export default function EliseStylesScreen({ navigation }) {
                     })
                         .then((response) => response.json())
                         .then((data) => {
-                            console.log('Success:', data);
-                            setImageURL(data.photo)
+                            setimageUserURL(data.photo)
 
                         })
                 });
         }
     };
 
+    const pickImageGroup = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            imageGroup = result.assets[0].uri;
+
+            //upload photo to backend
+            const formData = new FormData();
+
+            formData.append('groupPicture', {
+                uri: imageGroup,
+                name: 'groupPicture.jpg',
+                type: 'image/jpeg',
+            });
+
+            //UPLOAD picture in backend
+            fetch(`${BACKEND_ADDRESS}/groups/upload`, {
+                method: 'POST',
+                body: formData,
+            }).then((response) => response.json())
+                .then((data) => {
+                    setimageGroupURL(data.url)
+                });
+        }
+    };
+
+    console.log(imageGroupURL)
     return (
 
         <View style={styles.container}>
 
 
             <View styles={styles.headerContainer}>
-                {imageURL && <Image source={{ uri: 'https://res.cloudinary.com/dtizjnga8/image/upload/v1671702367/cyzxeqhysaba5pvk7ha0.jpg' }} style={{
+                {imageUserURL && <Image source={{ uri: imageUserURL }} style={{
                     width: 100, height: 100, borderRadius: 100, justifyContent: 'center', alignSelf: 'center', marginTop: '2%'
                 }}
                 />}
@@ -71,7 +105,20 @@ export default function EliseStylesScreen({ navigation }) {
 
                 <View style={styles.uploadPicture}>
                     <Text style={styles.underlineText}>Upload Profile Picture</Text>
-                    <FontAwesome name='upload' onPress={() => pickImage()} size={18} color='#979797' />
+                    <FontAwesome name='upload' onPress={() => pickImageUser()} size={18} color='#979797' />
+                </View>
+
+            </View>
+
+            <View styles={styles.pictureUploadContainer}>
+
+                {imageGroupURL && <Image
+                    source={{ uri: imageGroupURL }}
+                    style={{ width: 250, height: 150, margin: 10, borderRadius: 5 }}
+                />}
+                <View style={styles.uploadPictureText}>
+                    <Text style={styles.underlineText}>Upload Group Picture</Text>
+                    <FontAwesome name='upload' onPress={() => pickImageGroup()} size={18} color='#979797' />
                 </View>
 
             </View>
