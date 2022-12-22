@@ -26,7 +26,7 @@ import CreateGroupScreen from './screens/CreateGroupScreen';
 import SearchWorkoutLocationScreen from './screens/SearchWorkoutLocationScreen';
 
 const store = configureStore({
-  reducer: { user, group, workoutLocation,tab },
+  reducer: { user, group, workoutLocation, tab },
 });
 
 const Stack = createNativeStackNavigator();
@@ -73,6 +73,7 @@ export default function App() {
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="Elise" component={EliseStylesScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="Group" component={GroupScreenMain} />
           <Stack.Screen name="GroupMembers" component={GroupScreenMembers} />
