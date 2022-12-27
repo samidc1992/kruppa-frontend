@@ -190,7 +190,7 @@ export default function SearchScreen({ navigation }) {
             }}
             onCalloutPress={() => navigation.navigate('Group')}
             pinColor='green'
-            image={require('../assets/marker.png')}
+            image={data.sport.label === 'Yoga' ? require('../assets/yoga-marker1.png') : require('../assets/marker.png')}
         />;
     });
 
