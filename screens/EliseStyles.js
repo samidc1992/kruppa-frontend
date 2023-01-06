@@ -58,6 +58,7 @@ export default function EliseStylesScreen({ navigation }) {
         }
     };
 
+
     const pickImageGroup = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -85,8 +86,8 @@ export default function EliseStylesScreen({ navigation }) {
                 body: formData,
             }).then((response) => response.json())
                 .then((data) => {
-                    setimageGroupURL(data.url)
                 });
+            setimageGroupURL(data.url)
         }
     };
 
