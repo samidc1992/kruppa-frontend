@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
         width: '85%',
         fontSize: 34,
         fontWeight: '600',
-        //fontFamily: 'Inter',
         position: 'absolute',
         top: 60,
         textAlign: 'center'
@@ -88,16 +87,3 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     }
 })
-
-// <TouchableOpacity
-//     onPress={() => navigation.navigate('Elise')}>
-//     <Text>Elise Styles</Text>
-// </TouchableOpacity>
-// <TouchableOpacity
-//     onPress={() => navigation.navigate('Nawel')}>
-//     <Text>Nawel Styles</Text>
-// </TouchableOpacity>
-// <TouchableOpacity
-//     onPress={() => navigation.navigate('Search')}>
-//     <Text>Search screen</Text>
-// </TouchableOpacity>
