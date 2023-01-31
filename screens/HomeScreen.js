@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import GroupCard from '../components/GroupCard';
 import { useEffect, useState } from 'react';
 import { storeGroupId } from '../reducers/group';
-import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAddress';
 import { useFocusEffect } from '@react-navigation/native';
 import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import React from 'react';

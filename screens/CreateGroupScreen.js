@@ -9,7 +9,7 @@ import NumericInput from 'react-native-numeric-input'
 import { useSelector, useDispatch } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
 import { removeWorkoutLocation } from '../reducers/workoutLocation';
-import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAddress';
 import TopBar from '../components/TopBar';
 import { LogBox } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';

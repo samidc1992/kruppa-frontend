@@ -6,7 +6,7 @@ import SecondaryButton from '../components/SecondaryButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useCallback } from 'react';
-import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAddress';
 import { storeGroupName, storeJoinStatus } from  '../reducers/group';
 import { useFocusEffect } from '@react-navigation/native';
 import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';

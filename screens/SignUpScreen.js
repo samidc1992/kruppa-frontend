@@ -4,7 +4,7 @@ import PrimaryButton from '../components/PrimaryButton';
 import StandardFormInput from '../components/StandardFormInput';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
-import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAddress';
 
 
 export default function SignUpScreen({ navigation }) {

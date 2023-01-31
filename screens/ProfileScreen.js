@@ -4,7 +4,7 @@ import SecondaryButton from '../components/SecondaryButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { logout } from '../reducers/user';
-import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAddress';
 
 export default function ProfileScreen({ navigation }) {
 

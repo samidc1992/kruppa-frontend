@@ -8,7 +8,7 @@ import PrimaryButton from '../components/PrimaryButton'
 import * as Location from 'expo-location';
 import { useDispatch } from 'react-redux';
 import { storeGroupId } from '../reducers/group';
-import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAddress';
 import DoubleTab from '../components/DoubleTab'
 import GroupCard from '../components/GroupCard'
 

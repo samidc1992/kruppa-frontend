@@ -6,7 +6,7 @@ import SecondaryButton from '../components/SecondaryButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
-import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAddress';
 import { storeJoinStatus } from  '../reducers/group';
 
 export default function GroupScreenSessions({ navigation }) {

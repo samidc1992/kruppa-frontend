@@ -9,7 +9,7 @@ import { useState, useCallback} from 'react';
 import {handleLeftTabFocused, handleMiddleTabFocused, handleRightTabFocused } from '../reducers/tab';
 import MemberCard from '../components/MemberCard';
 import { storeJoinStatus } from  '../reducers/group';
-import { BACKEND_ADDRESS } from '../backendAdress';
+import { BACKEND_ADDRESS } from '../backendAddress';
 
 export default function GroupScreenMembers({ navigation }) {
 

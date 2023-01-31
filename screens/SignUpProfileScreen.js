@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { BACKEND_ADDRESS } from "../backendAdress";
+import { BACKEND_ADDRESS } from "../backendAddress";
 import { LogBox } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
