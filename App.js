@@ -12,9 +12,6 @@ import SignUpScreen from './screens/SignUpScreen';
 import SignUpProfileScreen from './screens/SignUpProfileScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import MessagesScreen from './screens/MessagesScreen';
-import EliseStylesScreen from './screens/EliseStyles';
-import NawelStylesScreen from './screens/NawelStyles';
-import SamiStylesScreen from './screens/SamiStyles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -73,7 +70,6 @@ export default function App() {
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
-          <Stack.Screen name="Elise" component={EliseStylesScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="Group" component={GroupScreenMain} />
           <Stack.Screen name="GroupMembers" component={GroupScreenMembers} />

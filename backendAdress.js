@@ -1,1 +1,1 @@
-export const BACKEND_ADDRESS = 'https://kruppa-backend-samidc1992.vercel.app'
+export const BACKEND_ADDRESS = 'http://192.168.1.72:3000'
